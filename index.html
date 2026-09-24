@@ -21,6 +21,8 @@
   href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 />
 
+<link rel="stylesheet" href="https://unpkg.com/mapillary-js@4.1.2/dist/mapillary.css">
+
 <style>
 
 :root{
@@ -1750,6 +1752,41 @@ body{
   .chartTitle .material-symbols-rounded{font-size:19px;padding:6px}
 }
 
+
+/* === Requested HazWatch website refinements === */
+.heroGrid{grid-template-columns:1fr;max-width:980px}
+.hero{padding:34px 0 22px}
+.hero h1{font-size:clamp(2.65rem,5vw,4.4rem);margin:18px 0 16px}
+.heroDescription{max-width:850px}
+.logoWrap{width:58px;height:52px}
+.logoWrap img{width:100%;height:100%;object-fit:contain}
+.brand{font-size:1.38rem}
+.navInner{height:82px}
+.navLinks a{display:inline-flex;align-items:center;gap:7px}
+.navLinks .material-symbols-rounded{font-size:19px;color:var(--red)}
+.themeButton .material-symbols-rounded{font-size:21px}
+.layerSwitch button{display:inline-flex;align-items:center;gap:6px}
+.layerSwitch button .material-symbols-rounded{font-size:18px}
+.mapStage{position:relative;border-radius:19px;overflow:hidden;background:#DCE3E5}
+.mapStage #map{border-radius:0}
+#mapillaryViewer{position:absolute;inset:0;z-index:8;display:none;background:#111}
+#mapillaryMessage{position:absolute;inset:0;z-index:9;display:none;place-items:center;text-align:center;padding:24px;background:rgba(15,20,23,.90);color:#fff}
+#mapillaryMessage .material-symbols-rounded{display:block;font-size:38px;margin:0 auto 10px;color:#fff}
+#mapillaryMessage strong{display:block;margin-bottom:6px}
+.hazardFilters::-webkit-scrollbar{display:none}
+.hazardChip{display:inline-flex;align-items:center;gap:7px;background:var(--surface)}
+.hazardChip .material-symbols-rounded{font-size:18px;color:var(--hazard-color,var(--red));font-variation-settings:'FILL' 0,'wght' 600,'GRAD' 0,'opsz' 24}
+.hazardChip.active .material-symbols-rounded{font-variation-settings:'FILL' 1,'wght' 700,'GRAD' 0,'opsz' 24}
+.qrBox{height:auto;min-height:250px}
+.qrBox img{width:min(220px,75vw);height:auto;background:#fff;padding:8px;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.qrCaption{margin-top:10px;color:var(--muted);font-size:.82rem;font-weight:700}
+@media(max-width:760px){
+  .hero{padding:28px 0 16px}
+  .hero h1{font-size:2.8rem}
+  .navInner{height:74px}
+  .logoWrap{width:50px;height:46px}
+}
+
 </style>
 
 </head>
@@ -1773,7 +1810,7 @@ body{
 
 <img
   id="navLogo"
-  src="hazwatch-logo-light.jpg"
+  src="hazwatch_logo_512.png"
   alt="HazWatch"
   onerror="
     this.style.display='none';
@@ -1801,25 +1838,15 @@ Haz
 
 <div class="navLinks">
 
-<a href="#about">
-About
-</a>
+<a href="#about"><span class="material-symbols-rounded">info</span>About</a>
 
-<a href="#intelligence">
-Map & Analytics
-</a>
+<a href="#intelligence"><span class="material-symbols-rounded">map</span>Map & Analytics</a>
 
-<a href="#conditions">
-Weather & AQI
-</a>
+<a href="#conditions"><span class="material-symbols-rounded">partly_cloudy_day</span>Weather & AQI</a>
 
-<a href="#guidelines">
-Guidelines
-</a>
+<a href="#guidelines"><span class="material-symbols-rounded">menu_book</span>Guidelines</a>
 
-<a href="#getapp">
-Get HazWatch
-</a>
+<a href="#getapp"><span class="material-symbols-rounded">download</span>Get HazWatch</a>
 
 </div>
 
@@ -1829,7 +1856,7 @@ Get HazWatch
   class="themeButton"
   aria-label="Toggle theme"
 >
-☾
+<span class="material-symbols-rounded">dark_mode</span>
 </button>
 
 </div>
@@ -1917,30 +1944,6 @@ Your safety comes first.
 
 Never enter a dangerous place
 to report a hazard.
-
-</div>
-
-</div>
-
-
-
-<div class="heroLogoBox">
-
-<div class="heroLogoWrap">
-
-<img
-  id="heroLogo"
-  src="hazwatch-logo-light.jpg"
-  alt="HazWatch logo"
-  onerror="
-    this.style.display='none';
-    this.nextElementSibling.style.display='grid';
-  "
->
-
-<span class="heroFallback">
-H
-</span>
 
 </div>
 
@@ -2176,30 +2179,33 @@ Reports plotted across India
 <button
   data-layer="standard"
   class="active"
->
-Standard
-</button>
+><span class="material-symbols-rounded">map</span>Standard</button>
 
 <button
   data-layer="satellite"
->
-Satellite
-</button>
+><span class="material-symbols-rounded">satellite_alt</span>Satellite</button>
 
 <button
   id="mapillaryButton"
   data-layer="mapillary"
-  disabled
->
-Mapillary
-</button>
+><span class="material-symbols-rounded">streetview</span>Mapillary</button>
 
 </div>
 
 </div>
 
 
+<div class="mapStage">
 <div id="map"></div>
+<div id="mapillaryViewer"></div>
+<div id="mapillaryMessage">
+  <div>
+    <span class="material-symbols-rounded">streetview</span>
+    <strong>Mapillary street-level imagery</strong>
+    <span id="mapillaryMessageText">Finding nearby imagery…</span>
+  </div>
+</div>
+</div>
 
 
 <div
@@ -2929,20 +2935,10 @@ Download HazWatch ↗
 
 
 <div class="qrBox">
-
 <div>
-
-<strong>
-HazWatch QR
-</strong>
-
-<br><br>
-
-Your Google Play QR code
-will be placed here.
-
+  <img src="qr.png" alt="HazWatch Google Play QR code">
+  <div class="qrCaption">Scan to open HazWatch on Google Play</div>
 </div>
-
 </div>
 
 
@@ -3066,6 +3062,8 @@ in legal action.
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+<script src="https://unpkg.com/mapillary-js@4.1.2/dist/mapillary.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 
 
@@ -3081,6 +3079,38 @@ const API_BASE =
 
 const REFRESH_INTERVAL =
 45000;
+
+const MAPILLARY_ACCESS_TOKEN =
+"MLY|26460833783581937|48136f3adecdb07c6eaa2136a7512dbb";
+
+const HAZWATCH_HAZARDS = [
+  "landslide",
+  "flash_flood",
+  "flood",
+  "urban_flood",
+  "forest_fire",
+  "avalanche",
+  "glof",
+  "debris_mud_flow",
+  "drought",
+  "heat_waves",
+  "cloud_burst"
+];
+
+const HAZARD_ICONS = {
+  all:"apps",
+  landslide:"terrain",
+  flash_flood:"flood",
+  flood:"water",
+  urban_flood:"location_city",
+  forest_fire:"local_fire_department",
+  avalanche:"ac_unit",
+  glof:"waves",
+  debris_mud_flow:"landscape",
+  drought:"water_drop",
+  heat_waves:"device_thermostat",
+  cloud_burst:"thunderstorm"
+};
 
 
 /* IMPORTANT:
@@ -3106,83 +3136,26 @@ document.getElementById(
 
 function resetLogoFallbacks(){
 
-document
-.querySelectorAll(
-".logoFallback,.heroFallback"
-)
-.forEach(
-el =>
-el.style.display =
-"none"
-);
-
-document
-.querySelectorAll(
-"#navLogo,#heroLogo"
-)
-.forEach(
-img =>
-img.style.display =
-"block"
-);
+const navLogo = document.getElementById("navLogo");
+const fallback = document.querySelector(".logoFallback");
+if(navLogo){ navLogo.style.display = "block"; navLogo.src = "hazwatch_logo_512.png"; }
+if(fallback){ fallback.style.display = "none"; }
 
 }
 
-
 function applyTheme(theme){
 
-root.dataset.theme =
-theme;
-
-
-localStorage.setItem(
-"hazwatch-theme",
-theme
-);
-
-
-const dark =
-theme === "dark";
-
-
+root.dataset.theme = theme;
+localStorage.setItem("hazwatch-theme", theme);
 resetLogoFallbacks();
 
-
-document.getElementById(
-"navLogo"
-).src =
-
-dark
-
-? "hazwatch-logo-dark.png"
-
-: "hazwatch-logo-light.jpg";
-
-
-document.getElementById(
-"heroLogo"
-).src =
-
-dark
-
-? "hazwatch-logo-dark.png"
-
-: "hazwatch-logo-light.jpg";
-
-
-themeButton.textContent =
-
-dark
-
-? "☀"
-
-: "☾";
-
+themeButton.innerHTML = theme === "dark"
+  ? '<span class="material-symbols-rounded">light_mode</span>'
+  : '<span class="material-symbols-rounded">dark_mode</span>';
 
 updateChartsTheme();
 
 }
-
 
 
 const savedTheme =
@@ -3269,23 +3242,47 @@ value ?? ""
 }
 
 
+function canonicalHazardKey(value){
+  const key = normaliseKey(value);
+  const aliases = {
+    debris_flow:"debris_mud_flow",
+    mud_flow:"debris_mud_flow",
+    debris_mudflow:"debris_mud_flow",
+    heat_wave:"heat_waves",
+    heatwave:"heat_waves",
+    cloudburst:"cloud_burst",
+    flashflood:"flash_flood",
+    urbanflood:"urban_flood",
+    forestfire:"forest_fire"
+  };
+  return aliases[key] || key;
+}
+
+
 
 function pretty(value){
 
-return String(
-value ?? "Unknown"
-)
+const key = normaliseKey(value);
+const labels = {
+  landslide:"Landslide",
+  flash_flood:"Flash Flood",
+  flood:"Flood",
+  urban_flood:"Urban Flood",
+  forest_fire:"Forest Fire",
+  avalanche:"Avalanche",
+  glof:"GLOF",
+  debris_mud_flow:"Debris/Mud Flow",
+  drought:"Drought",
+  heat_waves:"Heat Waves",
+  cloud_burst:"Cloud Burst",
+  other:"Other"
+};
 
-.replace(
-/_/g,
-" "
-)
+if(labels[key]) return labels[key];
 
-.replace(
-/\b\w/g,
-character =>
-character.toUpperCase()
-);
+return String(value ?? "Unknown")
+.replace(/_/g," ")
+.replace(/\b\w/g, character => character.toUpperCase());
 
 }
 
@@ -3671,11 +3668,7 @@ hazard
 
 return (
 
-hazardColors[
-normaliseKey(
-hazard
-)
-]
+hazardColors[canonicalHazardKey(hazard)]
 
 ||
 
@@ -3763,327 +3756,147 @@ MAP
 ===================================================== */
 
 let map;
-
 let markerLayer;
-
 let standardLayer;
-
 let satelliteLayer;
-
-let mapillaryLayer = null;
-
+let mapillaryViewer = null;
 let allReports = [];
+let selectedHazard = "all";
 
-let selectedHazard =
-"all";
+function showMapillaryMessage(message){
+  const box = document.getElementById("mapillaryMessage");
+  const text = document.getElementById("mapillaryMessageText");
+  if(text) text.textContent = message;
+  if(box) box.style.display = "grid";
+}
 
+function hideMapillaryMessage(){
+  const box = document.getElementById("mapillaryMessage");
+  if(box) box.style.display = "none";
+}
+
+async function nearestMapillaryImage(latitude, longitude){
+  for(const span of [0.03, 0.12, 0.5]){
+    const bbox = [
+      longitude - span,
+      latitude - span,
+      longitude + span,
+      latitude + span
+    ].join(",");
+
+    const url =
+      "https://graph.mapillary.com/images" +
+      "?access_token=" + encodeURIComponent(MAPILLARY_ACCESS_TOKEN) +
+      "&fields=id" +
+      "&bbox=" + encodeURIComponent(bbox) +
+      "&limit=1";
+
+    try{
+      const response = await fetch(url, {cache:"no-store"});
+      if(!response.ok) continue;
+      const json = await response.json();
+      if(json?.data?.[0]?.id) return json.data[0].id;
+    }catch(error){
+      console.warn("Mapillary lookup failed:", error);
+    }
+  }
+  return null;
+}
+
+async function activateMapillary(){
+  const viewerBox = document.getElementById("mapillaryViewer");
+  const mapBox = document.getElementById("map");
+
+  if(!viewerBox || !mapBox || typeof mapillary === "undefined"){
+    showMapillaryMessage("Mapillary viewer could not be loaded.");
+    return;
+  }
+
+  mapBox.style.visibility = "hidden";
+  viewerBox.style.display = "block";
+  showMapillaryMessage("Finding street-level imagery near the current map view…");
+
+  const center = map.getCenter();
+  const imageId = await nearestMapillaryImage(center.lat, center.lng);
+
+  if(!imageId){
+    showMapillaryMessage("No Mapillary imagery was found near this map view.");
+    return;
+  }
+
+  try{
+    if(!mapillaryViewer){
+      mapillaryViewer = new mapillary.Viewer({
+        accessToken: MAPILLARY_ACCESS_TOKEN,
+        container: "mapillaryViewer",
+        imageId: imageId
+      });
+    }else{
+      await mapillaryViewer.moveTo(imageId);
+    }
+    hideMapillaryMessage();
+  }catch(error){
+    console.error("Mapillary viewer error:", error);
+    showMapillaryMessage("Mapillary imagery is temporarily unavailable.");
+  }
+}
+
+function deactivateMapillary(){
+  const viewerBox = document.getElementById("mapillaryViewer");
+  const mapBox = document.getElementById("map");
+  hideMapillaryMessage();
+  if(viewerBox) viewerBox.style.display = "none";
+  if(mapBox) mapBox.style.visibility = "visible";
+  setTimeout(() => map?.invalidateSize(), 0);
+}
+
+function setMapLayer(layerName){
+  document.querySelectorAll("[data-layer]").forEach(button => {
+    button.classList.toggle("active", button.dataset.layer === layerName);
+  });
+
+  if(layerName === "mapillary"){
+    activateMapillary();
+    return;
+  }
+
+  deactivateMapillary();
+
+  if(map.hasLayer(standardLayer)) map.removeLayer(standardLayer);
+  if(map.hasLayer(satelliteLayer)) map.removeLayer(satelliteLayer);
+
+  if(layerName === "satellite") satelliteLayer.addTo(map);
+  else standardLayer.addTo(map);
+}
 
 function initialiseMap(){
+  map = L.map("map", {zoomControl:false}).setView([22.8,79.5],5);
 
-map =
+  L.control.zoom({position:"bottomleft"}).addTo(map);
 
-L.map(
+  standardLayer = L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {maxZoom:19, attribution:"© OpenStreetMap contributors"}
+  );
 
-"map",
+  satelliteLayer = L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    {maxZoom:19, attribution:"Tiles © Esri"}
+  );
 
-{
+  standardLayer.addTo(map);
+  markerLayer = L.layerGroup().addTo(map);
 
-zoomControl:false
-
+  document.querySelectorAll("[data-layer]").forEach(button => {
+    button.onclick = () => setMapLayer(button.dataset.layer);
+  });
 }
-
-)
-
-.setView(
-
-[
-22.8,
-79.5
-],
-
-5
-
-);
-
-
-
-L.control
-.zoom({
-
-position:
-"bottomleft"
-
-})
-.addTo(map);
-
-
-
-standardLayer =
-
-L.tileLayer(
-
-"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-
-{
-
-maxZoom:19,
-
-attribution:
-
-"© OpenStreetMap contributors"
-
-}
-
-);
-
-
-
-satelliteLayer =
-
-L.tileLayer(
-
-"https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-
-{
-
-maxZoom:19,
-
-attribution:
-"Tiles © Esri"
-
-}
-
-);
-
-
-
-standardLayer
-.addTo(map);
-
-
-
-markerLayer =
-
-L.layerGroup()
-
-.addTo(map);
-
-
-
-document
-.querySelectorAll(
-"[data-layer]"
-)
-.forEach(
-
-button => {
-
-button.onclick =
-function(){
-
-if(
-button.disabled
-){
-
-return;
-
-}
-
-
-document
-.querySelectorAll(
-"[data-layer]"
-)
-.forEach(
-
-item =>
-
-item
-.classList
-.remove("active")
-
-);
-
-
-button
-.classList
-.add("active");
-
-
-
-if(
-map.hasLayer(
-standardLayer
-)
-){
-
-map.removeLayer(
-standardLayer
-);
-
-}
-
-
-if(
-map.hasLayer(
-satelliteLayer
-)
-){
-
-map.removeLayer(
-satelliteLayer
-);
-
-}
-
-
-if(
-mapillaryLayer
-&&
-map.hasLayer(
-mapillaryLayer
-)
-){
-
-map.removeLayer(
-mapillaryLayer
-);
-
-}
-
-
-
-if(
-button.dataset.layer
-=== "satellite"
-){
-
-satelliteLayer
-.addTo(map);
-
-}
-
-
-else if(
-button.dataset.layer
-=== "mapillary"
-&&
-mapillaryLayer
-){
-
-standardLayer
-.addTo(map);
-
-mapillaryLayer
-.addTo(map);
-
-}
-
-
-else{
-
-standardLayer
-.addTo(map);
-
-}
-
-
-};
-
-}
-
-);
-
-}
-
-
 
 function configureMapillary(){
-
-const layers =
-
-publicConfig.map_layers
-
-??
-
-publicConfig.mapLayers
-
-??
-
-publicConfig.layers
-
-??
-
-{};
-
-
-const mapillary =
-
-layers.mapillary
-
-??
-
-layers.street
-
-??
-
-null;
-
-
-const tileURL =
-
-typeof mapillary === "string"
-
-?
-
-mapillary
-
-:
-
-mapillary?.url
-
-??
-
-mapillary?.tile_url
-
-??
-
-mapillary?.tiles
-
-??
-
-null;
-
-
-if(!tileURL){
-
-return;
-
-}
-
-
-mapillaryLayer =
-
-L.tileLayer(
-
-tileURL,
-
-{
-
-maxZoom:19,
-
-opacity:.8
-
-}
-
-);
-
-
-document.getElementById(
-"mapillaryButton"
-).disabled =
-false;
-
+  const button = document.getElementById("mapillaryButton");
+  if(button){
+    button.disabled = !(MAPILLARY_ACCESS_TOKEN && typeof mapillary !== "undefined");
+  }
 }
 
 
@@ -4202,7 +4015,7 @@ return true;
 
 return (
 
-normaliseKey(
+canonicalHazardKey(
 reportHazard(
 report
 )
@@ -4457,171 +4270,39 @@ markerLayer
 
 function renderHazardFilters(){
 
-const box =
+const box = document.getElementById("hazardFilters");
+if(!box) return;
 
-document.getElementById(
-"hazardFilters"
-);
+const hazards = ["all", ...HAZWATCH_HAZARDS];
 
+box.innerHTML = hazards.map(hazard => {
+  const active = selectedHazard === hazard ? "active" : "";
+  const label = hazard === "all" ? "All" : pretty(hazard);
+  const color = hazard === "all" ? "#A10D0D" : hazardColor(hazard);
+  const icon = HAZARD_ICONS[hazard] || "warning";
 
+  return `
+    <button
+      class="hazardChip ${active}"
+      data-hazard="${escapeHTML(hazard)}"
+      style="--hazard-color:${escapeHTML(color)}"
+    >
+      <span class="material-symbols-rounded">${escapeHTML(icon)}</span>
+      ${escapeHTML(label)}
+    </button>
+  `;
+}).join("");
 
-const hazards =
-
-[
-...new Set(
-
-allReports
-
-.map(
-reportHazard
-)
-
-.filter(Boolean)
-
-.map(
-normaliseKey
-)
-
-)
-]
-
-.sort();
-
-
-
-let output =
-
-`
-
-<button
-class="hazardChip
-
-${
-
-selectedHazard ===
-"all"
-
-?
-
-"active"
-
-:
-
-""
-
-}"
-
-data-hazard="all">
-
-<span
-class="hazardDot"
-style="
-background:#A10D0D;
-">
-</span>
-
-All
-
-</button>
-
-`;
-
-
-
-hazards
-.forEach(
-
-hazard => {
-
-output +=
-
-`
-
-<button
-class="hazardChip
-
-${
-
-selectedHazard ===
-hazard
-
-?
-
-"active"
-
-:
-
-""
-
-}"
-
-data-hazard="
-${escapeHTML(
-hazard
-)}
-">
-
-<span
-class="hazardDot"
-
-style="
-background:
-${escapeHTML(
-hazardColor(
-hazard
-)
-)};
-">
-
-</span>
-
-${escapeHTML(
-pretty(
-hazard
-)
-)}
-
-</button>
-
-`;
+box.querySelectorAll("[data-hazard]").forEach(button => {
+  button.onclick = function(){
+    selectedHazard = button.dataset.hazard;
+    renderHazardFilters();
+    renderMarkers();
+  };
+});
 
 }
 
-);
-
-
-
-box.innerHTML =
-output;
-
-
-
-box
-.querySelectorAll(
-"[data-hazard]"
-)
-.forEach(
-
-button => {
-
-button.onclick =
-function(){
-
-selectedHazard =
-button.dataset.hazard;
-
-
-renderHazardFilters();
-
-renderMarkers();
-
-};
-
-}
-
-);
-
-}
 
 
 /* =====================================================

@@ -1787,6 +1787,125 @@ body{
   .logoWrap{width:50px;height:46px}
 }
 
+
+
+/* =====================================================
+   SMART PROFESSIONAL INFORMATION ARCHITECTURE
+   ===================================================== */
+section{padding:48px 0}
+.sectionHead{margin-bottom:22px}
+.sectionHead h2{font-size:clamp(1.9rem,3.3vw,2.9rem);letter-spacing:-.035em}
+.hero{padding:26px 0 18px}
+.hero h1{font-size:clamp(2.45rem,4.5vw,3.75rem);line-height:.97;margin:14px 0 14px}
+.heroDescription{font-size:1rem;line-height:1.68}
+.heroButtons{margin-top:21px}
+.safety{margin-top:15px}
+
+.smartPanel{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:24px;
+  box-shadow:0 8px 26px rgba(48,55,61,.065);
+  overflow:hidden;
+}
+.smartPanel + .smartPanel{margin-top:14px}
+.smartSummary{
+  list-style:none;
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  gap:14px;
+  align-items:center;
+  padding:20px 22px;
+  cursor:pointer;
+  user-select:none;
+}
+.smartSummary::-webkit-details-marker{display:none}
+.smartSummary:hover{background:var(--surface2)}
+.smartSummaryIcon{
+  width:44px;height:44px;border-radius:14px;
+  display:grid;place-items:center;
+  background:var(--redSoft);color:var(--red);
+  flex:0 0 auto;
+}
+.smartSummaryIcon .material-symbols-rounded{font-size:23px}
+.smartSummaryText{min-width:0}
+.smartSummaryText strong{display:block;font-size:1.05rem;color:var(--text);letter-spacing:-.01em}
+.smartSummaryText span{display:block;margin-top:3px;color:var(--muted);font-size:.84rem;font-weight:500}
+.smartChevron{color:var(--muted);transition:transform .22s ease}
+.smartPanel[open] > .smartSummary .smartChevron{transform:rotate(180deg)}
+.smartBody{padding:0 22px 22px;border-top:1px solid var(--line)}
+
+.aboutAccordion{display:grid;gap:10px;padding-top:18px}
+.miniAccordion{
+  background:var(--surface2);
+  border:1px solid var(--line);
+  border-radius:18px;
+  overflow:hidden;
+}
+.miniAccordion summary{
+  list-style:none;
+  display:flex;align-items:center;gap:12px;
+  padding:15px 17px;
+  cursor:pointer;
+  font-weight:800;
+}
+.miniAccordion summary::-webkit-details-marker{display:none}
+.miniAccordion summary .material-symbols-rounded:first-child{color:var(--red);font-size:22px}
+.miniAccordion summary .miniTitle{flex:1}
+.miniAccordion summary .miniChevron{color:var(--muted);transition:transform .2s ease}
+.miniAccordion[open] summary .miniChevron{transform:rotate(180deg)}
+.miniAccordionContent{padding:0 17px 17px 51px;color:var(--muted);line-height:1.72}
+.miniAccordionContent p{margin:0}
+.compactTeamGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:2px}
+.compactTeamCard{
+  display:grid;grid-template-columns:54px 1fr;gap:13px;align-items:center;
+  padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line)
+}
+.compactTeamCard .teamAvatar{width:54px;height:54px;border-radius:15px}
+.compactTeamCard h3{font-size:1rem;margin:0 0 4px}
+.compactTeamCard .teamRole{font-size:.68rem;letter-spacing:.08em;margin-bottom:4px}
+.compactTeamCard p{margin:0;color:var(--muted);font-size:.84rem;line-height:1.45}
+
+.analyticsPanel{margin-top:18px}
+.analyticsPanel .smartBody{padding-top:18px}
+.analyticsPanel .analyticsGrid{margin-top:0}
+.analyticsPanel .chartCard,.analyticsPanel .heatCard{box-shadow:none}
+
+.conditions{background:transparent}
+.weatherPanel .smartBody{padding-top:18px}
+.weatherPanel .weatherControl{margin-bottom:16px}
+.weatherPanel .weatherGrid,.weatherPanel .aqGrid{margin-top:0}
+.weatherPanel .aqGrid{margin-top:12px}
+
+.guidelinesPanel .smartBody{padding-top:18px}
+.guidelinesPanel .guidelineGrid{grid-template-columns:repeat(5,1fr)}
+.guidelinesPanel .guide{min-height:190px;box-shadow:none}
+.guidelinesPanel .guideNumber{margin-bottom:24px}
+
+.panelIntro{
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  margin-bottom:14px;color:var(--muted);font-size:.86rem
+}
+.panelIntro strong{color:var(--text)}
+
+@media(max-width:900px){
+  .compactTeamGrid{grid-template-columns:1fr}
+  .guidelinesPanel .guidelineGrid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:760px){
+  section{padding:36px 0}
+  .hero{padding:22px 0 14px}
+  .hero h1{font-size:2.55rem}
+  .smartSummary{padding:17px 16px;gap:11px}
+  .smartSummaryIcon{width:40px;height:40px;border-radius:12px}
+  .smartSummaryText strong{font-size:1rem}
+  .smartSummaryText span{font-size:.78rem}
+  .smartBody{padding:0 15px 16px}
+  .miniAccordionContent{padding:0 15px 15px 47px}
+  .analyticsPanel .analyticsGrid{grid-template-columns:1fr}
+  .guidelinesPanel .guidelineGrid{grid-template-columns:1fr}
+}
+
 </style>
 
 </head>
@@ -1962,156 +2081,71 @@ to report a hazard.
 <!-- ABOUT -->
 
 <section id="about">
-
 <div class="wrap">
+  <details class="smartPanel" id="aboutPanel" open>
+    <summary class="smartSummary">
+      <span class="smartSummaryIcon"><span class="material-symbols-rounded">info</span></span>
+      <span class="smartSummaryText">
+        <strong>About HazWatch</strong>
+        <span>Mission, vision and the people behind the platform</span>
+      </span>
+      <span class="material-symbols-rounded smartChevron">expand_more</span>
+    </summary>
+    <div class="smartBody">
+      <div class="aboutAccordion">
+        <details class="miniAccordion" open>
+          <summary>
+            <span class="material-symbols-rounded">flag</span>
+            <span class="miniTitle">Our Mission</span>
+            <span class="material-symbols-rounded miniChevron">expand_more</span>
+          </summary>
+          <div class="miniAccordionContent">
+            <p>To empower citizens to safely report and map hazards through an accessible geospatial platform that enables real-time disaster awareness, community participation, scientific research, and informed decision-making.</p>
+          </div>
+        </details>
 
+        <details class="miniAccordion">
+          <summary>
+            <span class="material-symbols-rounded">visibility</span>
+            <span class="miniTitle">Our Vision</span>
+            <span class="material-symbols-rounded miniChevron">expand_more</span>
+          </summary>
+          <div class="miniAccordionContent">
+            <p>To create a safer and more resilient India by transforming citizens into contributors of geospatial disaster intelligence, enabling cost-effective hazard data collection, scientific research, and informed decision-making.</p>
+          </div>
+        </details>
 
-<div class="sectionHead">
-
-<div>
-
-<div class="kicker">
-About HazWatch
+        <details class="miniAccordion">
+          <summary>
+            <span class="material-symbols-rounded">groups</span>
+            <span class="miniTitle">Team</span>
+            <span class="material-symbols-rounded miniChevron">expand_more</span>
+          </summary>
+          <div class="miniAccordionContent">
+            <div class="compactTeamGrid">
+              <article class="compactTeamCard">
+                <div class="teamAvatar">ZK</div>
+                <div>
+                  <div class="teamRole"><span class="material-symbols-rounded roleIcon">person</span> Founder and Design Architect</div>
+                  <h3>Zainab Khan, PhD</h3>
+                  <p>Former Post-Doctoral Fellow, IIT Roorkee</p>
+                </div>
+              </article>
+              <article class="compactTeamCard">
+                <div class="teamAvatar">DV</div>
+                <div>
+                  <div class="teamRole"><span class="material-symbols-rounded roleIcon">handshake</span> Strategic Advisor</div>
+                  <h3>Deepika Vashishtha, PhD</h3>
+                  <p>Assistant Professor, Doctor Harisingh Gour Vishwavidyalaya, Sagar, MP</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+  </details>
 </div>
-
-<h2>
-Mission, vision & team
-</h2>
-
-</div>
-
-
-<p class="sectionSubtitle">
-
-Help us make India a safer place.
-
-</p>
-
-</div>
-
-
-
-<div class="aboutGrid">
-
-
-<article class="card aboutCard">
-
-<div class="aboutIcon"><span class="material-symbols-rounded">flag</span></div>
-
-<h3>
-Our Mission
-</h3>
-
-<p>
-
-To empower citizens to safely report
-and map hazards through an accessible
-geospatial platform that enables
-real-time disaster awareness,
-community participation,
-scientific research,
-and informed decision-making.
-
-</p>
-
-</article>
-
-
-
-<article class="card aboutCard">
-
-<div class="aboutIcon"><span class="material-symbols-rounded">visibility</span></div>
-
-<h3>
-Our Vision
-</h3>
-
-<p>
-
-To create a safer and more resilient
-India by transforming citizens into
-contributors of geospatial disaster
-intelligence, enabling cost-effective
-hazard data collection,
-scientific research,
-and informed decision-making.
-
-</p>
-
-</article>
-
-
-</div>
-
-
-
-<div class="teamHeading">
-Team
-</div>
-
-
-
-<div class="teamGrid">
-
-
-<article class="card teamCard">
-
-<div class="teamAvatar">
-ZK
-</div>
-
-<div>
-
-<div class="teamRole"><span class="material-symbols-rounded roleIcon">person</span> Founder and Design Architect</div>
-
-<h3>
-Zainab Khan, PhD
-</h3>
-
-<p>
-Former Post-Doctoral Fellow,
-IIT Roorkee
-</p>
-
-</div>
-
-</article>
-
-
-
-<article class="card teamCard">
-
-<div class="teamAvatar">
-DV
-</div>
-
-<div>
-
-<div class="teamRole"><span class="material-symbols-rounded roleIcon">handshake</span> Strategic Advisor</div>
-
-<h3>
-Deepika Vashishtha, PhD
-</h3>
-
-<p>
-
-Assistant Professor,
-Doctor Harisingh Gour
-Vishwavidyalaya,
-Sagar, MP
-
-</p>
-
-</div>
-
-</article>
-
-
-</div>
-
-
-</div>
-
 </section>
 
 
@@ -2333,6 +2367,16 @@ Loading live leaderboard…
 
 
 
+<details class="smartPanel analyticsPanel" id="analyticsPanel">
+<summary class="smartSummary">
+  <span class="smartSummaryIcon"><span class="material-symbols-rounded">monitoring</span></span>
+  <span class="smartSummaryText">
+    <strong>Detailed analytics</strong>
+    <span>Trends, states, affected areas, demographics and hazard matrices</span>
+  </span>
+  <span class="material-symbols-rounded smartChevron">expand_more</span>
+</summary>
+<div class="smartBody">
 <div class="analyticsGrid">
 
 
@@ -2465,6 +2509,8 @@ Loading live analytics…
 
 </div>
 
+</div>
+</details>
 
 </div>
 
@@ -2474,248 +2520,45 @@ Loading live analytics…
 
 <!-- WEATHER / AQI -->
 
-<section
-  id="conditions"
-  class="conditions"
->
-
+<section id="conditions" class="conditions">
 <div class="wrap">
+  <details class="smartPanel weatherPanel" id="weatherPanel">
+    <summary class="smartSummary">
+      <span class="smartSummaryIcon"><span class="material-symbols-rounded">partly_cloudy_day</span></span>
+      <span class="smartSummaryText">
+        <strong>Weather & air quality</strong>
+        <span id="weatherSummaryText">Open local environmental context from Open-Meteo</span>
+      </span>
+      <span class="material-symbols-rounded smartChevron">expand_more</span>
+    </summary>
+    <div class="smartBody">
+      <div class="panelIntro"><span>Weather and AQI are fetched separately from Open-Meteo and do not come from the HazWatch backend.</span></div>
+      <div class="weatherControl">
+        <button id="locationButton" class="btn btnRed"><span class="material-symbols-rounded">my_location</span>Use my current location</button>
+        <div class="citySearch">
+          <input id="cityInput" placeholder="Search city — e.g. Dehradun">
+          <button id="cityButton" class="btn btnLight"><span class="material-symbols-rounded">search</span>Search</button>
+        </div>
+        <div id="weatherLocation" class="weatherLocation">No location selected</div>
+      </div>
 
+      <div class="weatherGrid">
+        <div class="card weatherCard"><small><span class="material-symbols-rounded weatherIcon">thermostat</span>Temperature</small><strong id="weatherTemp">—</strong><span>°C</span></div>
+        <div class="card weatherCard"><small><span class="material-symbols-rounded weatherIcon">rainy</span>Precipitation</small><strong id="weatherRain">—</strong><span>mm</span></div>
+        <div class="card weatherCard"><small><span class="material-symbols-rounded weatherIcon">air</span>Wind Speed</small><strong id="weatherWind">—</strong><span>km/h</span></div>
+        <div class="card weatherCard"><small><span class="material-symbols-rounded weatherIcon">speed</span>Surface Pressure</small><strong id="weatherPressure">—</strong><span>hPa</span></div>
+        <div class="card weatherCard"><small><span class="material-symbols-rounded weatherIcon">eco</span>US AQI</small><strong id="weatherAQI">—</strong><span id="weatherAQILabel">Air quality</span></div>
+      </div>
 
-<div class="sectionHead">
-
-<div>
-
-<div class="kicker">
-Local Environmental Context
+      <div class="aqGrid">
+        <div class="card weatherCard"><small>PM2.5</small><strong id="pm25">—</strong><span>µg/m³</span></div>
+        <div class="card weatherCard"><small>PM10</small><strong id="pm10">—</strong><span>µg/m³</span></div>
+        <div class="card weatherCard"><small>NO₂</small><strong id="no2">—</strong><span>µg/m³</span></div>
+        <div class="card weatherCard"><small>O₃</small><strong id="o3">—</strong><span>µg/m³</span></div>
+      </div>
+    </div>
+  </details>
 </div>
-
-<h2>
-Weather & air quality
-</h2>
-
-</div>
-
-
-<p class="sectionSubtitle">
-
-Weather and AQI are fetched
-separately from Open-Meteo.
-
-They do not come from
-the HazWatch backend.
-
-</p>
-
-</div>
-
-
-
-<div class="weatherControl">
-
-
-<button
-  id="locationButton"
-  class="btn btnRed"
->
-Use my current location
-</button>
-
-
-<div class="citySearch">
-
-<input
-  id="cityInput"
-  placeholder="Search city — e.g. Dehradun"
->
-
-<button
-  id="cityButton"
-  class="btn btnLight"
->
-Search
-</button>
-
-</div>
-
-
-<div
-  id="weatherLocation"
-  class="weatherLocation"
->
-No location selected
-</div>
-
-
-</div>
-
-
-
-<div class="weatherGrid">
-
-
-<div class="card weatherCard">
-
-<small><span class="material-symbols-rounded weatherIcon">thermostat</span>Temperature</small>
-
-<strong id="weatherTemp">
-—
-</strong>
-
-<span>
-°C
-</span>
-
-</div>
-
-
-
-<div class="card weatherCard">
-
-<small><span class="material-symbols-rounded weatherIcon">rainy</span>Precipitation</small>
-
-<strong id="weatherRain">
-—
-</strong>
-
-<span>
-mm
-</span>
-
-</div>
-
-
-
-<div class="card weatherCard">
-
-<small><span class="material-symbols-rounded weatherIcon">air</span>Wind Speed</small>
-
-<strong id="weatherWind">
-—
-</strong>
-
-<span>
-km/h
-</span>
-
-</div>
-
-
-
-<div class="card weatherCard">
-
-<small><span class="material-symbols-rounded weatherIcon">speed</span>Surface Pressure</small>
-
-<strong id="weatherPressure">
-—
-</strong>
-
-<span>
-hPa
-</span>
-
-</div>
-
-
-
-<div class="card weatherCard">
-
-<small><span class="material-symbols-rounded weatherIcon">eco</span>US AQI</small>
-
-<strong id="weatherAQI">
-—
-</strong>
-
-<span id="weatherAQILabel">
-Air quality
-</span>
-
-</div>
-
-
-</div>
-
-
-
-<div class="aqGrid">
-
-
-<div class="card weatherCard">
-
-<small>
-PM2.5
-</small>
-
-<strong id="pm25">
-—
-</strong>
-
-<span>
-µg/m³
-</span>
-
-</div>
-
-
-
-<div class="card weatherCard">
-
-<small>
-PM10
-</small>
-
-<strong id="pm10">
-—
-</strong>
-
-<span>
-µg/m³
-</span>
-
-</div>
-
-
-
-<div class="card weatherCard">
-
-<small>
-NO₂
-</small>
-
-<strong id="no2">
-—
-</strong>
-
-<span>
-µg/m³
-</span>
-
-</div>
-
-
-
-<div class="card weatherCard">
-
-<small>
-O₃
-</small>
-
-<strong id="o3">
-—
-</strong>
-
-<span>
-µg/m³
-</span>
-
-</div>
-
-
-</div>
-
-
-</div>
-
 </section>
 
 
@@ -2723,155 +2566,27 @@ O₃
 <!-- GUIDELINES -->
 
 <section id="guidelines">
-
 <div class="wrap">
-
-
-<div class="sectionHead">
-
-<div>
-
-<div class="kicker">
-Reporting Guidelines
+  <details class="smartPanel guidelinesPanel" id="guidelinesPanel">
+    <summary class="smartSummary">
+      <span class="smartSummaryIcon"><span class="material-symbols-rounded">menu_book</span></span>
+      <span class="smartSummaryText">
+        <strong>Reporting guidelines</strong>
+        <span>Five steps for safe and correct hazard reporting</span>
+      </span>
+      <span class="material-symbols-rounded smartChevron">expand_more</span>
+    </summary>
+    <div class="smartBody">
+      <div class="guidelineGrid">
+        <article class="card guide"><div class="guideNumber">1</div><h3>Safety first</h3><p>Never go to dangerous places to report hazards. Report only if it is safe to do so.</p></article>
+        <article class="card guide"><div class="guideNumber">2</div><h3>Hazard details</h3><p>Select the hazard type and affected area(s). Choose the incident date.</p></article>
+        <article class="card guide"><div class="guideNumber">3</div><h3>Location</h3><p>Choose the location — either your current location or the place where the incident happened.</p></article>
+        <article class="card guide"><div class="guideNumber">4</div><h3>Photo</h3><p>Capture an image or upload one from the gallery.</p></article>
+        <article class="card guide"><div class="guideNumber">5</div><h3>Review and submit</h3><p>Review the details and submit the report.</p></article>
+      </div>
+    </div>
+  </details>
 </div>
-
-<h2>
-Report safely and correctly
-</h2>
-
-</div>
-
-
-<p class="sectionSubtitle">
-
-The five-step HazWatch
-reporting workflow.
-
-</p>
-
-</div>
-
-
-
-<div class="guidelineGrid">
-
-
-<article class="card guide">
-
-<div class="guideNumber">
-1
-</div>
-
-<h3>
-Safety first
-</h3>
-
-<p>
-
-Never go to dangerous places
-to report hazards.
-
-Report only if it is safe to do so.
-
-</p>
-
-</article>
-
-
-
-<article class="card guide">
-
-<div class="guideNumber">
-2
-</div>
-
-<h3>
-Hazard details
-</h3>
-
-<p>
-
-Select the hazard type
-and affected area(s).
-
-Choose the incident date.
-
-</p>
-
-</article>
-
-
-
-<article class="card guide">
-
-<div class="guideNumber">
-3
-</div>
-
-<h3>
-Location
-</h3>
-
-<p>
-
-Choose the location —
-either your current location
-or the place where
-the incident happened.
-
-</p>
-
-</article>
-
-
-
-<article class="card guide">
-
-<div class="guideNumber">
-4
-</div>
-
-<h3>
-Photo
-</h3>
-
-<p>
-
-Capture an image
-or upload one
-from the gallery.
-
-</p>
-
-</article>
-
-
-
-<article class="card guide">
-
-<div class="guideNumber">
-5
-</div>
-
-<h3>
-Review and submit
-</h3>
-
-<p>
-
-Review the details
-and submit the report.
-
-</p>
-
-</article>
-
-
-</div>
-
-
-</div>
-
 </section>
 
 
@@ -6427,6 +6142,9 @@ label
 
 `${latitude.toFixed(3)}, ${longitude.toFixed(3)}`;
 
+const weatherSummary = document.getElementById("weatherSummaryText");
+if(weatherSummary){ weatherSummary.textContent = label || `${latitude.toFixed(3)}, ${longitude.toFixed(3)}`; }
+
 
 
 try{
@@ -7019,6 +6737,47 @@ searchCity();
 }
 
 );
+
+
+
+
+/* =====================================================
+SMART COLLAPSIBLE PANELS
+===================================================== */
+function openPanelForHash(hash){
+  const panelMap = {
+    "#about":"aboutPanel",
+    "#conditions":"weatherPanel",
+    "#guidelines":"guidelinesPanel"
+  };
+  const panelId = panelMap[hash];
+  if(panelId){
+    const panel = document.getElementById(panelId);
+    if(panel) panel.open = true;
+  }
+}
+
+function resizeVisibleCharts(){
+  Object.values(charts).forEach(chart => {
+    try{ chart.resize(); chart.update("none"); }catch(_e){}
+  });
+  if(map){ setTimeout(() => map.invalidateSize(), 80); }
+}
+
+["aboutPanel","analyticsPanel","weatherPanel","guidelinesPanel"].forEach(id => {
+  const panel = document.getElementById(id);
+  if(panel){
+    panel.addEventListener("toggle", () => {
+      if(panel.open) setTimeout(resizeVisibleCharts, 80);
+    });
+  }
+});
+
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener("click", () => openPanelForHash(link.getAttribute("href")));
+});
+window.addEventListener("hashchange", () => openPanelForHash(location.hash));
+openPanelForHash(location.hash);
 
 
 /* =====================================================

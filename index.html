@@ -1,0 +1,7393 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="theme-color" content="#A10D0D">
+
+<title>HazWatch | Citizen Geospatial Hazard Intelligence</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+rel="stylesheet">
+
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<style>
+
+:root {
+
+  --red:#A10D0D;
+  --red2:#C41919;
+  --red-soft:#FFF1F1;
+
+  --bg:#ECEFF1;
+  --surface:#FFFFFF;
+  --surface2:#F7F9FA;
+
+  --text:#373D41;
+  --muted:#747D84;
+
+  --line:#DCE1E5;
+
+  --blue:#2F5D8A;
+  --green:#267C61;
+
+  --shadow:0 18px 55px rgba(27,34,39,.10);
+
+  --radius:24px;
+
+  --nav:rgba(255,255,255,.93);
+}
+
+
+html[data-theme="dark"] {
+
+  --bg:#0D1114;
+  --surface:#151B1F;
+  --surface2:#1B2227;
+
+  --text:#F4F6F7;
+  --muted:#A9B1B7;
+
+  --line:#293239;
+
+  --red-soft:#2B1719;
+
+  --shadow:0 20px 60px rgba(0,0,0,.32);
+
+  --nav:rgba(13,17,20,.93);
+}
+
+
+* {
+  box-sizing:border-box;
+}
+
+
+html {
+  scroll-behavior:smooth;
+}
+
+
+body {
+
+  margin:0;
+
+  font-family:
+  Inter,
+  system-ui,
+  Arial,
+  sans-serif;
+
+  background:var(--bg);
+
+  color:var(--text);
+
+  line-height:1.6;
+
+  transition:
+  background .25s,
+  color .25s;
+}
+
+
+a {
+  color:inherit;
+  text-decoration:none;
+}
+
+
+button,
+input {
+  font:inherit;
+}
+
+
+button {
+  cursor:pointer;
+}
+
+
+.wrap {
+
+  width:min(
+    1380px,
+    94vw
+  );
+
+  margin:auto;
+}
+
+
+/* ===================================
+NAV
+=================================== */
+
+.nav {
+
+  position:sticky;
+
+  top:0;
+
+  z-index:2000;
+
+  background:var(--nav);
+
+  backdrop-filter:blur(18px);
+
+  border-bottom:
+  1px solid var(--line);
+}
+
+
+.nav-inner {
+
+  height:74px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:
+  space-between;
+
+  gap:20px;
+}
+
+
+.brand {
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  font-size:1.28rem;
+
+  font-weight:900;
+
+  letter-spacing:-.035em;
+}
+
+
+.brand img {
+
+  width:48px;
+
+  height:42px;
+
+  object-fit:contain;
+}
+
+
+.brand-red {
+  color:var(--red);
+}
+
+
+.nav-links {
+
+  display:flex;
+
+  gap:24px;
+
+  align-items:center;
+
+  color:var(--muted);
+
+  font-size:.88rem;
+
+  font-weight:750;
+}
+
+
+.nav-links a:hover {
+  color:var(--red);
+}
+
+
+.theme-button {
+
+  width:44px;
+
+  height:44px;
+
+  border-radius:50%;
+
+  border:
+  1px solid var(--line);
+
+  background:var(--surface);
+
+  color:var(--text);
+
+  display:grid;
+
+  place-items:center;
+
+  font-size:1.1rem;
+}
+
+
+/* ===================================
+GENERAL
+=================================== */
+
+section {
+  padding:72px 0;
+}
+
+
+.card {
+
+  background:var(--surface);
+
+  border:
+  1px solid var(--line);
+
+  border-radius:
+  var(--radius);
+
+  box-shadow:
+  var(--shadow);
+}
+
+
+.kicker {
+
+  color:var(--red);
+
+  font-size:.76rem;
+
+  font-weight:900;
+
+  letter-spacing:.15em;
+
+  text-transform:uppercase;
+}
+
+
+.section-head {
+
+  display:flex;
+
+  justify-content:
+  space-between;
+
+  align-items:end;
+
+  gap:28px;
+
+  margin-bottom:28px;
+}
+
+
+.section-head h2 {
+
+  margin:7px 0 0;
+
+  font-size:
+  clamp(
+    2.2rem,
+    4vw,
+    4rem
+  );
+
+  line-height:.98;
+
+  letter-spacing:-.055em;
+}
+
+
+.section-subtitle {
+
+  max-width:720px;
+
+  color:var(--muted);
+}
+
+
+.btn {
+
+  border:0;
+
+  border-radius:14px;
+
+  padding:
+  13px 18px;
+
+  font-weight:850;
+
+  display:inline-flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:8px;
+}
+
+
+.btn-red {
+
+  background:var(--red);
+
+  color:white;
+
+  box-shadow:
+  0 10px 28px
+  rgba(161,13,13,.22);
+}
+
+
+.btn-light {
+
+  background:var(--surface);
+
+  color:var(--text);
+
+  border:
+  1px solid var(--line);
+}
+
+
+/* ===================================
+ABOUT / HERO
+=================================== */
+
+.hero {
+
+  padding:
+  48px 0 30px;
+
+  background:
+
+  radial-gradient(
+    circle at 82% 10%,
+    rgba(161,13,13,.12),
+    transparent 26%
+  );
+}
+
+
+.hero-grid {
+
+  display:grid;
+
+  grid-template-columns:
+  1.05fr .95fr;
+
+  gap:42px;
+
+  align-items:center;
+}
+
+
+.eyebrow {
+
+  display:inline-flex;
+
+  align-items:center;
+
+  gap:9px;
+
+  padding:
+  8px 13px;
+
+  border:
+  1px solid var(--line);
+
+  border-radius:999px;
+
+  background:var(--surface);
+
+  color:var(--red);
+
+  font-size:.76rem;
+
+  font-weight:900;
+
+  letter-spacing:.08em;
+
+  text-transform:uppercase;
+}
+
+
+.eyebrow::before {
+
+  content:"";
+
+  width:8px;
+
+  height:8px;
+
+  border-radius:50%;
+
+  background:var(--red);
+
+  box-shadow:
+  0 0 0 6px
+  rgba(161,13,13,.09);
+}
+
+
+.hero h1 {
+
+  margin:
+  22px 0;
+
+  font-size:
+  clamp(
+    3.3rem,
+    6.7vw,
+    7rem
+  );
+
+  line-height:.9;
+
+  letter-spacing:-.07em;
+}
+
+
+.hero-red {
+  color:var(--red);
+}
+
+
+.hero-description {
+
+  max-width:760px;
+
+  color:var(--muted);
+
+  font-size:1.08rem;
+}
+
+
+.hero-buttons {
+
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:12px;
+
+  margin-top:27px;
+}
+
+
+.safety {
+
+  margin-top:18px;
+
+  color:var(--muted);
+
+  font-size:.86rem;
+}
+
+
+.safety strong {
+  color:var(--red);
+}
+
+
+.hero-logo-box {
+
+  min-height:430px;
+
+  display:grid;
+
+  place-items:center;
+
+  position:relative;
+
+  overflow:hidden;
+
+  background:var(--surface);
+
+  border:
+  1px solid var(--line);
+
+  border-radius:34px;
+
+  box-shadow:
+  var(--shadow);
+}
+
+
+.hero-logo {
+
+  width:min(
+    390px,
+    76%
+  );
+
+  position:relative;
+
+  z-index:2;
+}
+
+
+/* ===================================
+MISSION VISION TEAM
+=================================== */
+
+.about-grid {
+
+  display:grid;
+
+  grid-template-columns:
+  1fr 1fr;
+
+  gap:18px;
+}
+
+
+.about-card {
+
+  padding:30px;
+
+  min-height:270px;
+}
+
+
+.about-icon {
+
+  width:48px;
+
+  height:48px;
+
+  display:grid;
+
+  place-items:center;
+
+  border-radius:15px;
+
+  background:
+  var(--red-soft);
+
+  color:var(--red);
+
+  font-size:1.45rem;
+
+  margin-bottom:30px;
+}
+
+
+.about-card h3 {
+
+  margin:
+  0 0 13px;
+
+  font-size:1.6rem;
+}
+
+
+.about-card p {
+
+  margin:0;
+
+  color:var(--muted);
+
+  font-size:1.03rem;
+}
+
+
+.team-heading {
+
+  margin:
+  28px 0 14px;
+
+  color:var(--muted);
+
+  font-size:.9rem;
+
+  font-weight:900;
+
+  letter-spacing:.14em;
+
+  text-transform:uppercase;
+}
+
+
+.team-grid {
+
+  display:grid;
+
+  grid-template-columns:
+  1fr 1fr;
+
+  gap:18px;
+}
+
+
+.team-card {
+
+  padding:25px;
+
+  display:grid;
+
+  grid-template-columns:
+  auto 1fr;
+
+  gap:18px;
+
+  align-items:center;
+}
+
+
+.team-avatar {
+
+  width:66px;
+
+  height:66px;
+
+  border-radius:19px;
+
+  display:grid;
+
+  place-items:center;
+
+  background:var(--red);
+
+  color:white;
+
+  font-size:1.2rem;
+
+  font-weight:900;
+}
+
+
+.team-role {
+
+  color:var(--red);
+
+  font-size:.76rem;
+
+  font-weight:900;
+
+  letter-spacing:.12em;
+
+  text-transform:uppercase;
+}
+
+
+.team-card h3 {
+
+  margin:
+  4px 0 3px;
+
+  font-size:1.35rem;
+}
+
+
+.team-card p {
+
+  margin:0;
+
+  color:var(--muted);
+}
+
+
+/* ===================================
+MAP AND ANALYTICS
+=================================== */
+
+.live-grid {
+
+  display:grid;
+
+  grid-template-columns:
+  minmax(0,1.7fr)
+  minmax(370px,.75fr);
+
+  gap:20px;
+}
+
+
+.map-card {
+
+  padding:14px;
+
+  overflow:hidden;
+}
+
+
+.map-header {
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:
+  space-between;
+
+  gap:16px;
+
+  padding:
+  7px 6px 15px;
+}
+
+
+.map-header h3 {
+
+  margin:0;
+
+  font-size:1.48rem;
+}
+
+
+.map-header small {
+  color:var(--muted);
+}
+
+
+.layer-switch {
+
+  display:flex;
+
+  gap:4px;
+
+  padding:4px;
+
+  border-radius:13px;
+
+  background:var(--surface2);
+
+  border:
+  1px solid var(--line);
+}
+
+
+.layer-switch button {
+
+  border:0;
+
+  background:transparent;
+
+  color:var(--muted);
+
+  padding:
+  8px 11px;
+
+  border-radius:9px;
+
+  font-weight:800;
+}
+
+
+.layer-switch button.active {
+
+  background:var(--red);
+
+  color:white;
+}
+
+
+#map {
+
+  height:650px;
+
+  border-radius:19px;
+
+  overflow:hidden;
+
+  background:#DCE3E5;
+}
+
+
+.hazard-filters {
+
+  display:flex;
+
+  gap:9px;
+
+  overflow-x:auto;
+
+  padding:
+  14px 2px 2px;
+
+  scrollbar-width:none;
+}
+
+
+.hazard-chip {
+
+  white-space:nowrap;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:7px;
+
+  padding:
+  8px 12px;
+
+  border-radius:999px;
+
+  border:
+  1px solid var(--line);
+
+  background:var(--surface2);
+
+  color:var(--text);
+
+  font-size:.8rem;
+
+  font-weight:800;
+}
+
+
+.hazard-chip.active {
+
+  border-color:var(--red);
+
+  box-shadow:
+  0 0 0 2px
+  rgba(161,13,13,.10);
+}
+
+
+.hazard-dot {
+
+  width:9px;
+
+  height:9px;
+
+  border-radius:50%;
+}
+
+
+.side-panel {
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:16px;
+}
+
+
+.api-card {
+
+  padding:
+  15px 18px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:
+  space-between;
+
+  gap:15px;
+}
+
+
+.api-badge {
+
+  display:flex;
+
+  align-items:center;
+
+  gap:8px;
+
+  color:var(--green);
+
+  font-size:.74rem;
+
+  font-weight:900;
+
+  letter-spacing:.1em;
+
+  text-transform:uppercase;
+}
+
+
+.api-badge::before {
+
+  content:"";
+
+  width:8px;
+
+  height:8px;
+
+  border-radius:50%;
+
+  background:currentColor;
+}
+
+
+.api-badge.error {
+  color:#B3261E;
+}
+
+
+.api-status {
+
+  color:var(--muted);
+
+  font-size:.75rem;
+
+  text-align:right;
+}
+
+
+.kpi-grid {
+
+  display:grid;
+
+  grid-template-columns:
+  repeat(3,1fr);
+
+  gap:10px;
+}
+
+
+.kpi {
+
+  padding:18px;
+
+  min-height:128px;
+}
+
+
+.kpi-icon {
+
+  width:35px;
+
+  height:35px;
+
+  display:grid;
+
+  place-items:center;
+
+  border-radius:11px;
+
+  margin-bottom:14px;
+
+  background:
+  var(--red-soft);
+
+  color:var(--red);
+
+  font-weight:900;
+}
+
+
+.kpi span {
+
+  color:var(--muted);
+
+  font-size:.7rem;
+
+  font-weight:850;
+
+  text-transform:uppercase;
+
+  letter-spacing:.07em;
+}
+
+
+.kpi strong {
+
+  display:block;
+
+  margin-top:5px;
+
+  font-size:2.15rem;
+
+  line-height:1;
+
+  letter-spacing:-.05em;
+}
+
+
+.chart-card {
+
+  padding:20px;
+
+  min-height:290px;
+}
+
+
+.chart-card h4,
+.leaderboard-card h4,
+.heat-card h4 {
+
+  margin:
+  0 0 13px;
+
+  color:var(--muted);
+
+  font-size:.88rem;
+
+  font-weight:900;
+
+  letter-spacing:.1em;
+
+  text-transform:uppercase;
+}
+
+
+.chart-box {
+  height:230px;
+}
+
+
+.leaderboard-card {
+  padding:20px;
+}
+
+
+.leader {
+
+  display:grid;
+
+  grid-template-columns:
+  38px 1fr auto;
+
+  gap:10px;
+
+  align-items:center;
+
+  padding:
+  11px 0;
+
+  border-bottom:
+  1px solid var(--line);
+}
+
+
+.leader:last-child {
+  border-bottom:0;
+}
+
+
+.rank {
+
+  width:34px;
+
+  height:34px;
+
+  border-radius:50%;
+
+  display:grid;
+
+  place-items:center;
+
+  background:var(--surface2);
+
+  font-size:.77rem;
+
+  font-weight:900;
+}
+
+
+.leader:first-child .rank {
+
+  background:var(--red);
+
+  color:white;
+}
+
+
+.leader-name {
+  font-weight:800;
+}
+
+
+.leader small {
+
+  display:block;
+
+  color:var(--muted);
+}
+
+
+.report-count {
+
+  color:var(--red);
+
+  font-size:.8rem;
+
+  font-weight:850;
+}
+
+
+/* ===================================
+ANALYTICS GRID
+=================================== */
+
+.analytics-grid {
+
+  margin-top:20px;
+
+  display:grid;
+
+  grid-template-columns:
+  1fr 1fr;
+
+  gap:18px;
+}
+
+
+.analytics-grid .chart-card {
+
+  min-height:360px;
+}
+
+
+.analytics-grid .chart-box {
+
+  height:290px;
+}
+
+
+.heat-card {
+  padding:20px;
+}
+
+
+.heat-scroll {
+  overflow:auto;
+}
+
+
+.heat-grid {
+
+  display:grid;
+
+  gap:5px;
+
+  min-width:560px;
+}
+
+
+.heat-label {
+
+  display:flex;
+
+  align-items:center;
+
+  padding-right:10px;
+
+  color:var(--muted);
+
+  font-size:.78rem;
+
+  font-weight:800;
+}
+
+
+.heat-cell {
+
+  height:43px;
+
+  display:grid;
+
+  place-items:center;
+
+  border-radius:8px;
+
+  background:var(--surface2);
+
+  font-size:.8rem;
+
+  font-weight:850;
+}
+
+
+.empty {
+
+  display:grid;
+
+  place-items:center;
+
+  text-align:center;
+
+  height:100%;
+
+  min-height:150px;
+
+  color:var(--muted);
+
+  border:
+  1px dashed var(--line);
+
+  border-radius:14px;
+
+  padding:20px;
+}
+
+
+/* ===================================
+WEATHER
+=================================== */
+
+.conditions {
+
+  background:
+
+  linear-gradient(
+    180deg,
+    transparent,
+    rgba(47,93,138,.06),
+    transparent
+  );
+}
+
+
+.weather-control {
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  flex-wrap:wrap;
+
+  margin-bottom:18px;
+}
+
+
+.city-search {
+
+  flex:1;
+
+  min-width:250px;
+
+  display:flex;
+
+  gap:8px;
+}
+
+
+.city-search input {
+
+  flex:1;
+
+  min-width:0;
+
+  padding:
+  12px 14px;
+
+  border-radius:13px;
+
+  border:
+  1px solid var(--line);
+
+  background:var(--surface);
+
+  color:var(--text);
+
+  outline:none;
+}
+
+
+.weather-location {
+
+  color:var(--muted);
+
+  font-size:.78rem;
+}
+
+
+.weather-grid {
+
+  display:grid;
+
+  grid-template-columns:
+  repeat(5,1fr);
+
+  gap:12px;
+}
+
+
+.weather-card {
+
+  padding:19px;
+}
+
+
+.weather-card small {
+
+  color:var(--muted);
+
+  font-weight:800;
+}
+
+
+.weather-card strong {
+
+  display:block;
+
+  margin-top:13px;
+
+  font-size:1.8rem;
+
+  line-height:1.1;
+}
+
+
+.weather-card span {
+
+  color:var(--muted);
+
+  font-size:.75rem;
+}
+
+
+.aq-grid {
+
+  display:grid;
+
+  grid-template-columns:
+  repeat(4,1fr);
+
+  gap:12px;
+
+  margin-top:12px;
+}
+
+
+/* ===================================
+GUIDELINES
+=================================== */
+
+.guideline-grid {
+
+  display:grid;
+
+  grid-template-columns:
+  repeat(5,1fr);
+
+  gap:14px;
+}
+
+
+.guide {
+
+  min-height:235px;
+
+  padding:22px;
+}
+
+
+.guide-number {
+
+  width:43px;
+
+  height:43px;
+
+  border-radius:50%;
+
+  display:grid;
+
+  place-items:center;
+
+  background:
+  var(--red-soft);
+
+  color:var(--red);
+
+  font-weight:900;
+
+  margin-bottom:38px;
+}
+
+
+.guide h3 {
+
+  margin:
+  0 0 8px;
+}
+
+
+.guide p {
+
+  margin:0;
+
+  color:var(--muted);
+}
+
+
+/* ===================================
+APP SECTION
+=================================== */
+
+.download-card {
+
+  padding:32px;
+
+  display:grid;
+
+  grid-template-columns:
+  1.2fr .8fr;
+
+  gap:22px;
+
+  align-items:center;
+
+  background:
+
+  linear-gradient(
+    135deg,
+    var(--surface),
+    var(--surface2)
+  );
+}
+
+
+.download-card h2 {
+
+  margin:
+  8px 0 16px;
+
+  font-size:
+  clamp(
+    2.2rem,
+    4vw,
+    4rem
+  );
+
+  line-height:1;
+
+  letter-spacing:-.055em;
+}
+
+
+.qr-box {
+
+  height:250px;
+
+  display:grid;
+
+  place-items:center;
+
+  padding:24px;
+
+  text-align:center;
+
+  border:
+  2px dashed var(--line);
+
+  border-radius:22px;
+
+  background:var(--surface);
+
+  color:var(--muted);
+}
+
+
+/* ===================================
+COPYRIGHT
+=================================== */
+
+footer {
+
+  padding:
+  25px 0 45px;
+}
+
+
+.copyright {
+
+  border-top:
+  1px solid var(--line);
+}
+
+
+details {
+  padding-top:22px;
+}
+
+
+summary {
+
+  cursor:pointer;
+
+  list-style:none;
+
+  display:flex;
+
+  justify-content:
+  space-between;
+
+  align-items:center;
+
+  gap:20px;
+
+  font-weight:850;
+}
+
+
+summary::-webkit-details-marker {
+  display:none;
+}
+
+
+.copyright-body {
+
+  max-width:950px;
+
+  padding-top:22px;
+
+  color:var(--muted);
+}
+
+
+.copyright-body p {
+
+  margin:
+  0 0 18px;
+}
+
+
+/* ===================================
+LEAFLET
+=================================== */
+
+.leaflet-container {
+
+  font-family:
+  Inter,
+  Arial,
+  sans-serif;
+}
+
+
+.leaflet-control-attribution {
+
+  font-size:
+  10px !important;
+}
+
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+
+  background:
+  var(--surface);
+
+  color:
+  var(--text);
+}
+
+
+/* ===================================
+RESPONSIVE
+=================================== */
+
+@media(max-width:1100px) {
+
+  .nav-links {
+    display:none;
+  }
+
+  .hero-grid,
+  .live-grid {
+    grid-template-columns:1fr;
+  }
+
+  .hero-logo-box {
+    min-height:340px;
+  }
+
+  .side-panel {
+
+    display:grid;
+
+    grid-template-columns:
+    1fr 1fr;
+  }
+
+  .api-card,
+  .leaderboard-card {
+    grid-column:1/-1;
+  }
+
+  #map {
+    height:560px;
+  }
+
+  .weather-grid {
+    grid-template-columns:
+    repeat(3,1fr);
+  }
+
+  .aq-grid {
+    grid-template-columns:
+    repeat(2,1fr);
+  }
+
+  .guideline-grid {
+    grid-template-columns:
+    1fr 1fr;
+  }
+
+}
+
+
+@media(max-width:760px) {
+
+  .hero-grid {
+
+    display:flex;
+
+    flex-direction:
+    column-reverse;
+  }
+
+  .hero-logo-box {
+
+    width:100%;
+
+    min-height:280px;
+  }
+
+  .hero-logo {
+    width:67%;
+  }
+
+  .hero h1 {
+    font-size:3.55rem;
+  }
+
+  .section-head {
+    display:block;
+  }
+
+  .section-subtitle {
+    margin-top:14px;
+  }
+
+  .about-grid,
+  .team-grid,
+  .download-card,
+  .analytics-grid {
+
+    grid-template-columns:1fr;
+  }
+
+  .map-header {
+
+    flex-direction:column;
+
+    align-items:flex-start;
+  }
+
+  #map {
+    height:520px;
+  }
+
+  .side-panel {
+    display:flex;
+  }
+
+  .weather-grid {
+    grid-template-columns:
+    1fr 1fr;
+  }
+
+  .guideline-grid {
+    grid-template-columns:1fr;
+  }
+
+}
+
+
+@media(max-width:450px) {
+
+  .hero h1 {
+    font-size:3rem;
+  }
+
+  .hero-buttons .btn {
+
+    width:100%;
+
+    justify-content:center;
+  }
+
+  .kpi-grid {
+
+    grid-template-columns:
+    1fr 1fr;
+  }
+
+  .kpi:last-child {
+    grid-column:1/-1;
+  }
+
+  #map {
+    height:470px;
+  }
+
+  .team-card {
+    grid-template-columns:1fr;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- ===================================
+NAVBAR
+=================================== -->
+
+<nav class="nav">
+
+<div class="wrap nav-inner">
+
+<a
+href="#top"
+class="brand">
+
+<img
+id="navLogo"
+src="hazwatch-logo-light.jpg"
+alt="HazWatch">
+
+<div>
+
+<span class="brand-red">
+Haz
+</span>Watch
+
+</div>
+
+</a>
+
+
+<div class="nav-links">
+
+<a href="#about">
+About
+</a>
+
+<a href="#intelligence">
+Map & Analytics
+</a>
+
+<a href="#conditions">
+Weather & AQI
+</a>
+
+<a href="#guidelines">
+Guidelines
+</a>
+
+<a href="#getapp">
+Get HazWatch
+</a>
+
+</div>
+
+
+<button
+id="themeButton"
+class="theme-button">
+
+☾
+
+</button>
+
+</div>
+
+</nav>
+
+
+
+<!-- ===================================
+ABOUT HERO
+=================================== -->
+
+<header
+id="top"
+class="hero">
+
+<div class="wrap hero-grid">
+
+
+<div>
+
+<div class="eyebrow">
+
+Citizen Science ·
+Geospatial Intelligence
+
+</div>
+
+
+<h1>
+
+About<br>
+
+<span class="hero-red">
+
+HazWatch.
+
+</span>
+
+</h1>
+
+
+<p class="hero-description">
+
+HazWatch is a citizen science-based
+geospatial mobile application for
+multi-hazard incident reporting in India.
+
+It connects citizen observations with
+mapped hazard evidence,
+public analytics,
+and research-oriented data access.
+
+</p>
+
+
+<div class="hero-buttons">
+
+<a
+href="#intelligence"
+class="btn btn-red">
+
+Explore HazWatch data
+
+</a>
+
+
+<a
+href="https://play.google.com/store/apps/details?id=in.hazwatch.myapp"
+target="_blank"
+rel="noopener"
+class="btn btn-light">
+
+Get it on Google Play ↗
+
+</a>
+
+</div>
+
+
+<div class="safety">
+
+<strong>
+Your safety comes first.
+</strong>
+
+Never enter a dangerous place
+to report a hazard.
+
+</div>
+
+</div>
+
+
+<div class="hero-logo-box">
+
+<img
+id="heroLogo"
+src="hazwatch-logo-light.jpg"
+class="hero-logo"
+alt="HazWatch">
+
+</div>
+
+
+</div>
+
+</header>
+
+
+
+<main>
+
+
+<!-- ===================================
+MISSION VISION TEAM
+=================================== -->
+
+<section id="about">
+
+<div class="wrap">
+
+
+<div class="section-head">
+
+<div>
+
+<div class="kicker">
+About HazWatch
+</div>
+
+<h2>
+
+Mission,
+vision & team
+
+</h2>
+
+</div>
+
+
+<p class="section-subtitle">
+
+Help us make India
+a safer place.
+
+</p>
+
+</div>
+
+
+
+<div class="about-grid">
+
+
+<article class="card about-card">
+
+<div class="about-icon">
+⌖
+</div>
+
+<h3>
+Our Mission
+</h3>
+
+<p>
+
+To empower citizens to safely report
+and map hazards through an accessible
+geospatial platform that enables
+real-time disaster awareness,
+community participation,
+scientific research,
+and informed decision-making.
+
+</p>
+
+</article>
+
+
+
+<article class="card about-card">
+
+<div class="about-icon">
+◉
+</div>
+
+<h3>
+Our Vision
+</h3>
+
+<p>
+
+To create a safer and more resilient
+India by transforming citizens into
+contributors of geospatial disaster
+intelligence, enabling cost-effective
+hazard data collection,
+scientific research,
+and informed decision-making.
+
+</p>
+
+</article>
+
+
+</div>
+
+
+
+<div class="team-heading">
+
+Team
+
+</div>
+
+
+
+<div class="team-grid">
+
+
+<article class="card team-card">
+
+<div class="team-avatar">
+ZK
+</div>
+
+<div>
+
+<div class="team-role">
+
+Founder and Design Architect
+
+</div>
+
+<h3>
+
+Zainab Khan, PhD
+
+</h3>
+
+<p>
+
+Former Post-Doctoral Fellow,
+IIT Roorkee
+
+</p>
+
+</div>
+
+</article>
+
+
+
+<article class="card team-card">
+
+<div class="team-avatar">
+DV
+</div>
+
+<div>
+
+<div class="team-role">
+
+Strategic Advisor
+
+</div>
+
+<h3>
+
+Deepika Vashishtha, PhD
+
+</h3>
+
+<p>
+
+Assistant Professor,
+Doctor Harisingh Gour
+Vishwavidyalaya,
+Sagar, MP
+
+</p>
+
+</div>
+
+</article>
+
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- ===================================
+MAP + ANALYTICS
+=================================== -->
+
+<section id="intelligence">
+
+<div class="wrap">
+
+
+<div class="section-head">
+
+<div>
+
+<div class="kicker">
+
+HazWatch Live Intelligence
+
+</div>
+
+<h2>
+
+Incident map
+& analytics
+
+</h2>
+
+</div>
+
+
+<p class="section-subtitle">
+
+Live public-safe incident reports,
+analytics and contributor information
+from the HazWatch backend.
+
+</p>
+
+</div>
+
+
+
+<div class="live-grid">
+
+
+<!-- MAP -->
+
+<div class="card map-card">
+
+
+<div class="map-header">
+
+<div>
+
+<h3>
+
+Incident map
+
+</h3>
+
+<small>
+
+Reports plotted across India
+
+</small>
+
+</div>
+
+
+<div class="layer-switch">
+
+<button
+data-layer="standard"
+class="active">
+
+Standard
+
+</button>
+
+<button
+data-layer="satellite">
+
+Satellite
+
+</button>
+
+</div>
+
+</div>
+
+
+
+<div id="map"></div>
+
+
+<div
+id="hazardFilters"
+class="hazard-filters">
+
+</div>
+
+
+</div>
+
+
+
+<!-- SIDE ANALYTICS -->
+
+<aside class="side-panel">
+
+
+<div class="card api-card">
+
+<div
+id="apiBadge"
+class="api-badge">
+
+Connecting
+
+</div>
+
+
+<div
+id="apiStatus"
+class="api-status">
+
+HazWatch API
+
+</div>
+
+</div>
+
+
+
+<div class="kpi-grid">
+
+
+<div class="card kpi">
+
+<div class="kpi-icon">
+!
+</div>
+
+<span>
+
+Reports Filed
+
+</span>
+
+<strong id="kpiReports">
+
+—
+
+</strong>
+
+</div>
+
+
+
+<div class="card kpi">
+
+<div class="kpi-icon">
+◎
+</div>
+
+<span>
+
+Contributors
+
+</span>
+
+<strong id="kpiContributors">
+
+—
+
+</strong>
+
+</div>
+
+
+
+<div class="card kpi">
+
+<div class="kpi-icon">
+⌖
+</div>
+
+<span>
+
+States Covered
+
+</span>
+
+<strong id="kpiStates">
+
+—
+
+</strong>
+
+</div>
+
+
+</div>
+
+
+
+<div class="card chart-card">
+
+<h4>
+
+Reports by Hazard Type
+
+</h4>
+
+<div
+class="chart-box"
+id="hazardChartBox">
+
+<canvas id="hazardChart"></canvas>
+
+</div>
+
+</div>
+
+
+
+<div class="card leaderboard-card">
+
+<h4>
+
+Top Contributors
+
+</h4>
+
+<div id="leaderboard">
+
+<div class="empty">
+
+Loading live leaderboard…
+
+</div>
+
+</div>
+
+</div>
+
+
+</aside>
+
+
+</div>
+
+
+
+<!-- MORE ANALYTICS -->
+
+<div class="analytics-grid">
+
+
+<div class="card chart-card">
+
+<h4>
+
+Reports Over Time
+
+</h4>
+
+<div
+class="chart-box"
+id="timeChartBox">
+
+<canvas id="timeChart"></canvas>
+
+</div>
+
+</div>
+
+
+
+<div class="card chart-card">
+
+<h4>
+
+Reports by State
+
+</h4>
+
+<div
+class="chart-box"
+id="stateChartBox">
+
+<canvas id="stateChart"></canvas>
+
+</div>
+
+</div>
+
+
+
+<div class="card chart-card">
+
+<h4>
+
+Reports by Affected Area
+
+</h4>
+
+<div
+class="chart-box"
+id="areaChartBox">
+
+<canvas id="areaChart"></canvas>
+
+</div>
+
+</div>
+
+
+
+<div class="card chart-card">
+
+<h4>
+
+Demographics — Gender
+
+</h4>
+
+<div
+class="chart-box"
+id="genderChartBox">
+
+<canvas id="genderChart"></canvas>
+
+</div>
+
+</div>
+
+
+
+<div class="card chart-card">
+
+<h4>
+
+Demographics — Education
+
+</h4>
+
+<div
+class="chart-box"
+id="educationChartBox">
+
+<canvas id="educationChart"></canvas>
+
+</div>
+
+</div>
+
+
+
+<div class="card chart-card">
+
+<h4>
+
+Demographics — Age Groups
+
+</h4>
+
+<div
+class="chart-box"
+id="ageChartBox">
+
+<canvas id="ageChart"></canvas>
+
+</div>
+
+</div>
+
+
+
+<div class="card heat-card">
+
+<h4>
+
+Hazard Type × Month
+
+</h4>
+
+<div
+id="monthHeat"
+class="heat-scroll">
+
+<div class="empty">
+
+Loading live data…
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="card heat-card">
+
+<h4>
+
+Hazard Type × State
+
+</h4>
+
+<div
+id="stateHeat"
+class="heat-scroll">
+
+<div class="empty">
+
+Loading live data…
+
+</div>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- ===================================
+WEATHER AQI
+=================================== -->
+
+<section
+id="conditions"
+class="conditions">
+
+<div class="wrap">
+
+
+<div class="section-head">
+
+<div>
+
+<div class="kicker">
+
+Local Environmental Context
+
+</div>
+
+<h2>
+
+Weather
+& air quality
+
+</h2>
+
+</div>
+
+
+<p class="section-subtitle">
+
+Weather and AQI come independently
+from Open-Meteo for the visitor's
+selected location.
+
+They are not fetched from
+the HazWatch backend.
+
+</p>
+
+</div>
+
+
+
+<div class="weather-control">
+
+
+<button
+id="locationButton"
+class="btn btn-red">
+
+Use my current location
+
+</button>
+
+
+<div class="city-search">
+
+<input
+id="cityInput"
+placeholder="Search city — e.g. Dehradun">
+
+<button
+id="cityButton"
+class="btn btn-light">
+
+Search
+
+</button>
+
+</div>
+
+
+<div
+id="weatherLocation"
+class="weather-location">
+
+No location selected
+
+</div>
+
+
+</div>
+
+
+
+<div class="weather-grid">
+
+
+<div class="card weather-card">
+
+<small>
+Temperature
+</small>
+
+<strong id="weatherTemp">
+—
+</strong>
+
+<span>
+°C
+</span>
+
+</div>
+
+
+
+<div class="card weather-card">
+
+<small>
+Precipitation
+</small>
+
+<strong id="weatherRain">
+—
+</strong>
+
+<span>
+mm
+</span>
+
+</div>
+
+
+
+<div class="card weather-card">
+
+<small>
+Wind Speed
+</small>
+
+<strong id="weatherWind">
+—
+</strong>
+
+<span>
+km/h
+</span>
+
+</div>
+
+
+
+<div class="card weather-card">
+
+<small>
+Surface Pressure
+</small>
+
+<strong id="weatherPressure">
+—
+</strong>
+
+<span>
+hPa
+</span>
+
+</div>
+
+
+
+<div class="card weather-card">
+
+<small>
+US AQI
+</small>
+
+<strong id="weatherAQI">
+—
+</strong>
+
+<span id="weatherAQILabel">
+
+Air quality
+
+</span>
+
+</div>
+
+
+</div>
+
+
+
+<div class="aq-grid">
+
+
+<div class="card weather-card">
+
+<small>
+PM2.5
+</small>
+
+<strong id="pm25">
+—
+</strong>
+
+<span>
+µg/m³
+</span>
+
+</div>
+
+
+
+<div class="card weather-card">
+
+<small>
+PM10
+</small>
+
+<strong id="pm10">
+—
+</strong>
+
+<span>
+µg/m³
+</span>
+
+</div>
+
+
+
+<div class="card weather-card">
+
+<small>
+NO₂
+</small>
+
+<strong id="no2">
+—
+</strong>
+
+<span>
+µg/m³
+</span>
+
+</div>
+
+
+
+<div class="card weather-card">
+
+<small>
+O₃
+</small>
+
+<strong id="o3">
+—
+</strong>
+
+<span>
+µg/m³
+</span>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- ===================================
+GUIDELINES
+=================================== -->
+
+<section id="guidelines">
+
+<div class="wrap">
+
+
+<div class="section-head">
+
+<div>
+
+<div class="kicker">
+
+Reporting Guidelines
+
+</div>
+
+<h2>
+
+Report safely
+and correctly
+
+</h2>
+
+</div>
+
+
+<p class="section-subtitle">
+
+The five-step HazWatch
+reporting workflow.
+
+</p>
+
+</div>
+
+
+
+<div class="guideline-grid">
+
+
+<article class="card guide">
+
+<div class="guide-number">
+1
+</div>
+
+<h3>
+
+Safety first
+
+</h3>
+
+<p>
+
+Never go to dangerous places
+to report hazards.
+
+Report only if it is
+safe to do so.
+
+</p>
+
+</article>
+
+
+
+<article class="card guide">
+
+<div class="guide-number">
+2
+</div>
+
+<h3>
+
+Hazard details
+
+</h3>
+
+<p>
+
+Select the hazard type
+and affected area(s).
+
+Choose the incident date.
+
+</p>
+
+</article>
+
+
+
+<article class="card guide">
+
+<div class="guide-number">
+3
+</div>
+
+<h3>
+
+Location
+
+</h3>
+
+<p>
+
+Choose the location —
+either your current location
+or the place where
+the incident happened.
+
+</p>
+
+</article>
+
+
+
+<article class="card guide">
+
+<div class="guide-number">
+4
+</div>
+
+<h3>
+
+Photo
+
+</h3>
+
+<p>
+
+Capture an image
+or upload one
+from the gallery.
+
+</p>
+
+</article>
+
+
+
+<article class="card guide">
+
+<div class="guide-number">
+5
+</div>
+
+<h3>
+
+Review and submit
+
+</h3>
+
+<p>
+
+Review the details
+and submit the report.
+
+</p>
+
+</article>
+
+
+</div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- ===================================
+GET APP
+=================================== -->
+
+<section id="getapp">
+
+<div class="wrap">
+
+
+<div class="card download-card">
+
+
+<div>
+
+
+<div class="kicker">
+
+Reporting & Data Access
+
+</div>
+
+
+<h2>
+
+Continue in
+the HazWatch app
+
+</h2>
+
+
+<p class="section-subtitle">
+
+For incident reporting
+and HazData access requests,
+download HazWatch from
+Google Play.
+
+The website provides
+public maps,
+analytics,
+and environmental context.
+
+</p>
+
+
+<div class="hero-buttons">
+
+<a
+href="https://play.google.com/store/apps/details?id=in.hazwatch.myapp"
+target="_blank"
+rel="noopener"
+class="btn btn-red">
+
+Download HazWatch ↗
+
+</a>
+
+</div>
+
+
+</div>
+
+
+
+<div class="qr-box">
+
+
+<div>
+
+<strong>
+
+HazWatch QR
+
+</strong>
+
+<br><br>
+
+Your Google Play QR code
+will be placed here.
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+</section>
+
+
+
+</main>
+
+
+
+<!-- ===================================
+COPYRIGHT
+=================================== -->
+
+<footer>
+
+
+<div class="wrap copyright">
+
+
+<details>
+
+
+<summary>
+
+
+<span>
+
+© 2026 HazWatch.
+All rights reserved.
+
+</span>
+
+
+<span>
+
+⌄
+
+</span>
+
+
+</summary>
+
+
+
+<div class="copyright-body">
+
+
+<p>
+
+HazWatch is a citizen
+science-based geospatial
+mobile application for
+multi-hazard incident
+reporting in India.
+
+</p>
+
+
+<p>
+
+This application,
+including its concept,
+design,
+user interface,
+graphics,
+database structure,
+source code,
+and functionality,
+is the intellectual property
+of Zainab Khan.
+
+</p>
+
+
+<p>
+
+No part of this application
+may be copied,
+reproduced,
+distributed,
+transmitted,
+displayed,
+or otherwise used
+in any form without
+prior written permission.
+
+</p>
+
+
+<p>
+
+The name “HazWatch”,
+its logo,
+and associated branding
+elements are proprietary.
+
+</p>
+
+
+<p>
+
+Unauthorized use,
+duplication,
+or imitation may result
+in legal action.
+
+</p>
+
+
+</div>
+
+
+</details>
+
+
+</div>
+
+
+</footer>
+
+
+
+<script
+src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+
+<script
+src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js">
+</script>
+
+
+<script>
+
+/* =========================================================
+CORRECT HAZWATCH API
+========================================================= */
+
+const API_BASE =
+"https://disaster-watch-beta.preview.emergentagent.com/api";
+
+
+const REFRESH_INTERVAL =
+45000;
+
+
+/* =========================================================
+THEME
+========================================================= */
+
+const root =
+document.documentElement;
+
+
+const themeButton =
+document.getElementById(
+"themeButton"
+);
+
+
+function applyTheme(theme) {
+
+root.dataset.theme =
+theme;
+
+
+localStorage.setItem(
+"hazwatch-theme",
+theme
+);
+
+
+const dark =
+theme === "dark";
+
+
+document.getElementById(
+"navLogo"
+).src =
+
+dark
+
+? "hazwatch-logo-dark.png"
+
+: "hazwatch-logo-light.jpg";
+
+
+document.getElementById(
+"heroLogo"
+).src =
+
+dark
+
+? "hazwatch-logo-dark.png"
+
+: "hazwatch-logo-light.jpg";
+
+
+themeButton.textContent =
+
+dark
+
+? "☀"
+
+: "☾";
+
+
+updateChartsTheme();
+
+}
+
+
+
+const savedTheme =
+localStorage.getItem(
+"hazwatch-theme"
+);
+
+
+if(savedTheme) {
+
+applyTheme(
+savedTheme
+);
+
+}
+
+else {
+
+const prefersDark =
+
+window
+.matchMedia(
+"(prefers-color-scheme: dark)"
+)
+.matches;
+
+
+applyTheme(
+
+prefersDark
+? "dark"
+: "light"
+
+);
+
+}
+
+
+
+themeButton.onclick =
+function() {
+
+applyTheme(
+
+root.dataset.theme
+=== "dark"
+
+? "light"
+
+: "dark"
+
+);
+
+};
+
+
+
+/* =========================================================
+HELPERS
+========================================================= */
+
+function normaliseKey(value) {
+
+return String(
+value || ""
+)
+
+.toLowerCase()
+
+.trim()
+
+.replace(
+/\s+/g,
+"_"
+)
+
+.replace(
+/[-/]+/g,
+"_"
+);
+
+}
+
+
+
+function pretty(value) {
+
+return String(
+value || "Unknown"
+)
+
+.replace(
+/_/g,
+" "
+)
+
+.replace(
+/\b\w/g,
+character =>
+character.toUpperCase()
+);
+
+}
+
+
+
+function escapeHTML(value) {
+
+return String(
+value ?? ""
+)
+
+.replace(
+/[&<>"]/g,
+character => ({
+
+"&":"&amp;",
+
+"<":"&lt;",
+
+">":"&gt;",
+
+'"':"&quot;"
+
+})[character]
+
+);
+
+}
+
+
+
+async function API(path) {
+
+const response =
+await fetch(
+
+API_BASE + path,
+
+{
+
+headers:{
+
+"Accept":
+"application/json"
+
+},
+
+cache:
+"no-store"
+
+}
+
+);
+
+
+if(!response.ok) {
+
+throw new Error(
+
+path +
+" returned HTTP " +
+response.status
+
+);
+
+}
+
+
+return response.json();
+
+}
+
+
+
+/* =========================================================
+ROBUST API PARSING
+========================================================= */
+
+function unwrapObject(
+raw,
+possibleKeys=[]
+) {
+
+if(
+!raw
+||
+typeof raw !== "object"
+) {
+
+return {};
+
+}
+
+
+for(
+const key
+of possibleKeys
+) {
+
+if(
+raw[key]
+&&
+typeof raw[key]
+=== "object"
+&&
+!Array.isArray(
+raw[key]
+)
+) {
+
+return raw[key];
+
+}
+
+}
+
+
+if(
+raw.data
+&&
+typeof raw.data
+=== "object"
+&&
+!Array.isArray(
+raw.data
+)
+) {
+
+return raw.data;
+
+}
+
+
+return raw;
+
+}
+
+
+
+function unwrapArray(
+raw,
+possibleKeys=[]
+) {
+
+if(
+Array.isArray(raw)
+) {
+
+return raw;
+
+}
+
+
+if(
+!raw
+||
+typeof raw !== "object"
+) {
+
+return [];
+
+}
+
+
+for(
+const key
+of possibleKeys
+) {
+
+if(
+Array.isArray(
+raw[key]
+)
+) {
+
+return raw[key];
+
+}
+
+}
+
+
+if(
+Array.isArray(
+raw.data
+)
+) {
+
+return raw.data;
+
+}
+
+
+return [];
+
+}
+
+
+
+function valueFrom(
+object,
+keys
+) {
+
+for(
+const key
+of keys
+) {
+
+if(
+object
+&&
+object[key]
+!== undefined
+) {
+
+return object[key];
+
+}
+
+}
+
+
+return undefined;
+
+}
+
+
+
+function normaliseCategories(
+value,
+preferredKey
+) {
+
+if(
+Array.isArray(value)
+) {
+
+return value.map(
+
+item => {
+
+if(
+item
+&&
+typeof item
+=== "object"
+) {
+
+return {
+
+category:
+
+item[
+preferredKey
+]
+??
+
+item.category
+??
+
+item.label
+??
+
+item.name
+??
+
+item.key
+??
+
+"Unknown",
+
+count:
+
+Number(
+
+item.count
+??
+
+item.value
+??
+
+item.total
+??
+
+0
+
+)
+
+};
+
+}
+
+
+return {
+
+category:
+String(item),
+
+count:
+0
+
+};
+
+}
+
+);
+
+}
+
+
+
+if(
+value
+&&
+typeof value
+=== "object"
+) {
+
+return Object
+.entries(value)
+.map(
+
+([
+category,
+count
+]) => ({
+
+category:
+
+category,
+
+count:
+
+Number(
+
+typeof count
+=== "object"
+
+?
+
+count.count
+??
+
+count.value
+??
+
+count.total
+??
+
+0
+
+:
+
+count
+
+)
+
+})
+
+);
+
+}
+
+
+return [];
+
+}
+
+
+
+/* =========================================================
+HAZARD CONFIG
+========================================================= */
+
+let hazardColors = {};
+
+
+function hazardColor(
+hazard
+) {
+
+return (
+
+hazardColors[
+normaliseKey(
+hazard
+)
+]
+
+||
+
+"#A10D0D"
+
+);
+
+}
+
+
+
+async function loadHazardConfig() {
+
+const raw =
+await API(
+"/public/config"
+);
+
+
+const config =
+unwrapObject(
+
+raw,
+
+[
+"config"
+]
+
+);
+
+
+const colors =
+
+config.hazard_colors
+
+??
+
+config.hazardColors
+
+??
+
+config.colors
+
+??
+
+{};
+
+
+hazardColors = {};
+
+
+Object
+.entries(colors)
+.forEach(
+
+([
+name,
+color
+]) => {
+
+hazardColors[
+normaliseKey(name)
+] =
+color;
+
+}
+
+);
+
+
+return config;
+
+}
+
+
+
+/* =========================================================
+MAP
+========================================================= */
+
+let map;
+
+let markerLayer;
+
+let allReports = [];
+
+let selectedHazard =
+"all";
+
+
+function initialiseMap() {
+
+
+map =
+L.map(
+
+"map",
+
+{
+
+zoomControl:false
+
+}
+
+)
+
+.setView(
+
+[
+22.8,
+79.5
+],
+
+5
+
+);
+
+
+
+L.control
+.zoom({
+
+position:
+"bottomleft"
+
+})
+.addTo(map);
+
+
+
+const standard =
+
+L.tileLayer(
+
+"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+
+{
+
+maxZoom:19,
+
+attribution:
+
+"© OpenStreetMap contributors"
+
+}
+
+);
+
+
+
+const satellite =
+
+L.tileLayer(
+
+"https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+
+{
+
+maxZoom:19,
+
+attribution:
+"Tiles © Esri"
+
+}
+
+);
+
+
+
+standard.addTo(map);
+
+
+
+markerLayer =
+
+L.layerGroup()
+
+.addTo(map);
+
+
+
+const buttons =
+
+document.querySelectorAll(
+"[data-layer]"
+);
+
+
+
+buttons.forEach(
+
+button => {
+
+button.onclick =
+function() {
+
+
+buttons.forEach(
+
+item =>
+
+item
+.classList
+.remove("active")
+
+);
+
+
+button
+.classList
+.add("active");
+
+
+
+if(
+map.hasLayer(
+standard
+)
+) {
+
+map.removeLayer(
+standard
+);
+
+}
+
+
+if(
+map.hasLayer(
+satellite
+)
+) {
+
+map.removeLayer(
+satellite
+);
+
+}
+
+
+
+if(
+button.dataset.layer
+=== "satellite"
+) {
+
+satellite.addTo(map);
+
+}
+
+else {
+
+standard.addTo(map);
+
+}
+
+
+};
+
+}
+
+);
+
+}
+
+
+
+/* =========================================================
+REPORT DATA
+========================================================= */
+
+function getReportHazard(
+report
+) {
+
+return (
+
+report.hazard_type
+
+??
+
+report.disaster_type
+
+??
+
+report.hazard
+
+??
+
+"other"
+
+);
+
+}
+
+
+
+function reportLatitude(
+report
+) {
+
+return Number(
+
+report.latitude
+
+??
+
+report.lat
+
+??
+
+report.location?.latitude
+
+??
+
+report.location?.lat
+
+);
+
+}
+
+
+
+function reportLongitude(
+report
+) {
+
+return Number(
+
+report.longitude
+
+??
+
+report.lon
+
+??
+
+report.lng
+
+??
+
+report.location?.longitude
+
+??
+
+report.location?.lon
+
+??
+
+report.location?.lng
+
+);
+
+}
+
+
+
+function renderMarkers() {
+
+
+markerLayer
+.clearLayers();
+
+
+
+const filtered =
+
+allReports.filter(
+
+report => {
+
+if(
+selectedHazard
+=== "all"
+) {
+
+return true;
+
+}
+
+
+return (
+
+normaliseKey(
+getReportHazard(
+report
+)
+)
+
+===
+
+selectedHazard
+
+);
+
+}
+
+);
+
+
+
+filtered.forEach(
+
+report => {
+
+
+const latitude =
+reportLatitude(
+report
+);
+
+
+const longitude =
+reportLongitude(
+report
+);
+
+
+
+if(
+!Number.isFinite(
+latitude
+)
+
+||
+
+!Number.isFinite(
+longitude
+)
+) {
+
+return;
+
+}
+
+
+
+const hazard =
+getReportHazard(
+report
+);
+
+
+
+let affectedArea =
+
+report.affected_area
+
+??
+
+report.affected_areas
+
+??
+
+"";
+
+
+
+if(
+Array.isArray(
+affectedArea
+)
+) {
+
+affectedArea =
+affectedArea.join(", ");
+
+}
+
+
+
+const incidentDate =
+
+report.incident_date
+
+??
+
+report.date
+
+??
+
+"";
+
+
+
+const place =
+
+report.location_name
+
+??
+
+report.locality
+
+??
+
+report.district
+
+??
+
+report.state
+
+??
+
+"";
+
+
+
+L.circleMarker(
+
+[
+latitude,
+longitude
+],
+
+{
+
+radius:9,
+
+color:"#FFFFFF",
+
+weight:2,
+
+fillColor:
+hazardColor(
+hazard
+),
+
+fillOpacity:1
+
+}
+
+)
+
+.bindPopup(
+
+`
+
+<strong>
+
+${escapeHTML(
+pretty(hazard)
+)}
+
+</strong>
+
+${
+
+affectedArea
+
+?
+
+`
+<br>
+
+${escapeHTML(
+pretty(
+affectedArea
+)
+)}
+`
+
+:
+
+""
+
+}
+
+${
+
+incidentDate
+
+?
+
+`
+<br>
+
+<span
+style="opacity:.72">
+
+${escapeHTML(
+incidentDate
+)}
+
+</span>
+`
+
+:
+
+""
+
+}
+
+${
+
+place
+
+?
+
+`
+<br>
+
+<span
+style="opacity:.72">
+
+${escapeHTML(
+place
+)}
+
+</span>
+`
+
+:
+
+""
+
+}
+
+`
+
+)
+
+.addTo(
+markerLayer
+);
+
+
+}
+
+);
+
+}
+
+
+
+/* =========================================================
+HAZARD FILTERS
+========================================================= */
+
+function renderHazardFilters() {
+
+
+const box =
+document.getElementById(
+"hazardFilters"
+);
+
+
+
+const hazards =
+
+[
+...new Set(
+
+allReports
+
+.map(
+getReportHazard
+)
+
+.filter(Boolean)
+
+.map(
+normaliseKey
+)
+
+)
+]
+
+.sort();
+
+
+
+let html =
+
+`
+
+<button
+class="hazard-chip
+${
+
+selectedHazard
+=== "all"
+
+?
+
+"active"
+
+:
+
+""
+
+}"
+
+data-hazard="all">
+
+<span
+class="hazard-dot"
+style="
+background:#A10D0D;
+">
+</span>
+
+All
+
+</button>
+
+`;
+
+
+
+hazards.forEach(
+
+hazard => {
+
+html +=
+
+`
+
+<button
+class="hazard-chip
+
+${
+
+selectedHazard
+=== hazard
+
+?
+
+"active"
+
+:
+
+""
+
+}"
+
+data-hazard="
+${escapeHTML(
+hazard
+)}
+">
+
+<span
+class="hazard-dot"
+
+style="
+background:
+${escapeHTML(
+hazardColor(
+hazard
+)
+)};
+">
+</span>
+
+${escapeHTML(
+pretty(
+hazard
+)
+)}
+
+</button>
+
+`;
+
+}
+
+);
+
+
+
+box.innerHTML =
+html;
+
+
+
+box
+.querySelectorAll(
+"[data-hazard]"
+)
+.forEach(
+
+button => {
+
+button.onclick =
+function() {
+
+selectedHazard =
+button.dataset.hazard;
+
+
+renderHazardFilters();
+
+renderMarkers();
+
+};
+
+}
+
+);
+
+}
+
+
+
+/* =========================================================
+CHARTS
+========================================================= */
+
+let charts = {};
+
+
+function chartTheme() {
+
+const style =
+getComputedStyle(
+root
+);
+
+
+return {
+
+text:
+
+style
+.getPropertyValue(
+"--muted"
+)
+.trim(),
+
+grid:
+
+root.dataset.theme
+=== "dark"
+
+?
+
+"rgba(255,255,255,.08)"
+
+:
+
+"rgba(40,50,55,.08)"
+
+};
+
+}
+
+
+
+function showEmpty(
+boxId,
+message
+) {
+
+const box =
+document.getElementById(
+boxId
+);
+
+
+if(!box) {
+return;
+}
+
+
+box.innerHTML =
+
+`
+
+<div class="empty">
+
+${escapeHTML(
+message
+)}
+
+</div>
+
+`;
+
+}
+
+
+
+function destroyChart(
+id
+) {
+
+if(
+charts[id]
+) {
+
+charts[id]
+.destroy();
+
+delete charts[id];
+
+}
+
+}
+
+
+
+function drawChart(
+id,
+type,
+labels,
+values,
+options={}
+) {
+
+
+destroyChart(
+id
+);
+
+
+
+if(
+!labels.length
+||
+!values.length
+) {
+
+showEmpty(
+
+id +
+"Box",
+
+"No live data available."
+
+);
+
+return;
+
+}
+
+
+
+const canvas =
+document.getElementById(
+id
+);
+
+
+
+if(!canvas) {
+return;
+}
+
+
+
+const theme =
+chartTheme();
+
+
+
+charts[id] =
+
+new Chart(
+
+canvas,
+
+{
+
+type:type,
+
+
+data:{
+
+labels:labels,
+
+
+datasets:[
+
+{
+
+data:values,
+
+backgroundColor:
+
+options.colors
+
+??
+
+"#A10D0D",
+
+borderColor:
+
+options.border
+
+??
+
+"#A10D0D",
+
+borderWidth:
+
+type === "line"
+
+?
+
+3
+
+:
+
+0,
+
+borderRadius:
+
+type === "bar"
+
+?
+
+8
+
+:
+
+0,
+
+tension:.35,
+
+fill:
+
+options.fill
+
+??
+
+false,
+
+pointRadius:
+
+type === "line"
+
+?
+
+4
+
+:
+
+0
+
+}
+
+]
+
+},
+
+
+
+options:{
+
+responsive:true,
+
+maintainAspectRatio:false,
+
+indexAxis:
+
+options.horizontal
+
+?
+
+"y"
+
+:
+
+"x",
+
+
+plugins:{
+
+legend:{
+
+display:
+
+options.legend
+
+??
+
+(
+type ===
+"doughnut"
+),
+
+position:"right",
+
+labels:{
+
+color:
+theme.text,
+
+usePointStyle:true,
+
+boxWidth:12
+
+}
+
+},
+
+tooltip:{
+
+enabled:true
+
+}
+
+},
+
+
+scales:
+
+type
+=== "doughnut"
+
+?
+
+{}
+
+:
+
+{
+
+x:{
+
+grid:{
+
+display:false
+
+},
+
+ticks:{
+
+color:
+theme.text
+
+}
+
+},
+
+y:{
+
+beginAtZero:true,
+
+grid:{
+
+color:
+theme.grid
+
+},
+
+ticks:{
+
+color:
+theme.text,
+
+precision:0
+
+}
+
+}
+
+}
+
+}
+
+}
+
+);
+
+
+}
+
+
+
+function updateChartsTheme() {
+
+
+if(
+typeof Chart
+=== "undefined"
+) {
+
+return;
+
+}
+
+
+
+const theme =
+chartTheme();
+
+
+
+Object
+.values(
+charts
+)
+.forEach(
+
+chart => {
+
+
+if(
+chart.options
+.scales
+?.x
+?.ticks
+) {
+
+chart.options
+.scales
+.x
+.ticks
+.color =
+theme.text;
+
+}
+
+
+
+if(
+chart.options
+.scales
+?.y
+?.ticks
+) {
+
+chart.options
+.scales
+.y
+.ticks
+.color =
+theme.text;
+
+}
+
+
+
+if(
+chart.options
+.scales
+?.y
+?.grid
+) {
+
+chart.options
+.scales
+.y
+.grid
+.color =
+theme.grid;
+
+}
+
+
+
+if(
+chart.options
+.plugins
+?.legend
+?.labels
+) {
+
+chart.options
+.plugins
+.legend
+.labels
+.color =
+theme.text;
+
+}
+
+
+
+chart.update();
+
+}
+
+);
+
+}
+
+
+
+/* =========================================================
+ANALYTICS
+========================================================= */
+
+function analyticsRows(
+data,
+keys,
+categoryKey
+) {
+
+
+const value =
+valueFrom(
+data,
+keys
+);
+
+
+return normaliseCategories(
+
+value,
+
+categoryKey
+
+)
+
+.filter(
+
+row =>
+Number.isFinite(
+row.count
+)
+
+);
+
+}
+
+
+
+function renderAnalytics(
+raw
+) {
+
+
+const data =
+unwrapObject(
+
+raw,
+
+[
+"analytics"
+]
+
+);
+
+
+
+const hazard =
+analyticsRows(
+
+data,
+
+[
+"reports_by_hazard",
+"reports_by_hazard_type",
+"hazard_counts"
+],
+
+"hazard_type"
+
+);
+
+
+
+const states =
+analyticsRows(
+
+data,
+
+[
+"reports_by_state",
+"state_counts"
+],
+
+"state"
+
+);
+
+
+
+const areas =
+analyticsRows(
+
+data,
+
+[
+"reports_by_affected_area",
+"affected_area_counts"
+],
+
+"affected_area"
+
+);
+
+
+
+const gender =
+analyticsRows(
+
+data,
+
+[
+"demographics_gender",
+"gender_demographics",
+"gender_counts"
+],
+
+"category"
+
+);
+
+
+
+const education =
+analyticsRows(
+
+data,
+
+[
+"demographics_education",
+"education_demographics",
+"education_counts"
+],
+
+"category"
+
+);
+
+
+
+const age =
+analyticsRows(
+
+data,
+
+[
+"demographics_age_groups",
+"age_groups",
+"age_group_counts"
+],
+
+"age_group"
+
+);
+
+
+
+const timelineValue =
+
+valueFrom(
+
+data,
+
+[
+"reports_over_time",
+"monthly_reports",
+"report_timeline"
+]
+
+);
+
+
+
+let timeline = [];
+
+
+
+if(
+Array.isArray(
+timelineValue
+)
+) {
+
+timeline =
+
+timelineValue.map(
+
+item => ({
+
+category:
+
+item.month
+
+??
+
+item.label
+
+??
+
+item.period
+
+??
+
+item.date
+
+??
+
+"Unknown",
+
+count:
+
+Number(
+
+item.count
+
+??
+
+item.value
+
+??
+
+item.total
+
+??
+
+0
+
+)
+
+})
+
+);
+
+}
+
+else {
+
+timeline =
+
+normaliseCategories(
+
+timelineValue,
+
+"month"
+
+);
+
+}
+
+
+
+/* HAZARD */
+
+drawChart(
+
+"hazardChart",
+
+"bar",
+
+hazard.map(
+
+item =>
+pretty(
+item.category
+)
+
+),
+
+hazard.map(
+
+item =>
+item.count
+
+),
+
+{
+
+horizontal:true,
+
+colors:
+
+hazard.map(
+
+item =>
+hazardColor(
+item.category
+)
+
+)
+
+}
+
+);
+
+
+
+/* TIME */
+
+drawChart(
+
+"timeChart",
+
+"line",
+
+timeline.map(
+
+item =>
+item.category
+
+),
+
+timeline.map(
+
+item =>
+item.count
+
+),
+
+{
+
+fill:true,
+
+colors:
+
+"rgba(161,13,13,.12)",
+
+border:
+
+"#A10D0D"
+
+}
+
+);
+
+
+
+/* STATES */
+
+drawChart(
+
+"stateChart",
+
+"bar",
+
+states
+.slice(0,15)
+.map(
+
+item =>
+item.category
+
+),
+
+states
+.slice(0,15)
+.map(
+
+item =>
+item.count
+
+),
+
+{
+
+horizontal:true,
+
+colors:"#3F83C8"
+
+}
+
+);
+
+
+
+/* AFFECTED AREA */
+
+drawChart(
+
+"areaChart",
+
+"bar",
+
+areas.map(
+
+item =>
+pretty(
+item.category
+)
+
+),
+
+areas.map(
+
+item =>
+item.count
+
+),
+
+{
+
+horizontal:true,
+
+colors:"#49B0A7"
+
+}
+
+);
+
+
+
+/* GENDER */
+
+drawChart(
+
+"genderChart",
+
+"doughnut",
+
+gender.map(
+
+item =>
+pretty(
+item.category
+)
+
+),
+
+gender.map(
+
+item =>
+item.count
+
+),
+
+{
+
+legend:true,
+
+colors:[
+
+"#B10B12",
+
+"#236BC0",
+
+"#49AFA7",
+
+"#7650C4",
+
+"#C69B45"
+
+]
+
+}
+
+);
+
+
+
+/* EDUCATION */
+
+drawChart(
+
+"educationChart",
+
+"doughnut",
+
+education.map(
+
+item =>
+pretty(
+item.category
+)
+
+),
+
+education.map(
+
+item =>
+item.count
+
+),
+
+{
+
+legend:true,
+
+colors:[
+
+"#B10B12",
+
+"#236BC0",
+
+"#14A9B9",
+
+"#673BB8",
+
+"#D94212",
+
+"#C69B45",
+
+"#49AFA7"
+
+]
+
+}
+
+);
+
+
+
+/* AGE */
+
+drawChart(
+
+"ageChart",
+
+"bar",
+
+age.map(
+
+item =>
+pretty(
+item.category
+)
+
+),
+
+age.map(
+
+item =>
+item.count
+
+),
+
+{
+
+horizontal:true,
+
+colors:"#7650C4"
+
+}
+
+);
+
+
+
+renderHeatmap(
+
+"monthHeat",
+
+valueFrom(
+
+data,
+
+[
+"hazard_by_month",
+"hazard_type_by_month"
+]
+
+)
+
+);
+
+
+
+renderHeatmap(
+
+"stateHeat",
+
+valueFrom(
+
+data,
+
+[
+"hazard_by_state",
+"hazard_type_by_state"
+]
+
+)
+
+);
+
+
+}
+
+
+
+/* =========================================================
+HEATMAP
+========================================================= */
+
+function renderHeatmap(
+targetId,
+matrix
+) {
+
+
+const target =
+document.getElementById(
+targetId
+);
+
+
+
+if(
+!matrix
+||
+typeof matrix
+!== "object"
+) {
+
+target.innerHTML =
+
+`
+
+<div class="empty">
+
+No live matrix data available.
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+
+const columns =
+
+matrix.months
+
+??
+
+matrix.states
+
+??
+
+matrix.columns
+
+??
+
+[];
+
+
+
+const rows =
+
+Array.isArray(
+matrix.rows
+)
+
+?
+
+matrix.rows
+
+:
+
+[];
+
+
+
+if(
+!columns.length
+||
+!rows.length
+) {
+
+target.innerHTML =
+
+`
+
+<div class="empty">
+
+No live matrix data available.
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+
+const values =
+
+rows.flatMap(
+
+row =>
+
+Array.isArray(
+row.values
+)
+
+?
+
+row.values
+.map(Number)
+
+:
+
+[]
+
+);
+
+
+
+const maximum =
+
+Math.max(
+
+1,
+
+...values.filter(
+Number.isFinite
+)
+
+);
+
+
+
+const grid =
+
+document.createElement(
+"div"
+);
+
+
+
+grid.className =
+"heat-grid";
+
+
+
+grid.style.gridTemplateColumns =
+
+`160px repeat(
+${columns.length},
+minmax(92px,1fr)
+)`;
+
+
+
+grid.innerHTML =
+
+"<div></div>"
+
++
+
+columns
+.map(
+
+column =>
+
+`
+
+<div
+class="heat-label"
+style="
+justify-content:center;
+">
+
+${escapeHTML(
+column
+)}
+
+</div>
+
+`
+
+)
+.join("");
+
+
+
+rows.forEach(
+
+row => {
+
+
+const label =
+
+row.hazard_type
+
+??
+
+row.label
+
+??
+
+row.category
+
+??
+
+"Unknown";
+
+
+
+grid.innerHTML +=
+
+`
+
+<div class="heat-label">
+
+${escapeHTML(
+pretty(
+label
+)
+)}
+
+</div>
+
+`;
+
+
+
+const rowValues =
+
+Array.isArray(
+row.values
+)
+
+?
+
+row.values
+
+:
+
+[];
+
+
+
+rowValues.forEach(
+
+rawValue => {
+
+
+const value =
+Number(
+rawValue
+)
+||
+0;
+
+
+
+const intensity =
+
+value
+
+?
+
+.18
++
+.72
+*
+(
+value
+/
+maximum
+)
+
+:
+
+0;
+
+
+
+const background =
+
+value
+
+?
+
+`rgba(
+161,
+13,
+13,
+${intensity}
+)`
+
+:
+
+"var(--surface2)";
+
+
+
+const foreground =
+
+value
+/
+maximum
+>
+.58
+
+?
+
+"#FFFFFF"
+
+:
+
+"var(--text)";
+
+
+
+grid.innerHTML +=
+
+`
+
+<div
+class="heat-cell"
+
+style="
+background:
+${background};
+
+color:
+${foreground};
+">
+
+${
+
+value
+
+?
+
+value
+
+:
+
+""
+
+}
+
+</div>
+
+`;
+
+
+
+}
+
+);
+
+
+}
+
+);
+
+
+
+target.innerHTML =
+"";
+
+
+target.appendChild(
+grid
+);
+
+
+}
+
+
+
+/* =========================================================
+OVERVIEW
+========================================================= */
+
+function renderOverview(
+raw
+) {
+
+
+const data =
+unwrapObject(
+
+raw,
+
+[
+"overview"
+]
+
+);
+
+
+
+const reports =
+
+data.total_reports
+
+??
+
+data.reports
+
+??
+
+data.report_count;
+
+
+
+const contributors =
+
+data.unique_contributors
+
+??
+
+data.active_citizens
+
+??
+
+data.total_contributors
+
+??
+
+data.contributors;
+
+
+
+const states =
+
+data.states_covered
+
+??
+
+data.total_states
+
+??
+
+data.state_count;
+
+
+
+document.getElementById(
+"kpiReports"
+).textContent =
+
+reports
+??
+
+"—";
+
+
+
+document.getElementById(
+"kpiContributors"
+).textContent =
+
+contributors
+??
+
+"—";
+
+
+
+document.getElementById(
+"kpiStates"
+).textContent =
+
+states
+??
+
+"—";
+
+
+}
+
+
+
+/* =========================================================
+LEADERBOARD
+========================================================= */
+
+function renderLeaderboard(
+raw
+) {
+
+
+const rows =
+unwrapArray(
+
+raw,
+
+[
+"leaderboard",
+"contributors",
+"items"
+]
+
+);
+
+
+
+const box =
+document.getElementById(
+"leaderboard"
+);
+
+
+
+if(
+!rows.length
+) {
+
+box.innerHTML =
+
+`
+
+<div class="empty">
+
+No live leaderboard data available.
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+
+box.innerHTML =
+
+rows
+.slice(0,10)
+.map(
+
+(
+item,
+index
+) =>
+
+`
+
+<div class="leader">
+
+
+<div class="rank">
+
+#${
+escapeHTML(
+item.rank
+??
+index + 1
+)
+}
+
+</div>
+
+
+<div>
+
+<div class="leader-name">
+
+${escapeHTML(
+
+item.display_name
+
+??
+
+item.name
+
+??
+
+"Contributor"
+
+)}
+
+</div>
+
+
+<small>
+
+HazWatch contributor
+
+</small>
+
+</div>
+
+
+<div class="report-count">
+
+${escapeHTML(
+
+item.report_count
+
+??
+
+item.reports
+
+??
+
+item.count
+
+??
+
+0
+
+)}
+
+reports
+
+</div>
+
+
+</div>
+
+`
+
+)
+
+.join("");
+
+
+}
+
+
+
+/* =========================================================
+LOAD LIVE HAZWATCH DATA
+========================================================= */
+
+let loadingHazWatch =
+false;
+
+
+async function loadHazWatchData() {
+
+
+if(
+loadingHazWatch
+) {
+
+return;
+
+}
+
+
+loadingHazWatch =
+true;
+
+
+
+const badge =
+document.getElementById(
+"apiBadge"
+);
+
+
+const status =
+document.getElementById(
+"apiStatus"
+);
+
+
+
+badge.textContent =
+"Loading live data";
+
+
+badge.classList
+.remove("error");
+
+
+
+try {
+
+
+
+/* CONFIG */
+
+try {
+
+await loadHazardConfig();
+
+}
+
+catch(error) {
+
+console.warn(
+"Config endpoint unavailable",
+error
+);
+
+hazardColors = {};
+
+}
+
+
+
+/* FETCH ALL LIVE DATA */
+
+const results =
+
+await Promise.allSettled(
+
+[
+
+API(
+"/public/overview"
+),
+
+API(
+"/public/analytics"
+),
+
+API(
+"/public/reports?limit=2000"
+),
+
+API(
+"/public/leaderboard?limit=10"
+)
+
+]
+
+);
+
+
+
+const overviewResult =
+results[0];
+
+
+const analyticsResult =
+results[1];
+
+
+const reportsResult =
+results[2];
+
+
+const leaderboardResult =
+results[3];
+
+
+
+/* OVERVIEW */
+
+if(
+overviewResult.status
+=== "fulfilled"
+) {
+
+renderOverview(
+overviewResult.value
+);
+
+}
+
+else {
+
+document.getElementById(
+"kpiReports"
+).textContent =
+"—";
+
+
+document.getElementById(
+"kpiContributors"
+).textContent =
+"—";
+
+
+document.getElementById(
+"kpiStates"
+).textContent =
+"—";
+
+}
+
+
+
+/* ANALYTICS */
+
+if(
+analyticsResult.status
+=== "fulfilled"
+) {
+
+renderAnalytics(
+analyticsResult.value
+);
+
+}
+
+else {
+
+[
+
+"hazardChartBox",
+
+"timeChartBox",
+
+"stateChartBox",
+
+"areaChartBox",
+
+"genderChartBox",
+
+"educationChartBox",
+
+"ageChartBox"
+
+]
+
+.forEach(
+
+id =>
+showEmpty(
+
+id,
+
+"Live analytics temporarily unavailable."
+
+)
+
+);
+
+
+
+document.getElementById(
+"monthHeat"
+).innerHTML =
+
+`
+
+<div class="empty">
+
+Live analytics temporarily unavailable.
+
+</div>
+
+`;
+
+
+
+document.getElementById(
+"stateHeat"
+).innerHTML =
+
+`
+
+<div class="empty">
+
+Live analytics temporarily unavailable.
+
+</div>
+
+`;
+
+}
+
+
+
+/* REPORT MAP */
+
+if(
+reportsResult.status
+=== "fulfilled"
+) {
+
+allReports =
+
+unwrapArray(
+
+reportsResult.value,
+
+[
+"reports",
+"items",
+"results"
+]
+
+);
+
+
+renderHazardFilters();
+
+renderMarkers();
+
+}
+
+else {
+
+allReports = [];
+
+renderHazardFilters();
+
+renderMarkers();
+
+}
+
+
+
+/* LEADERBOARD */
+
+if(
+leaderboardResult.status
+=== "fulfilled"
+) {
+
+renderLeaderboard(
+leaderboardResult.value
+);
+
+}
+
+else {
+
+document.getElementById(
+"leaderboard"
+).innerHTML =
+
+`
+
+<div class="empty">
+
+Live leaderboard temporarily unavailable.
+
+</div>
+
+`;
+
+}
+
+
+
+/* STATUS */
+
+const successful =
+
+results.filter(
+
+item =>
+item.status
+=== "fulfilled"
+
+).length;
+
+
+
+if(
+successful
+=== 0
+) {
+
+throw new Error(
+"HazWatch public API unavailable"
+);
+
+}
+
+
+
+badge.textContent =
+"Live HazWatch data";
+
+
+status.textContent =
+
+"Updated "
++
+new Date()
+.toLocaleTimeString(
+
+[],
+
+{
+
+hour:"2-digit",
+
+minute:"2-digit"
+
+}
+
+);
+
+
+
+}
+
+catch(error) {
+
+
+console.error(
+error
+);
+
+
+badge.textContent =
+"Live data unavailable";
+
+
+badge.classList
+.add("error");
+
+
+status.textContent =
+"No demo values shown";
+
+
+}
+
+finally {
+
+
+loadingHazWatch =
+false;
+
+
+}
+
+
+}
+
+
+
+/* =========================================================
+WEATHER AND AQI
+========================================================= */
+
+function AQILabel(
+value
+) {
+
+
+const AQI =
+Number(
+value
+);
+
+
+if(
+!Number.isFinite(
+AQI
+)
+) {
+
+return "Air quality";
+
+}
+
+
+if(
+AQI <= 50
+) {
+
+return "Good";
+
+}
+
+
+if(
+AQI <= 100
+) {
+
+return "Moderate";
+
+}
+
+
+if(
+AQI <= 150
+) {
+
+return "Unhealthy for sensitive groups";
+
+}
+
+
+if(
+AQI <= 200
+) {
+
+return "Unhealthy";
+
+}
+
+
+if(
+AQI <= 300
+) {
+
+return "Very unhealthy";
+
+}
+
+
+return "Hazardous";
+
+}
+
+
+
+async function loadWeather(
+latitude,
+longitude,
+label
+) {
+
+
+document.getElementById(
+"weatherLocation"
+).textContent =
+
+label
+
+||
+
+`${latitude.toFixed(3)},
+${longitude.toFixed(3)}`;
+
+
+
+try {
+
+
+
+const weatherURL =
+
+"https://api.open-meteo.com/v1/forecast"
+
++
+
+"?latitude="
++
+encodeURIComponent(
+latitude
+)
+
++
+
+"&longitude="
++
+encodeURIComponent(
+longitude
+)
+
++
+
+"&current="
+
++
+
+"temperature_2m,"
+
++
+
+"precipitation,"
+
++
+
+"wind_speed_10m,"
+
++
+
+"surface_pressure"
+
++
+
+"&timezone=auto";
+
+
+
+const airURL =
+
+"https://air-quality-api.open-meteo.com/v1/air-quality"
+
++
+
+"?latitude="
++
+encodeURIComponent(
+latitude
+)
+
++
+
+"&longitude="
++
+encodeURIComponent(
+longitude
+)
+
++
+
+"&current="
+
++
+
+"us_aqi,"
+
++
+
+"pm2_5,"
+
++
+
+"pm10,"
+
++
+
+"nitrogen_dioxide,"
+
++
+
+"ozone"
+
++
+
+"&timezone=auto";
+
+
+
+const responses =
+
+await Promise.all(
+
+[
+
+fetch(
+weatherURL
+),
+
+fetch(
+airURL
+)
+
+]
+
+);
+
+
+
+if(
+!responses[0].ok
+||
+!responses[1].ok
+) {
+
+throw new Error(
+"Environmental API error"
+);
+
+}
+
+
+
+const weather =
+
+await responses[0]
+.json();
+
+
+
+const air =
+
+await responses[1]
+.json();
+
+
+
+const currentWeather =
+
+weather.current
+
+??
+
+{};
+
+
+
+const currentAir =
+
+air.current
+
+??
+
+{};
+
+
+
+document.getElementById(
+"weatherTemp"
+).textContent =
+
+currentWeather.temperature_2m
+
+??
+
+"—";
+
+
+
+document.getElementById(
+"weatherRain"
+).textContent =
+
+currentWeather.precipitation
+
+??
+
+"—";
+
+
+
+document.getElementById(
+"weatherWind"
+).textContent =
+
+currentWeather.wind_speed_10m
+
+??
+
+"—";
+
+
+
+document.getElementById(
+"weatherPressure"
+).textContent =
+
+Number.isFinite(
+
+Number(
+currentWeather.surface_pressure
+)
+
+)
+
+?
+
+Math.round(
+
+Number(
+currentWeather.surface_pressure
+)
+
+)
+
+:
+
+"—";
+
+
+
+document.getElementById(
+"weatherAQI"
+).textContent =
+
+currentAir.us_aqi
+
+??
+
+"—";
+
+
+
+document.getElementById(
+"weatherAQILabel"
+).textContent =
+
+AQILabel(
+currentAir.us_aqi
+);
+
+
+
+document.getElementById(
+"pm25"
+).textContent =
+
+currentAir.pm2_5
+
+??
+
+"—";
+
+
+
+document.getElementById(
+"pm10"
+).textContent =
+
+currentAir.pm10
+
+??
+
+"—";
+
+
+
+document.getElementById(
+"no2"
+).textContent =
+
+currentAir.nitrogen_dioxide
+
+??
+
+"—";
+
+
+
+document.getElementById(
+"o3"
+).textContent =
+
+currentAir.ozone
+
+??
+
+"—";
+
+
+
+}
+
+catch(error) {
+
+
+console.error(
+error
+);
+
+
+document.getElementById(
+"weatherLocation"
+).textContent =
+
+(
+label
+||
+"Selected location"
+)
+
++
+
+" — environmental data unavailable";
+
+
+}
+
+
+}
+
+
+
+/* CURRENT LOCATION */
+
+document.getElementById(
+"locationButton"
+).onclick =
+function() {
+
+
+if(
+!navigator.geolocation
+) {
+
+document.getElementById(
+"weatherLocation"
+).textContent =
+
+"Location is not supported by this browser.";
+
+return;
+
+}
+
+
+
+document.getElementById(
+"weatherLocation"
+).textContent =
+
+"Getting current location…";
+
+
+
+navigator
+.geolocation
+.getCurrentPosition(
+
+
+position => {
+
+
+loadWeather(
+
+position.coords.latitude,
+
+position.coords.longitude,
+
+"Current location"
+
+);
+
+},
+
+
+() => {
+
+
+document.getElementById(
+"weatherLocation"
+).textContent =
+
+"Location permission was not available.";
+
+},
+
+
+{
+
+enableHighAccuracy:true,
+
+timeout:10000,
+
+maximumAge:300000
+
+}
+
+
+);
+
+
+};
+
+
+
+/* CITY SEARCH */
+
+async function searchCity() {
+
+
+const city =
+
+document.getElementById(
+"cityInput"
+)
+
+.value
+
+.trim();
+
+
+
+if(!city) {
+return;
+}
+
+
+
+document.getElementById(
+"weatherLocation"
+).textContent =
+
+"Searching…";
+
+
+
+try {
+
+
+const response =
+
+await fetch(
+
+"https://geocoding-api.open-meteo.com/v1/search"
+
++
+
+"?name="
+
++
+
+encodeURIComponent(
+city
+)
+
++
+
+"&count=1"
+
++
+
+"&language=en"
+
++
+
+"&format=json"
+
+);
+
+
+
+if(!response.ok) {
+
+throw new Error(
+"Geocoding error"
+);
+
+}
+
+
+
+const data =
+
+await response.json();
+
+
+
+const result =
+
+data.results?.[0];
+
+
+
+if(!result) {
+
+throw new Error(
+"City not found"
+);
+
+}
+
+
+
+const place =
+
+[
+
+result.name,
+
+result.admin1,
+
+result.country
+
+]
+
+.filter(Boolean)
+
+.join(", ");
+
+
+
+loadWeather(
+
+result.latitude,
+
+result.longitude,
+
+place
+
+);
+
+
+
+}
+
+catch(error) {
+
+
+document.getElementById(
+"weatherLocation"
+).textContent =
+
+"City not found.";
+
+
+}
+
+
+}
+
+
+
+document.getElementById(
+"cityButton"
+).onclick =
+searchCity;
+
+
+
+document.getElementById(
+"cityInput"
+)
+.addEventListener(
+
+"keydown",
+
+event => {
+
+if(
+event.key
+=== "Enter"
+) {
+
+searchCity();
+
+}
+
+}
+
+);
+
+
+
+/* =========================================================
+START
+========================================================= */
+
+initialiseMap();
+
+
+loadHazWatchData();
+
+
+setInterval(
+
+loadHazWatchData,
+
+REFRESH_INTERVAL
+
+);
+
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,6596 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#A10D0D">
+
+<title>HazWatch | Citizen Geospatial Hazard Intelligence</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;800;900&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0&display=swap"
+  rel="stylesheet"
+>
+
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<link rel="stylesheet" href="https://unpkg.com/mapillary-js@4.1.2/dist/mapillary.css">
+
+<style>
+
+:root{
+  --red:#A10D0D;
+  --red2:#C41919;
+  --redSoft:#FFF1F1;
+
+  --bg:#ECEFF1;
+  --surface:#FFFFFF;
+  --surface2:#F7F9FA;
+
+  --text:#373D41;
+  --muted:#747D84;
+  --line:#DCE1E5;
+
+  --blue:#2F5D8A;
+  --green:#267C61;
+
+  --shadow:0 18px 55px rgba(27,34,39,.10);
+  --radius:24px;
+
+  --nav:rgba(255,255,255,.94);
+}
+
+
+html[data-theme="dark"]{
+  --bg:#0D1114;
+  --surface:#151B1F;
+  --surface2:#1B2227;
+
+  --text:#F4F6F7;
+  --muted:#A9B1B7;
+  --line:#293239;
+
+  --redSoft:#2B1719;
+
+  --shadow:0 20px 60px rgba(0,0,0,.32);
+
+  --nav:rgba(13,17,20,.94);
+}
+
+
+*{
+  box-sizing:border-box;
+}
+
+
+html{
+  scroll-behavior:smooth;
+}
+
+
+body{
+  margin:0;
+
+  font-family:
+    'Roboto',
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  background:var(--bg);
+  color:var(--text);
+
+  line-height:1.6;
+
+  transition:
+    background .25s,
+    color .25s;
+}
+
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+
+button,
+input{
+  font:inherit;
+}
+
+
+button{
+  cursor:pointer;
+}
+
+
+.wrap{
+  width:min(1380px,94vw);
+  margin:auto;
+}
+
+
+section{
+  padding:72px 0;
+}
+
+
+.card{
+  background:var(--surface);
+
+  border:1px solid var(--line);
+
+  border-radius:var(--radius);
+
+  box-shadow:var(--shadow);
+}
+
+
+/* ================================
+NAV
+================================ */
+
+.nav{
+  position:sticky;
+  top:0;
+
+  z-index:2000;
+
+  background:var(--nav);
+
+  backdrop-filter:blur(18px);
+
+  border-bottom:1px solid var(--line);
+}
+
+
+.navInner{
+  height:74px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:20px;
+}
+
+
+.brand{
+  display:flex;
+  align-items:center;
+
+  gap:10px;
+
+  font-size:1.28rem;
+  font-weight:900;
+
+  letter-spacing:-.035em;
+}
+
+
+.logoWrap{
+  width:48px;
+  height:42px;
+
+  position:relative;
+
+  display:grid;
+  place-items:center;
+}
+
+
+.logoWrap img{
+  width:100%;
+  height:100%;
+
+  object-fit:contain;
+}
+
+
+.logoFallback{
+  width:38px;
+  height:38px;
+
+  border-radius:12px;
+
+  display:none;
+  place-items:center;
+
+  background:var(--red);
+  color:white;
+
+  font-weight:900;
+}
+
+
+.brandRed{
+  color:var(--red);
+}
+
+
+.navLinks{
+  display:flex;
+  align-items:center;
+
+  gap:24px;
+
+  color:var(--muted);
+
+  font-size:.88rem;
+  font-weight:750;
+}
+
+
+.navLinks a:hover{
+  color:var(--red);
+}
+
+
+.themeButton{
+  width:44px;
+  height:44px;
+
+  border-radius:50%;
+
+  border:1px solid var(--line);
+
+  background:var(--surface);
+  color:var(--text);
+
+  display:grid;
+  place-items:center;
+
+  font-size:1.08rem;
+}
+
+
+/* ================================
+COMMON
+================================ */
+
+.kicker{
+  color:var(--red);
+
+  font-size:.76rem;
+  font-weight:900;
+
+  letter-spacing:.15em;
+
+  text-transform:uppercase;
+}
+
+
+.sectionHead{
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+
+  gap:28px;
+
+  margin-bottom:28px;
+}
+
+
+.sectionHead h2{
+  margin:7px 0 0;
+
+  font-size:clamp(2.2rem,4vw,4rem);
+
+  line-height:.98;
+
+  letter-spacing:-.055em;
+}
+
+
+.sectionSubtitle{
+  max-width:720px;
+
+  color:var(--muted);
+}
+
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  gap:8px;
+
+  border:0;
+
+  border-radius:14px;
+
+  padding:13px 18px;
+
+  font-weight:850;
+}
+
+
+.btnRed{
+  background:var(--red);
+  color:white;
+
+  box-shadow:
+    0 10px 28px
+    rgba(161,13,13,.22);
+}
+
+
+.btnLight{
+  background:var(--surface);
+  color:var(--text);
+
+  border:1px solid var(--line);
+}
+
+
+/* ================================
+ABOUT HERO
+================================ */
+
+.hero{
+  padding:48px 0 32px;
+
+  background:
+    radial-gradient(
+      circle at 82% 10%,
+      rgba(161,13,13,.12),
+      transparent 26%
+    );
+}
+
+
+.heroGrid{
+  display:grid;
+
+  grid-template-columns:1.05fr .95fr;
+
+  gap:42px;
+
+  align-items:center;
+}
+
+
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+
+  gap:9px;
+
+  padding:8px 13px;
+
+  border:1px solid var(--line);
+
+  border-radius:999px;
+
+  background:var(--surface);
+
+  color:var(--red);
+
+  font-size:.76rem;
+  font-weight:900;
+
+  letter-spacing:.08em;
+
+  text-transform:uppercase;
+}
+
+
+.eyebrow::before{
+  content:"";
+
+  width:8px;
+  height:8px;
+
+  border-radius:50%;
+
+  background:var(--red);
+
+  box-shadow:
+    0 0 0 6px
+    rgba(161,13,13,.09);
+}
+
+
+.hero h1{
+  margin:22px 0;
+
+  font-size:clamp(3.3rem,6.7vw,7rem);
+
+  line-height:.9;
+
+  letter-spacing:-.07em;
+}
+
+
+.heroRed{
+  color:var(--red);
+}
+
+
+.heroDescription{
+  max-width:760px;
+
+  color:var(--muted);
+
+  font-size:1.08rem;
+}
+
+
+.heroButtons{
+  display:flex;
+  flex-wrap:wrap;
+
+  gap:12px;
+
+  margin-top:27px;
+}
+
+
+.safety{
+  margin-top:18px;
+
+  color:var(--muted);
+
+  font-size:.86rem;
+}
+
+
+.safety strong{
+  color:var(--red);
+}
+
+
+.heroLogoBox{
+  min-height:430px;
+
+  display:grid;
+  place-items:center;
+
+  position:relative;
+
+  overflow:hidden;
+
+  background:var(--surface);
+
+  border:1px solid var(--line);
+
+  border-radius:34px;
+
+  box-shadow:var(--shadow);
+}
+
+
+.heroLogoBox::after{
+  content:"";
+
+  position:absolute;
+
+  width:520px;
+  height:280px;
+
+  bottom:-180px;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(161,13,13,.20),
+      transparent 68%
+    );
+}
+
+
+.heroLogoWrap{
+  width:min(390px,76%);
+  aspect-ratio:1/1;
+
+  display:grid;
+  place-items:center;
+
+  position:relative;
+
+  z-index:2;
+}
+
+
+.heroLogoWrap img{
+  width:100%;
+  height:100%;
+
+  object-fit:contain;
+}
+
+
+.heroFallback{
+  width:160px;
+  height:160px;
+
+  display:none;
+  place-items:center;
+
+  border-radius:45px;
+
+  background:var(--red);
+  color:white;
+
+  font-size:4rem;
+  font-weight:900;
+}
+
+
+/* ================================
+MISSION VISION TEAM
+================================ */
+
+.aboutGrid{
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:18px;
+}
+
+
+.aboutCard{
+  padding:30px;
+
+  min-height:270px;
+}
+
+
+.aboutIcon{
+  width:48px;
+  height:48px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:15px;
+
+  background:var(--redSoft);
+  color:var(--red);
+
+  font-size:1.45rem;
+
+  margin-bottom:30px;
+}
+
+
+.aboutCard h3{
+  margin:0 0 13px;
+
+  font-size:1.6rem;
+}
+
+
+.aboutCard p{
+  margin:0;
+
+  color:var(--muted);
+
+  font-size:1.03rem;
+}
+
+
+.teamHeading{
+  margin:28px 0 14px;
+
+  color:var(--muted);
+
+  font-size:.9rem;
+  font-weight:900;
+
+  letter-spacing:.14em;
+
+  text-transform:uppercase;
+}
+
+
+.teamGrid{
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:18px;
+}
+
+
+.teamCard{
+  padding:25px;
+
+  display:grid;
+
+  grid-template-columns:auto 1fr;
+
+  gap:18px;
+
+  align-items:center;
+}
+
+
+.teamAvatar{
+  width:66px;
+  height:66px;
+
+  border-radius:19px;
+
+  display:grid;
+  place-items:center;
+
+  background:var(--red);
+  color:white;
+
+  font-size:1.2rem;
+  font-weight:900;
+}
+
+
+.teamRole{
+  color:var(--red);
+
+  font-size:.76rem;
+  font-weight:900;
+
+  letter-spacing:.12em;
+
+  text-transform:uppercase;
+}
+
+
+.teamCard h3{
+  margin:4px 0 3px;
+
+  font-size:1.35rem;
+}
+
+
+.teamCard p{
+  margin:0;
+
+  color:var(--muted);
+}
+
+
+/* ================================
+MAP + ANALYTICS
+================================ */
+
+.liveGrid{
+  display:grid;
+
+  grid-template-columns:
+    minmax(0,1.7fr)
+    minmax(370px,.75fr);
+
+  gap:20px;
+}
+
+
+.mapCard{
+  padding:14px;
+
+  overflow:hidden;
+}
+
+
+.mapHeader{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:16px;
+
+  padding:7px 6px 15px;
+}
+
+
+.mapHeader h3{
+  margin:0;
+
+  font-size:1.48rem;
+}
+
+
+.mapHeader small{
+  color:var(--muted);
+}
+
+
+.layerSwitch{
+  display:flex;
+
+  gap:4px;
+
+  padding:4px;
+
+  border-radius:13px;
+
+  background:var(--surface2);
+
+  border:1px solid var(--line);
+}
+
+
+.layerSwitch button{
+  border:0;
+
+  background:transparent;
+
+  color:var(--muted);
+
+  padding:8px 11px;
+
+  border-radius:9px;
+
+  font-weight:800;
+}
+
+
+.layerSwitch button.active{
+  background:var(--red);
+  color:white;
+}
+
+
+.layerSwitch button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+
+#map{
+  height:650px;
+
+  border-radius:19px;
+
+  overflow:hidden;
+
+  background:#DCE3E5;
+}
+
+
+.hazardFilters{
+  display:flex;
+
+  gap:9px;
+
+  overflow-x:auto;
+
+  padding:14px 2px 2px;
+
+  scrollbar-width:none;
+}
+
+
+.hazardChip{
+  white-space:nowrap;
+
+  display:flex;
+  align-items:center;
+
+  gap:7px;
+
+  padding:8px 12px;
+
+  border-radius:999px;
+
+  border:1px solid var(--line);
+
+  background:var(--surface2);
+  color:var(--text);
+
+  font-size:.8rem;
+  font-weight:800;
+}
+
+
+.hazardChip.active{
+  border-color:var(--red);
+
+  box-shadow:
+    0 0 0 2px
+    rgba(161,13,13,.10);
+}
+
+
+.hazardDot{
+  width:9px;
+  height:9px;
+
+  border-radius:50%;
+}
+
+
+.sidePanel{
+  display:flex;
+
+  flex-direction:column;
+
+  gap:16px;
+}
+
+
+.apiCard{
+  padding:15px 18px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:15px;
+}
+
+
+.apiBadge{
+  display:flex;
+  align-items:center;
+
+  gap:8px;
+
+  color:var(--green);
+
+  font-size:.74rem;
+  font-weight:900;
+
+  letter-spacing:.1em;
+
+  text-transform:uppercase;
+}
+
+
+.apiBadge::before{
+  content:"";
+
+  width:8px;
+  height:8px;
+
+  border-radius:50%;
+
+  background:currentColor;
+}
+
+
+.apiBadge.error{
+  color:#B3261E;
+}
+
+
+.apiStatus{
+  color:var(--muted);
+
+  font-size:.75rem;
+
+  text-align:right;
+}
+
+
+.kpiGrid{
+  display:grid;
+
+  grid-template-columns:repeat(3,1fr);
+
+  gap:10px;
+}
+
+
+.kpi{
+  padding:18px;
+
+  min-height:128px;
+}
+
+
+.kpiIcon{
+  width:35px;
+  height:35px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:11px;
+
+  margin-bottom:14px;
+
+  background:var(--redSoft);
+  color:var(--red);
+
+  font-weight:900;
+}
+
+
+.kpi span{
+  color:var(--muted);
+
+  font-size:.7rem;
+  font-weight:850;
+
+  text-transform:uppercase;
+
+  letter-spacing:.07em;
+}
+
+
+.kpi strong{
+  display:block;
+
+  margin-top:5px;
+
+  font-size:2.15rem;
+
+  line-height:1;
+
+  letter-spacing:-.05em;
+}
+
+
+.chartCard{
+  padding:20px;
+
+  min-height:290px;
+}
+
+
+.chartTitle{
+  margin:0 0 13px;
+
+  color:var(--muted);
+
+  font-size:.88rem;
+  font-weight:900;
+
+  letter-spacing:.1em;
+
+  text-transform:uppercase;
+}
+
+
+.chartBox{
+  height:230px;
+}
+
+
+.leaderboardCard{
+  padding:20px;
+}
+
+
+.leader{
+  display:grid;
+
+  grid-template-columns:38px 1fr auto;
+
+  gap:10px;
+
+  align-items:center;
+
+  padding:11px 0;
+
+  border-bottom:1px solid var(--line);
+}
+
+
+.leader:last-child{
+  border-bottom:0;
+}
+
+
+.rank{
+  width:34px;
+  height:34px;
+
+  border-radius:50%;
+
+  display:grid;
+  place-items:center;
+
+  background:var(--surface2);
+
+  font-size:.77rem;
+  font-weight:900;
+}
+
+
+.leader:first-child .rank{
+  background:var(--red);
+  color:white;
+}
+
+
+.leaderName{
+  font-weight:800;
+}
+
+
+.leader small{
+  display:block;
+
+  color:var(--muted);
+}
+
+
+.reportCount{
+  color:var(--red);
+
+  font-size:.8rem;
+  font-weight:850;
+}
+
+
+/* ================================
+ANALYTICS GRID
+================================ */
+
+.analyticsGrid{
+  margin-top:20px;
+
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:18px;
+}
+
+
+.analyticsGrid .chartCard{
+  min-height:360px;
+}
+
+
+.analyticsGrid .chartBox{
+  height:290px;
+}
+
+
+.heatCard{
+  padding:20px;
+}
+
+
+.heatScroll{
+  overflow:auto;
+}
+
+
+.heatGrid{
+  display:grid;
+
+  gap:5px;
+
+  min-width:560px;
+}
+
+
+.heatLabel{
+  display:flex;
+  align-items:center;
+
+  padding-right:10px;
+
+  color:var(--muted);
+
+  font-size:.78rem;
+  font-weight:800;
+}
+
+
+.heatCell{
+  height:43px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:8px;
+
+  background:var(--surface2);
+
+  font-size:.8rem;
+  font-weight:850;
+}
+
+
+.empty{
+  min-height:150px;
+
+  height:100%;
+
+  display:grid;
+  place-items:center;
+
+  text-align:center;
+
+  color:var(--muted);
+
+  border:1px dashed var(--line);
+
+  border-radius:14px;
+
+  padding:20px;
+}
+
+
+/* ================================
+WEATHER
+================================ */
+
+.conditions{
+  background:
+    linear-gradient(
+      180deg,
+      transparent,
+      rgba(47,93,138,.06),
+      transparent
+    );
+}
+
+
+.weatherControl{
+  display:flex;
+  align-items:center;
+
+  gap:10px;
+
+  flex-wrap:wrap;
+
+  margin-bottom:18px;
+}
+
+
+.citySearch{
+  flex:1;
+
+  min-width:250px;
+
+  display:flex;
+
+  gap:8px;
+}
+
+
+.citySearch input{
+  flex:1;
+
+  min-width:0;
+
+  padding:12px 14px;
+
+  border-radius:13px;
+
+  border:1px solid var(--line);
+
+  background:var(--surface);
+  color:var(--text);
+
+  outline:none;
+}
+
+
+.weatherLocation{
+  color:var(--muted);
+
+  font-size:.78rem;
+}
+
+
+.weatherGrid{
+  display:grid;
+
+  grid-template-columns:repeat(5,1fr);
+
+  gap:12px;
+}
+
+
+.aqGrid{
+  display:grid;
+
+  grid-template-columns:repeat(4,1fr);
+
+  gap:12px;
+
+  margin-top:12px;
+}
+
+
+.weatherCard{
+  padding:19px;
+}
+
+
+.weatherCard small{
+  color:var(--muted);
+
+  font-weight:800;
+}
+
+
+.weatherCard strong{
+  display:block;
+
+  margin-top:13px;
+
+  font-size:1.8rem;
+
+  line-height:1.1;
+}
+
+
+.weatherCard span{
+  color:var(--muted);
+
+  font-size:.75rem;
+}
+
+
+/* ================================
+GUIDELINES
+================================ */
+
+.guidelineGrid{
+  display:grid;
+
+  grid-template-columns:repeat(5,1fr);
+
+  gap:14px;
+}
+
+
+.guide{
+  min-height:235px;
+
+  padding:22px;
+}
+
+
+.guideNumber{
+  width:43px;
+  height:43px;
+
+  border-radius:50%;
+
+  display:grid;
+  place-items:center;
+
+  background:var(--redSoft);
+  color:var(--red);
+
+  font-weight:900;
+
+  margin-bottom:38px;
+}
+
+
+.guide h3{
+  margin:0 0 8px;
+}
+
+
+.guide p{
+  margin:0;
+
+  color:var(--muted);
+}
+
+
+/* ================================
+APP CTA
+================================ */
+
+.downloadCard{
+  padding:32px;
+
+  display:grid;
+
+  grid-template-columns:1.2fr .8fr;
+
+  gap:22px;
+
+  align-items:center;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--surface),
+      var(--surface2)
+    );
+}
+
+
+.downloadCard h2{
+  margin:8px 0 16px;
+
+  font-size:clamp(2.2rem,4vw,4rem);
+
+  line-height:1;
+
+  letter-spacing:-.055em;
+}
+
+
+.qrBox{
+  height:250px;
+
+  display:grid;
+  place-items:center;
+
+  padding:24px;
+
+  text-align:center;
+
+  border:2px dashed var(--line);
+
+  border-radius:22px;
+
+  background:var(--surface);
+
+  color:var(--muted);
+}
+
+
+/* ================================
+COPYRIGHT
+================================ */
+
+footer{
+  padding:25px 0 45px;
+}
+
+
+.copyright{
+  border-top:1px solid var(--line);
+}
+
+
+details{
+  padding-top:22px;
+}
+
+
+summary{
+  cursor:pointer;
+
+  list-style:none;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  gap:20px;
+
+  font-weight:850;
+}
+
+
+summary::-webkit-details-marker{
+  display:none;
+}
+
+
+.copyrightBody{
+  max-width:950px;
+
+  padding-top:22px;
+
+  color:var(--muted);
+}
+
+
+.copyrightBody p{
+  margin:0 0 18px;
+}
+
+
+/* ================================
+LEAFLET
+================================ */
+
+.leaflet-container{
+  font-family:
+    'Roboto',
+    Arial,
+    sans-serif;
+}
+
+
+.leaflet-control-attribution{
+  font-size:10px !important;
+}
+
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip{
+  background:var(--surface);
+  color:var(--text);
+}
+
+
+/* ================================
+RESPONSIVE
+================================ */
+
+@media(max-width:1100px){
+
+  .navLinks{
+    display:none;
+  }
+
+  .heroGrid,
+  .liveGrid{
+    grid-template-columns:1fr;
+  }
+
+  .heroLogoBox{
+    min-height:340px;
+  }
+
+  .sidePanel{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+  }
+
+  .apiCard,
+  .leaderboardCard{
+    grid-column:1/-1;
+  }
+
+  #map{
+    height:560px;
+  }
+
+  .weatherGrid{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .aqGrid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .guidelineGrid{
+    grid-template-columns:1fr 1fr;
+  }
+
+}
+
+
+@media(max-width:760px){
+
+  .heroGrid{
+    display:flex;
+
+    flex-direction:column-reverse;
+  }
+
+  .heroLogoBox{
+    width:100%;
+
+    min-height:280px;
+  }
+
+  .heroLogoWrap{
+    width:67%;
+  }
+
+  .hero h1{
+    font-size:3.55rem;
+  }
+
+  .sectionHead{
+    display:block;
+  }
+
+  .sectionSubtitle{
+    margin-top:14px;
+  }
+
+  .aboutGrid,
+  .teamGrid,
+  .downloadCard,
+  .analyticsGrid{
+    grid-template-columns:1fr;
+  }
+
+  .mapHeader{
+    flex-direction:column;
+
+    align-items:flex-start;
+  }
+
+  #map{
+    height:520px;
+  }
+
+  .sidePanel{
+    display:flex;
+  }
+
+  .weatherGrid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .guidelineGrid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+
+@media(max-width:450px){
+
+  .hero h1{
+    font-size:3rem;
+  }
+
+  .heroButtons .btn{
+    width:100%;
+  }
+
+  .kpiGrid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .kpi:last-child{
+    grid-column:1/-1;
+  }
+
+  #map{
+    height:470px;
+  }
+
+  .teamCard{
+    grid-template-columns:1fr;
+  }
+
+}
+
+
+/* =====================================================
+   HAZWATCH APP-MATCHED PREMIUM VISUAL SYSTEM
+   ===================================================== */
+.material-symbols-rounded{
+  font-family:'Material Symbols Rounded';
+  font-weight:normal;
+  font-style:normal;
+  font-size:1.25em;
+  line-height:1;
+  letter-spacing:normal;
+  text-transform:none;
+  display:inline-block;
+  white-space:nowrap;
+  word-wrap:normal;
+  direction:ltr;
+  -webkit-font-feature-settings:'liga';
+  -webkit-font-smoothing:antialiased;
+  font-feature-settings:'liga';
+}
+
+:root{
+  --red:#B10B12;
+  --red2:#C51A21;
+  --redSoft:#F9E8E9;
+  --bg:#EEF2F5;
+  --surface:#FFFFFF;
+  --surface2:#F7F8FA;
+  --text:#414141;
+  --muted:#7B7B7B;
+  --line:#D9DDE1;
+  --blue:#2F5D8A;
+  --green:#2D7C64;
+  --shadow:0 9px 28px rgba(48,55,61,.075);
+  --radius:26px;
+  --nav:rgba(255,255,255,.96);
+}
+
+html[data-theme="dark"]{
+  --bg:#0F1417;
+  --surface:#171D21;
+  --surface2:#1D2429;
+  --text:#F2F2F2;
+  --muted:#A8ADB1;
+  --line:#2C353B;
+  --redSoft:#331719;
+  --shadow:0 12px 34px rgba(0,0,0,.28);
+  --nav:rgba(15,20,23,.96);
+}
+
+body{
+  font-family:'Roboto',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  font-weight:400;
+  letter-spacing:.002em;
+}
+
+.navInner{height:78px}
+.brand{font-weight:800;letter-spacing:-.025em;font-size:1.34rem}
+.themeButton{width:46px;height:46px;border-color:var(--line);box-shadow:0 3px 12px rgba(40,45,48,.04)}
+
+.card{
+  border-color:var(--line);
+  border-radius:26px;
+  box-shadow:var(--shadow);
+}
+
+.kicker{
+  color:var(--red);
+  font-size:.78rem;
+  font-weight:800;
+  letter-spacing:.13em;
+}
+.sectionHead h2{font-weight:800;letter-spacing:-.035em;color:var(--text)}
+.sectionSubtitle{color:var(--muted);font-weight:400}
+
+.hero{background:linear-gradient(180deg,rgba(177,11,18,.045),transparent 42%)}
+.hero h1{font-weight:900;letter-spacing:-.055em}
+.heroDescription{font-size:1.05rem;line-height:1.72}
+.eyebrow{font-weight:800;border-radius:999px;background:var(--surface);box-shadow:0 4px 18px rgba(40,45,48,.045)}
+
+.aboutCard,.teamCard{box-shadow:0 5px 18px rgba(43,49,54,.055)}
+.aboutIcon{
+  background:var(--redSoft);
+  color:var(--red);
+  width:50px;height:50px;
+  border-radius:16px;
+}
+.aboutIcon .material-symbols-rounded{font-size:27px}
+.aboutCard h3,.teamCard h3{font-weight:800;color:var(--text)}
+.teamRole{
+  display:flex;align-items:center;gap:8px;
+  color:#666;
+  font-size:.78rem;
+  font-weight:800;
+  letter-spacing:.13em;
+}
+.teamRole .roleIcon{color:var(--red);font-size:22px}
+.teamAvatar{background:var(--red);border-radius:18px}
+
+.layerSwitch{border-radius:18px;padding:5px;background:var(--surface2)}
+.layerSwitch button{border-radius:13px;padding:10px 15px;font-weight:700}
+.layerSwitch button.active{background:var(--red);box-shadow:0 6px 16px rgba(177,11,18,.22)}
+#map{border-radius:24px}
+.hazardChip{border-radius:999px;font-weight:700;padding:9px 14px}
+
+.apiCard{
+  border-left:4px solid var(--red);
+  background:linear-gradient(135deg,var(--surface),var(--surface2));
+}
+.apiBadge{font-weight:800;letter-spacing:.08em}
+
+.kpi{
+  position:relative;
+  overflow:hidden;
+  padding:20px;
+  min-height:140px;
+}
+.kpi::after{
+  content:"";
+  position:absolute;
+  right:-34px;bottom:-38px;
+  width:96px;height:96px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(177,11,18,.10),rgba(177,11,18,0) 70%);
+}
+.kpiIcon{
+  width:42px;height:42px;
+  border-radius:14px;
+  background:var(--redSoft);color:var(--red);
+  margin-bottom:17px;
+}
+.kpiIcon .material-symbols-rounded{font-size:23px}
+.kpi span{font-size:.72rem;font-weight:800;letter-spacing:.08em;color:#6F6F6F}
+.kpi strong{font-size:2.3rem;font-weight:900;color:var(--text)}
+
+.chartCard,.heatCard,.leaderboardCard{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(180deg,var(--surface) 0%,var(--surface) 72%,var(--surface2) 140%);
+  border:1px solid var(--line);
+}
+.chartCard::before,.heatCard::before,.leaderboardCard::before{
+  content:"";
+  position:absolute;left:0;top:0;width:100%;height:3px;
+  background:linear-gradient(90deg,var(--red),#D4474C,transparent 78%);
+}
+.chartTitle{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:0 0 18px;
+  color:#5F6265;
+  font-size:.82rem;
+  font-weight:800;
+  letter-spacing:.085em;
+  text-transform:uppercase;
+}
+.chartTitle .material-symbols-rounded{
+  color:var(--red);
+  font-size:21px;
+  background:var(--redSoft);
+  border-radius:10px;
+  padding:7px;
+}
+.chartBox{height:255px;padding:2px 2px 0}
+.analyticsGrid .chartCard{min-height:390px;padding:24px}
+.analyticsGrid .chartBox{height:310px}
+
+.leader{padding:13px 2px}
+.rank{font-weight:800;background:var(--surface2)}
+.leader:first-child .rank{background:var(--red);box-shadow:0 4px 12px rgba(177,11,18,.20)}
+.leaderName{font-weight:700}
+.reportCount{font-weight:800}
+
+.heatGrid{gap:7px}
+.heatCell{height:46px;border-radius:11px;font-weight:700;border:1px solid rgba(120,120,120,.05)}
+.heatLabel{font-weight:700;font-size:.76rem}
+
+.weatherCard{position:relative;overflow:hidden}
+.weatherCard small{display:flex;align-items:center;gap:7px;font-weight:700;color:#6C6F72}
+.weatherIcon{color:var(--red);font-size:19px}
+.weatherCard strong{font-weight:900;color:var(--text)}
+
+.guide{position:relative;overflow:hidden}
+.guideNumber{background:var(--red);color:white;box-shadow:0 6px 14px rgba(177,11,18,.20)}
+.guide h3{font-weight:800}
+
+.btn{font-weight:700;border-radius:16px}
+.btnRed{background:var(--red);box-shadow:0 8px 22px rgba(177,11,18,.20)}
+.btnLight{background:var(--surface)}
+
+@media(max-width:760px){
+  .analyticsGrid .chartCard{min-height:370px;padding:20px}
+  .analyticsGrid .chartBox{height:290px}
+  .chartTitle{font-size:.76rem}
+  .chartTitle .material-symbols-rounded{font-size:19px;padding:6px}
+}
+
+
+/* === Requested HazWatch website refinements === */
+.heroGrid{grid-template-columns:1fr;max-width:980px}
+.hero{padding:34px 0 22px}
+.hero h1{font-size:clamp(2.65rem,5vw,4.4rem);margin:18px 0 16px}
+.heroDescription{max-width:850px}
+.logoWrap{width:58px;height:52px}
+.logoWrap img{width:100%;height:100%;object-fit:contain}
+.brand{font-size:1.38rem}
+.navInner{height:82px}
+.navLinks a{display:inline-flex;align-items:center;gap:7px}
+.navLinks .material-symbols-rounded{font-size:19px;color:var(--red)}
+.themeButton .material-symbols-rounded{font-size:21px}
+.layerSwitch button{display:inline-flex;align-items:center;gap:6px}
+.layerSwitch button .material-symbols-rounded{font-size:18px}
+.mapStage{position:relative;border-radius:19px;overflow:hidden;background:#DCE3E5}
+.mapStage #map{border-radius:0}
+#mapillaryViewer{position:absolute;inset:0;z-index:8;display:none;background:#111}
+#mapillaryMessage{position:absolute;inset:0;z-index:9;display:none;place-items:center;text-align:center;padding:24px;background:rgba(15,20,23,.90);color:#fff}
+#mapillaryMessage .material-symbols-rounded{display:block;font-size:38px;margin:0 auto 10px;color:#fff}
+#mapillaryMessage strong{display:block;margin-bottom:6px}
+.hazardFilters::-webkit-scrollbar{display:none}
+.hazardChip{display:inline-flex;align-items:center;gap:7px;background:var(--surface)}
+.hazardChip .material-symbols-rounded{font-size:18px;color:var(--hazard-color,var(--red));font-variation-settings:'FILL' 0,'wght' 600,'GRAD' 0,'opsz' 24}
+.hazardChip.active .material-symbols-rounded{font-variation-settings:'FILL' 1,'wght' 700,'GRAD' 0,'opsz' 24}
+.qrBox{height:auto;min-height:250px}
+.qrBox img{width:min(220px,75vw);height:auto;background:#fff;padding:8px;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.qrCaption{margin-top:10px;color:var(--muted);font-size:.82rem;font-weight:700}
+@media(max-width:760px){
+  .hero{padding:28px 0 16px}
+  .hero h1{font-size:2.8rem}
+  .navInner{height:74px}
+  .logoWrap{width:50px;height:46px}
+}
+
+
+/* =====================================================
+   PROFESSIONAL INFORMATION ARCHITECTURE — USER REQUEST
+   ===================================================== */
+
+section{padding:46px 0}
+.hero{padding:28px 0 18px}
+.heroGrid{max-width:1100px}
+.hero h1{
+  margin:14px 0 12px;
+  font-size:clamp(2.35rem,4.5vw,4rem);
+  line-height:.98;
+}
+.heroDescription{font-size:1rem;line-height:1.65;max-width:920px}
+.heroButtons{margin-top:20px}
+.safety{margin-top:14px}
+
+/* Professional top information menu */
+.navInner{
+  min-height:78px;
+  height:auto;
+  padding:7px 0;
+}
+.infoMenu{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  min-width:0;
+}
+.infoMenuItem{
+  position:relative;
+}
+.infoMenuButton{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:10px 11px;
+  border-radius:12px;
+  font-size:.82rem;
+  font-weight:800;
+  white-space:nowrap;
+}
+.infoMenuButton:hover,
+.infoMenuItem.open .infoMenuButton{
+  color:var(--red);
+  background:var(--redSoft);
+}
+.infoMenuButton .material-symbols-rounded{
+  font-size:18px;
+  color:var(--red);
+}
+.navFlyout{
+  position:absolute;
+  top:calc(100% + 8px);
+  left:50%;
+  transform:translate(-50%,8px);
+  width:min(430px,86vw);
+  padding:18px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:var(--surface);
+  box-shadow:0 18px 50px rgba(24,31,36,.18);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .16s ease,transform .16s ease,visibility .16s ease;
+  z-index:3000;
+}
+.infoMenuItem.open .navFlyout{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+  transform:translate(-50%,0);
+}
+.navFlyoutTitle{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin:0 0 9px;
+  color:var(--text);
+  font-size:1rem;
+  font-weight:900;
+}
+.navFlyoutTitle .material-symbols-rounded{color:var(--red);font-size:21px}
+.navFlyout p{
+  margin:0;
+  color:var(--muted);
+  font-size:.88rem;
+  line-height:1.65;
+}
+.navMiniList{
+  display:grid;
+  gap:8px;
+  margin-top:10px;
+}
+.navMiniRow{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  padding:9px 10px;
+  background:var(--surface2);
+  border:1px solid var(--line);
+  border-radius:12px;
+}
+.navMiniRow .material-symbols-rounded{
+  color:var(--red);
+  font-size:18px;
+  margin-top:1px;
+}
+.navMiniRow strong{font-size:.84rem}
+.navMiniRow span{display:block;color:var(--muted);font-size:.78rem;line-height:1.45}
+.contactLinks{display:grid;gap:9px;margin-top:10px}
+.contactLink{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:11px 12px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:var(--surface2);
+  font-size:.86rem;
+  font-weight:700;
+}
+.contactLink .material-symbols-rounded{color:var(--red)}
+
+/* Live impact is the first primary content block */
+.liveImpactHead{
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  gap:20px;
+  margin-bottom:16px;
+}
+.liveImpactHead h2{
+  margin:4px 0 0;
+  font-size:clamp(1.9rem,3.5vw,2.8rem);
+  line-height:1;
+  letter-spacing:-.04em;
+}
+.liveImpactGrid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+.liveImpactGrid .kpi{
+  min-height:130px;
+  padding:20px;
+}
+.liveImpactGrid .kpiIcon{
+  width:40px;height:40px;border-radius:50%;
+  background:#EAF0F6;
+  color:var(--blue);
+}
+html[data-theme="dark"] .liveImpactGrid .kpiIcon{background:#172431}
+.liveImpactGrid .kpi strong{font-size:2.35rem}
+.apiStrip{
+  margin-top:12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:11px 15px;
+  border:1px solid var(--line);
+  border-left:4px solid var(--red);
+  border-radius:14px;
+  background:var(--surface);
+}
+
+/* Map becomes full-width central product */
+.mapSection{padding-top:20px}
+.mapCard{
+  padding:16px;
+  overflow:hidden;
+}
+.mapHeader{
+  padding:3px 4px 15px;
+}
+.mapHeader h3{font-size:1.7rem;letter-spacing:-.03em}
+.mapStage{
+  border-radius:23px;
+  overflow:hidden;
+  border:1px solid var(--line);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.2);
+}
+#map{height:610px;border-radius:0}
+.layerSwitch{
+  border-radius:16px;
+  padding:5px;
+  box-shadow:0 5px 18px rgba(40,45,48,.06);
+}
+.layerSwitch button{
+  gap:7px;
+  padding:10px 14px;
+  border-radius:12px;
+  font-weight:800;
+}
+.layerSwitch button.active{
+  box-shadow:0 6px 16px rgba(161,13,13,.22);
+}
+.hazardFilters{padding-top:13px}
+.hazardChip{
+  min-height:40px;
+  background:var(--surface);
+  box-shadow:0 2px 8px rgba(40,45,48,.035);
+}
+.hazardChip:hover{border-color:rgba(161,13,13,.42)}
+.leaflet-control-scale-line{
+  border:0 !important;
+  border-left:2px solid #424242 !important;
+  border-bottom:2px solid #424242 !important;
+  background:rgba(255,255,255,.88) !important;
+  color:#333 !important;
+  font-weight:700 !important;
+  box-shadow:0 2px 10px rgba(0,0,0,.10);
+}
+.northControl{
+  width:48px;
+  height:58px;
+  display:grid;
+  place-items:center;
+  background:rgba(255,255,255,.94);
+  border:1px solid rgba(0,0,0,.14);
+  border-radius:14px;
+  box-shadow:0 4px 16px rgba(0,0,0,.14);
+  color:#A10D0D;
+  font-weight:900;
+  line-height:1;
+}
+.northControl .northArrow{
+  display:block;
+  font-size:26px;
+  line-height:.8;
+  margin-bottom:2px;
+}
+.northControl .northN{
+  display:block;
+  font-size:12px;
+  letter-spacing:.08em;
+}
+
+/* Analytics is now clearly below the map */
+.analyticsSection{padding-top:34px}
+.analyticsHeader{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  align-items:end;
+  margin-bottom:17px;
+}
+.analyticsHeader h2{
+  margin:5px 0 0;
+  font-size:clamp(1.9rem,3.6vw,2.9rem);
+  letter-spacing:-.04em;
+  line-height:1;
+}
+.analyticsGrid{margin-top:0}
+.analyticsGrid .chartCard,
+.analyticsGrid .heatCard,
+.leaderboardCard{
+  box-shadow:0 8px 26px rgba(43,49,54,.065);
+}
+.analyticsGrid .chartCard{min-height:360px}
+.leaderboardWide{grid-column:1/-1}
+
+/* Weather is deliberately secondary */
+.weatherExtra{
+  padding-top:18px;
+  padding-bottom:28px;
+}
+.weatherExtraCard{
+  overflow:hidden;
+  border-radius:20px;
+}
+.weatherExtraHeader{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:16px 18px;
+}
+.weatherExtraTitle{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:0;
+}
+.weatherExtraIcon{
+  width:42px;height:42px;
+  display:grid;place-items:center;
+  border-radius:50%;
+  background:#EAF0F6;
+  color:var(--blue);
+  flex:0 0 auto;
+}
+html[data-theme="dark"] .weatherExtraIcon{background:#172431}
+.weatherExtraTitle strong{display:block;font-size:.98rem}
+.weatherExtraTitle small{display:block;color:var(--muted);font-size:.78rem}
+.weatherToggle{
+  width:40px;height:40px;
+  border-radius:50%;
+  border:1px solid var(--line);
+  background:var(--surface2);
+  color:var(--text);
+  display:grid;place-items:center;
+  flex:0 0 auto;
+}
+.weatherToggle .material-symbols-rounded{transition:transform .18s ease}
+.weatherExtraCard.open .weatherToggle .material-symbols-rounded{transform:rotate(180deg)}
+.weatherExtraBody{
+  display:none;
+  padding:0 18px 18px;
+  border-top:1px solid var(--line);
+}
+.weatherExtraCard.open .weatherExtraBody{display:block}
+.weatherControl{margin-top:17px}
+.weatherGrid{grid-template-columns:repeat(5,1fr)}
+.aqGrid{grid-template-columns:repeat(4,1fr)}
+
+/* App CTA is the final destination */
+.downloadCard{
+  align-items:center;
+  padding:28px;
+}
+.playBadge{
+  display:block;
+  width:210px;
+  max-width:100%;
+  margin-top:18px;
+}
+.appConnectRow{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  flex-wrap:wrap;
+}
+.qrBox{
+  min-height:220px;
+  border-style:solid;
+}
+.qrBox img{width:min(190px,70vw)}
+
+/* Hide obsolete standalone content sections */
+#about,
+#guidelines{display:none !important}
+
+@media(max-width:1040px){
+  .infoMenu{
+    order:3;
+    width:100%;
+    justify-content:flex-start;
+    overflow-x:auto;
+    scrollbar-width:none;
+    padding-bottom:2px;
+  }
+  .infoMenu::-webkit-scrollbar{display:none}
+  .navInner{flex-wrap:wrap}
+  .brand{order:1}
+  .themeButton{order:2;margin-left:auto}
+  .infoMenuItem{flex:0 0 auto}
+  .navFlyout{
+    position:fixed;
+    top:126px;
+    left:3vw;
+    right:3vw;
+    width:auto;
+    transform:translateY(8px);
+  }
+  .infoMenuItem.open .navFlyout{transform:translateY(0)}
+}
+@media(max-width:760px){
+  section{padding:34px 0}
+  .navInner{padding:7px 0 5px}
+  .infoMenuButton{padding:8px 9px;font-size:.77rem}
+  .navFlyout{top:118px;padding:15px}
+  .hero{padding:24px 0 12px}
+  .hero h1{font-size:2.5rem}
+  .heroButtons .btn{width:auto}
+  .liveImpactGrid{grid-template-columns:repeat(3,1fr);gap:8px}
+  .liveImpactGrid .kpi{min-height:112px;padding:14px 10px}
+  .liveImpactGrid .kpiIcon{width:34px;height:34px;margin-bottom:10px}
+  .liveImpactGrid .kpi span{font-size:.61rem;letter-spacing:.05em}
+  .liveImpactGrid .kpi strong{font-size:1.7rem}
+  .apiStrip{font-size:.74rem}
+  #map{height:500px}
+  .mapHeader{align-items:stretch}
+  .layerSwitch{width:100%;justify-content:space-between}
+  .layerSwitch button{flex:1;padding:9px 7px;font-size:.76rem}
+  .layerSwitch button .material-symbols-rounded{font-size:17px}
+  .analyticsGrid{grid-template-columns:1fr}
+  .leaderboardWide{grid-column:auto}
+  .weatherGrid{grid-template-columns:1fr 1fr}
+  .aqGrid{grid-template-columns:1fr 1fr}
+  .downloadCard{grid-template-columns:1fr}
+}
+@media(max-width:430px){
+  .brand{font-size:1.2rem}
+  .logoWrap{width:46px;height:42px}
+  .infoMenu{gap:2px}
+  .infoMenuButton{font-size:.73rem}
+  .infoMenuButton .material-symbols-rounded{font-size:16px}
+  .liveImpactGrid{grid-template-columns:1fr 1fr 1fr}
+  .liveImpactGrid .kpi{padding:12px 8px}
+  .liveImpactGrid .kpi strong{font-size:1.55rem}
+  #map{height:455px}
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<nav class="nav">
+  <div class="wrap navInner">
+    <a href="#top" class="brand">
+      <div class="logoWrap">
+        <img id="navLogo" src="hazwatch_logo_512.png" alt="HazWatch" onerror="this.style.display='none';this.nextElementSibling.style.display='grid';">
+        <span class="logoFallback">H</span>
+      </div>
+      <div><span class="brandRed">Haz</span>Watch</div>
+    </a>
+
+    <div class="infoMenu" id="infoMenu" aria-label="HazWatch information">
+      <div class="infoMenuItem">
+        <button class="infoMenuButton" type="button">
+          <span class="material-symbols-rounded">flag</span>Mission
+        </button>
+        <div class="navFlyout">
+          <div class="navFlyoutTitle"><span class="material-symbols-rounded">flag</span>Our Mission</div>
+          <p>To empower citizens to safely report and map hazards through an accessible geospatial platform that enables real-time disaster awareness, community participation, scientific research, and informed decision-making.</p>
+        </div>
+      </div>
+
+      <div class="infoMenuItem">
+        <button class="infoMenuButton" type="button">
+          <span class="material-symbols-rounded">visibility</span>Vision
+        </button>
+        <div class="navFlyout">
+          <div class="navFlyoutTitle"><span class="material-symbols-rounded">visibility</span>Our Vision</div>
+          <p>To create a safer and more resilient India by transforming citizens into contributors of geospatial disaster intelligence, enabling cost-effective hazard data collection, scientific research, and informed decision-making.</p>
+        </div>
+      </div>
+
+      <div class="infoMenuItem">
+        <button class="infoMenuButton" type="button">
+          <span class="material-symbols-rounded">groups</span>Team
+        </button>
+        <div class="navFlyout">
+          <div class="navFlyoutTitle"><span class="material-symbols-rounded">groups</span>Team</div>
+          <div class="navMiniList">
+            <div class="navMiniRow">
+              <span class="material-symbols-rounded">person</span>
+              <div><strong>Zainab Khan, PhD</strong><span>Founder and Design Architect · Former Post-Doctoral Fellow, IIT Roorkee</span></div>
+            </div>
+            <div class="navMiniRow">
+              <span class="material-symbols-rounded">handshake</span>
+              <div><strong>Deepika Vashishtha, PhD</strong><span>Strategic Advisor · Assistant Professor, Doctor Harisingh Gour Vishwavidyalaya, Sagar, MP</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="infoMenuItem">
+        <button class="infoMenuButton" type="button">
+          <span class="material-symbols-rounded">menu_book</span>Guidelines
+        </button>
+        <div class="navFlyout">
+          <div class="navFlyoutTitle"><span class="material-symbols-rounded">menu_book</span>Reporting Guidelines</div>
+          <div class="navMiniList">
+            <div class="navMiniRow"><span class="material-symbols-rounded">shield</span><div><strong>1. Safety first</strong><span>Never enter a dangerous place to report a hazard.</span></div></div>
+            <div class="navMiniRow"><span class="material-symbols-rounded">crisis_alert</span><div><strong>2. Hazard details</strong><span>Select hazard type, affected area and incident date.</span></div></div>
+            <div class="navMiniRow"><span class="material-symbols-rounded">location_on</span><div><strong>3. Location</strong><span>Use current location or select the incident location.</span></div></div>
+            <div class="navMiniRow"><span class="material-symbols-rounded">photo_camera</span><div><strong>4. Photo</strong><span>Capture or upload an image when it is safe.</span></div></div>
+            <div class="navMiniRow"><span class="material-symbols-rounded">task_alt</span><div><strong>5. Review & submit</strong><span>Check the report details before submission.</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="infoMenuItem">
+        <button class="infoMenuButton" type="button">
+          <span class="material-symbols-rounded">contact_mail</span>Contact
+        </button>
+        <div class="navFlyout">
+          <div class="navFlyoutTitle"><span class="material-symbols-rounded">contact_mail</span>Contact HazWatch</div>
+          <div class="contactLinks">
+            <a class="contactLink" href="mailto:khanzainub@gmail.com"><span class="material-symbols-rounded">mail</span>khanzainub@gmail.com</a>
+            <a class="contactLink" href="tel:+917455910098"><span class="material-symbols-rounded">call</span>+91 74559 10098</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button id="themeButton" class="themeButton" aria-label="Toggle theme">
+      <span class="material-symbols-rounded">dark_mode</span>
+    </button>
+  </div>
+</nav>
+
+<header id="top" class="hero">
+  <div class="wrap heroGrid">
+    <div>
+      <div class="eyebrow">Citizen Science · Geospatial Intelligence</div>
+      <h1><span class="heroRed">HazWatch.</span></h1>
+      <p class="heroDescription">
+        HazWatch is a citizen science-based geospatial mobile application for multi-hazard incident reporting in India.
+        It connects citizen observations with mapped hazard evidence, public analytics, and research-oriented data access.
+      </p>
+      <div class="heroButtons">
+        <a href="#intelligence" class="btn btnRed"><span class="material-symbols-rounded">map</span>Explore live data</a>
+        <a href="#getapp" class="btn btnLight"><span class="material-symbols-rounded">smartphone</span>Get the app</a>
+      </div>
+      <div class="safety"><strong>Your safety comes first.</strong> Never enter a dangerous place to report a hazard.</div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section id="intelligence">
+  <div class="wrap">
+
+    <div class="liveImpactHead">
+      <div>
+        <div class="kicker">Live Impact</div>
+        <h2>HazWatch at a glance</h2>
+      </div>
+      <p class="sectionSubtitle">Live public-safe figures from the HazWatch production API.</p>
+    </div>
+
+    <div class="liveImpactGrid">
+      <div class="card kpi">
+        <div class="kpiIcon"><span class="material-symbols-rounded">crisis_alert</span></div>
+        <span>Reports Submitted</span>
+        <strong id="kpiReports">—</strong>
+      </div>
+      <div class="card kpi">
+        <div class="kpiIcon"><span class="material-symbols-rounded">groups</span></div>
+        <span>Active Citizens</span>
+        <strong id="kpiContributors">—</strong>
+      </div>
+      <div class="card kpi">
+        <div class="kpiIcon"><span class="material-symbols-rounded">map</span></div>
+        <span>States Covered</span>
+        <strong id="kpiStates">—</strong>
+      </div>
+    </div>
+
+    <div class="apiStrip">
+      <div id="apiBadge" class="apiBadge">Connecting</div>
+      <div id="apiStatus" class="apiStatus">HazWatch API</div>
+    </div>
+
+    <div class="mapSection">
+      <div class="card mapCard">
+        <div class="mapHeader">
+          <div>
+            <h3>Incident map</h3>
+            <small>Live HazWatch reports plotted across India</small>
+          </div>
+          <div class="layerSwitch">
+            <button data-layer="standard" class="active"><span class="material-symbols-rounded">map</span>Standard</button>
+            <button data-layer="satellite"><span class="material-symbols-rounded">satellite_alt</span>Satellite</button>
+            <button id="mapillaryButton" data-layer="mapillary"><span class="material-symbols-rounded">streetview</span>Mapillary</button>
+          </div>
+        </div>
+
+        <div class="mapStage">
+          <div id="map"></div>
+          <div id="mapillaryViewer"></div>
+          <div id="mapillaryMessage">
+            <div>
+              <span class="material-symbols-rounded">streetview</span>
+              <strong>Mapillary street-level imagery</strong>
+              <span id="mapillaryMessageText">Finding nearby imagery…</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="hazardFilters" class="hazardFilters"></div>
+      </div>
+    </div>
+
+    <div class="analyticsSection">
+      <div class="analyticsHeader">
+        <div>
+          <div class="kicker">Analytics</div>
+          <h2>Live hazard intelligence</h2>
+        </div>
+        <p class="sectionSubtitle">Charts are generated only from the public HazWatch analytics endpoint.</p>
+      </div>
+
+      <div class="analyticsGrid">
+        <div class="card chartCard">
+          <div class="chartTitle"><span class="material-symbols-rounded">warning</span><span>Reports by Hazard Type</span></div>
+          <div class="chartBox" id="hazardChartBox"><canvas id="hazardChart"></canvas></div>
+        </div>
+
+        <div class="card chartCard">
+          <div class="chartTitle"><span class="material-symbols-rounded">show_chart</span><span>Reports Over Time</span></div>
+          <div class="chartBox" id="timeChartBox"><canvas id="timeChart"></canvas></div>
+        </div>
+
+        <div class="card chartCard">
+          <div class="chartTitle"><span class="material-symbols-rounded">map</span><span>Reports by State</span></div>
+          <div class="chartBox" id="stateChartBox"><canvas id="stateChart"></canvas></div>
+        </div>
+
+        <div class="card chartCard">
+          <div class="chartTitle"><span class="material-symbols-rounded">domain</span><span>Reports by Affected Area</span></div>
+          <div class="chartBox" id="areaChartBox"><canvas id="areaChart"></canvas></div>
+        </div>
+
+        <div class="card chartCard">
+          <div class="chartTitle"><span class="material-symbols-rounded">wc</span><span>Demographics — Gender</span></div>
+          <div class="chartBox" id="genderChartBox"><canvas id="genderChart"></canvas></div>
+        </div>
+
+        <div class="card chartCard">
+          <div class="chartTitle"><span class="material-symbols-rounded">school</span><span>Demographics — Education</span></div>
+          <div class="chartBox" id="educationChartBox"><canvas id="educationChart"></canvas></div>
+        </div>
+
+        <div class="card chartCard">
+          <div class="chartTitle"><span class="material-symbols-rounded">groups</span><span>Demographics — Age Groups</span></div>
+          <div class="chartBox" id="ageChartBox"><canvas id="ageChart"></canvas></div>
+        </div>
+
+        <div class="card heatCard">
+          <div class="chartTitle"><span class="material-symbols-rounded">calendar_month</span><span>Hazard Type × Month</span></div>
+          <div id="monthHeat" class="heatScroll"><div class="empty">Loading live analytics…</div></div>
+        </div>
+
+        <div class="card heatCard">
+          <div class="chartTitle"><span class="material-symbols-rounded">grid_view</span><span>Hazard Type × State</span></div>
+          <div id="stateHeat" class="heatScroll"><div class="empty">Loading live analytics…</div></div>
+        </div>
+
+        <div class="card leaderboardCard leaderboardWide">
+          <div class="chartTitle"><span class="material-symbols-rounded">leaderboard</span><span>Top Contributors</span></div>
+          <div id="leaderboard"><div class="empty">Loading live leaderboard…</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="conditions" class="weatherExtra">
+  <div class="wrap">
+    <div class="card weatherExtraCard" id="weatherExtraCard">
+      <div class="weatherExtraHeader">
+        <div class="weatherExtraTitle">
+          <div class="weatherExtraIcon"><span class="material-symbols-rounded">partly_cloudy_day</span></div>
+          <div>
+            <strong>Local Weather & Air Quality</strong>
+            <small>Optional environmental context powered separately by Open-Meteo</small>
+          </div>
+        </div>
+        <button class="weatherToggle" id="weatherToggle" type="button" aria-label="Open weather tools" aria-expanded="false">
+          <span class="material-symbols-rounded">expand_more</span>
+        </button>
+      </div>
+
+      <div class="weatherExtraBody" id="weatherExtraBody">
+        <div class="weatherControl">
+          <button id="locationButton" class="btn btnRed"><span class="material-symbols-rounded">my_location</span>Use my current location</button>
+          <div class="citySearch">
+            <input id="cityInput" placeholder="Search city — e.g. Dehradun">
+            <button id="cityButton" class="btn btnLight"><span class="material-symbols-rounded">search</span>Search</button>
+          </div>
+          <div id="weatherLocation" class="weatherLocation">No location selected</div>
+        </div>
+
+        <div class="weatherGrid">
+          <div class="card weatherCard"><small><span class="material-symbols-rounded weatherIcon">thermostat</span>Temperature</small><strong id="weatherTemp">—</strong><span>°C</span></div>
+          <div class="card weatherCard"><small><span class="material-symbols-rounded weatherIcon">rainy</span>Precipitation</small><strong id="weatherRain">—</strong><span>mm</span></div>
+          <div class="card weatherCard"><small><span class="material-symbols-rounded weatherIcon">air</span>Wind Speed</small><strong id="weatherWind">—</strong><span>km/h</span></div>
+          <div class="card weatherCard"><small><span class="material-symbols-rounded weatherIcon">speed</span>Surface Pressure</small><strong id="weatherPressure">—</strong><span>hPa</span></div>
+          <div class="card weatherCard"><small><span class="material-symbols-rounded weatherIcon">eco</span>US AQI</small><strong id="weatherAQI">—</strong><span id="weatherAQILabel">Air quality</span></div>
+        </div>
+
+        <div class="aqGrid">
+          <div class="card weatherCard"><small>PM2.5</small><strong id="pm25">—</strong><span>µg/m³</span></div>
+          <div class="card weatherCard"><small>PM10</small><strong id="pm10">—</strong><span>µg/m³</span></div>
+          <div class="card weatherCard"><small>NO₂</small><strong id="no2">—</strong><span>µg/m³</span></div>
+          <div class="card weatherCard"><small>O₃</small><strong id="o3">—</strong><span>µg/m³</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="getapp">
+  <div class="wrap">
+    <div class="card downloadCard">
+      <div>
+        <div class="kicker">Join HazWatch</div>
+        <h2>Connect through the HazWatch app</h2>
+        <p class="sectionSubtitle">
+          Submit incident reports and request HazData through the Android application. The website remains focused on public mapping, analytics, and environmental context.
+        </p>
+        <div class="appConnectRow">
+          <a href="https://play.google.com/store/apps/details?id=in.hazwatch.myapp" target="_blank" rel="noopener" aria-label="Get HazWatch on Google Play">
+            <img class="playBadge" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play">
+          </a>
+        </div>
+      </div>
+
+      <div class="qrBox">
+        <div>
+          <img src="qr.png" alt="HazWatch Google Play QR code" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+          <div style="display:none;color:var(--muted);">Place <strong>qr.png</strong> beside index.html.</div>
+          <div class="qrCaption">Scan to open HazWatch on Google Play</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap copyright">
+    <details>
+      <summary><span>© 2026 HazWatch. All rights reserved.</span><span>⌄</span></summary>
+      <div class="copyrightBody">
+        <p>HazWatch is a citizen science-based geospatial mobile application for multi-hazard incident reporting in India.</p>
+        <p>This application, including its concept, design, user interface, graphics, database structure, source code, and functionality, is the intellectual property of Zainab Khan.</p>
+        <p>No part of this application may be copied, reproduced, distributed, transmitted, displayed, or otherwise used in any form without prior written permission.</p>
+        <p>The name “HazWatch”, its logo, and associated branding elements are proprietary.</p>
+        <p>Unauthorized use, duplication, or imitation may result in legal action.</p>
+      </div>
+    </details>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script src="https://unpkg.com/mapillary-js@4.1.2/dist/mapillary.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+
+
+<script>
+
+/* =====================================================
+FINAL HAZWATCH API
+===================================================== */
+
+const API_BASE =
+"https://disaster-watch-beta.emergent.host/api";
+
+
+const REFRESH_INTERVAL =
+45000;
+
+const MAPILLARY_ACCESS_TOKEN =
+"MLY|26460833783581937|48136f3adecdb07c6eaa2136a7512dbb";
+
+const HAZWATCH_HAZARDS = [
+  "landslide",
+  "flash_flood",
+  "flood",
+  "urban_flood",
+  "forest_fire",
+  "avalanche",
+  "glof",
+  "debris_mud_flow",
+  "drought",
+  "heat_waves",
+  "cloud_burst"
+];
+
+const HAZARD_ICONS = {
+  all:"apps",
+  landslide:"terrain",
+  flash_flood:"flood",
+  flood:"water",
+  urban_flood:"location_city",
+  forest_fire:"local_fire_department",
+  avalanche:"ac_unit",
+  glof:"waves",
+  debris_mud_flow:"landscape",
+  drought:"water_drop",
+  heat_waves:"device_thermostat",
+  cloud_burst:"thunderstorm"
+};
+
+
+/* IMPORTANT:
+   charts is initialized BEFORE theme functions run.
+*/
+
+let charts = {};
+
+
+/* =====================================================
+THEME
+===================================================== */
+
+const root =
+document.documentElement;
+
+
+const themeButton =
+document.getElementById(
+"themeButton"
+);
+
+
+function resetLogoFallbacks(){
+
+const navLogo = document.getElementById("navLogo");
+const fallback = document.querySelector(".logoFallback");
+if(navLogo){ navLogo.style.display = "block"; navLogo.src = "hazwatch_logo_512.png"; }
+if(fallback){ fallback.style.display = "none"; }
+
+}
+
+function applyTheme(theme){
+
+root.dataset.theme = theme;
+localStorage.setItem("hazwatch-theme", theme);
+resetLogoFallbacks();
+
+themeButton.innerHTML = theme === "dark"
+  ? '<span class="material-symbols-rounded">light_mode</span>'
+  : '<span class="material-symbols-rounded">dark_mode</span>';
+
+updateChartsTheme();
+
+}
+
+
+const savedTheme =
+localStorage.getItem(
+"hazwatch-theme"
+);
+
+
+if(savedTheme){
+
+applyTheme(
+savedTheme
+);
+
+}
+
+else{
+
+const prefersDark =
+
+window.matchMedia
+&&
+window.matchMedia(
+"(prefers-color-scheme: dark)"
+)
+.matches;
+
+
+applyTheme(
+
+prefersDark
+
+? "dark"
+
+: "light"
+
+);
+
+}
+
+
+
+themeButton.onclick =
+function(){
+
+applyTheme(
+
+root.dataset.theme
+=== "dark"
+
+? "light"
+
+: "dark"
+
+);
+
+};
+
+
+/* =====================================================
+HELPERS
+===================================================== */
+
+function normaliseKey(value){
+
+return String(
+value ?? ""
+)
+
+.trim()
+
+.toLowerCase()
+
+.replace(
+/\s+/g,
+"_"
+)
+
+.replace(
+/[-/]+/g,
+"_"
+);
+
+}
+
+
+function canonicalHazardKey(value){
+  const key = normaliseKey(value);
+  const aliases = {
+    debris_flow:"debris_mud_flow",
+    mud_flow:"debris_mud_flow",
+    debris_mudflow:"debris_mud_flow",
+    heat_wave:"heat_waves",
+    heatwave:"heat_waves",
+    cloudburst:"cloud_burst",
+    flashflood:"flash_flood",
+    urbanflood:"urban_flood",
+    forestfire:"forest_fire"
+  };
+  return aliases[key] || key;
+}
+
+
+
+function pretty(value){
+
+const key = normaliseKey(value);
+const labels = {
+  landslide:"Landslide",
+  flash_flood:"Flash Flood",
+  flood:"Flood",
+  urban_flood:"Urban Flood",
+  forest_fire:"Forest Fire",
+  avalanche:"Avalanche",
+  glof:"GLOF",
+  debris_mud_flow:"Debris/Mud Flow",
+  drought:"Drought",
+  heat_waves:"Heat Waves",
+  cloud_burst:"Cloud Burst",
+  other:"Other"
+};
+
+if(labels[key]) return labels[key];
+
+return String(value ?? "Unknown")
+.replace(/_/g," ")
+.replace(/\b\w/g, character => character.toUpperCase());
+
+}
+
+
+
+function escapeHTML(value){
+
+return String(
+value ?? ""
+)
+
+.replace(
+/[&<>"]/g,
+character => ({
+
+"&":"&amp;",
+
+"<":"&lt;",
+
+">":"&gt;",
+
+'"':"&quot;"
+
+})[character]
+
+);
+
+}
+
+
+
+async function API(path){
+
+const response =
+
+await fetch(
+
+API_BASE + path,
+
+{
+
+headers:{
+
+"Accept":
+"application/json"
+
+},
+
+cache:
+"no-store"
+
+}
+
+);
+
+
+if(!response.ok){
+
+throw new Error(
+
+path
++
+" returned HTTP "
++
+response.status
+
+);
+
+}
+
+
+return response.json();
+
+}
+
+
+
+function unwrapObject(
+raw,
+keys=[]
+){
+
+if(
+!raw
+||
+typeof raw !== "object"
+){
+
+return {};
+
+}
+
+
+for(
+const key
+of keys
+){
+
+if(
+raw[key]
+&&
+typeof raw[key] === "object"
+&&
+!Array.isArray(raw[key])
+){
+
+return raw[key];
+
+}
+
+}
+
+
+if(
+raw.data
+&&
+typeof raw.data === "object"
+&&
+!Array.isArray(raw.data)
+){
+
+return raw.data;
+
+}
+
+
+return raw;
+
+}
+
+
+
+function unwrapArray(
+raw,
+keys=[]
+){
+
+if(
+Array.isArray(raw)
+){
+
+return raw;
+
+}
+
+
+if(
+!raw
+||
+typeof raw !== "object"
+){
+
+return [];
+
+}
+
+
+for(
+const key
+of keys
+){
+
+if(
+Array.isArray(
+raw[key]
+)
+){
+
+return raw[key];
+
+}
+
+}
+
+
+if(
+Array.isArray(
+raw.data
+)
+){
+
+return raw.data;
+
+}
+
+
+return [];
+
+}
+
+
+
+function valueFrom(
+object,
+keys
+){
+
+for(
+const key
+of keys
+){
+
+if(
+object
+&&
+object[key] !== undefined
+){
+
+return object[key];
+
+}
+
+}
+
+
+return undefined;
+
+}
+
+
+
+function normaliseCategories(
+value,
+preferredKey
+){
+
+if(
+Array.isArray(value)
+){
+
+return value.map(
+
+item => {
+
+if(
+item
+&&
+typeof item === "object"
+){
+
+return {
+
+category:
+
+item[
+preferredKey
+]
+
+??
+
+item.category
+
+??
+
+item.label
+
+??
+
+item.name
+
+??
+
+item.key
+
+??
+
+"Unknown",
+
+
+count:
+
+Number(
+
+item.count
+
+??
+
+item.value
+
+??
+
+item.total
+
+??
+
+0
+
+)
+
+};
+
+}
+
+
+return {
+
+category:
+String(item),
+
+count:
+0
+
+};
+
+}
+
+);
+
+}
+
+
+
+if(
+value
+&&
+typeof value === "object"
+){
+
+return Object
+.entries(value)
+.map(
+
+([
+category,
+count
+]) => ({
+
+category,
+
+count:
+
+Number(
+
+typeof count === "object"
+
+?
+
+count.count
+
+??
+
+count.value
+
+??
+
+count.total
+
+??
+
+0
+
+:
+
+count
+
+)
+
+})
+
+);
+
+}
+
+
+return [];
+
+}
+
+
+/* =====================================================
+HAZARD CONFIG
+===================================================== */
+
+let hazardColors = {};
+
+
+let publicConfig = {};
+
+
+function hazardColor(
+hazard
+){
+
+return (
+
+hazardColors[canonicalHazardKey(hazard)]
+
+||
+
+"#A10D0D"
+
+);
+
+}
+
+
+
+async function loadConfig(){
+
+const raw =
+
+await API(
+"/public/config"
+);
+
+
+const config =
+
+unwrapObject(
+
+raw,
+
+[
+"config"
+]
+
+);
+
+
+publicConfig =
+config;
+
+
+const colors =
+
+config.hazard_colors
+
+??
+
+config.hazardColors
+
+??
+
+config.colors
+
+??
+
+{};
+
+
+hazardColors =
+{};
+
+
+Object
+.entries(colors)
+.forEach(
+
+([
+name,
+color
+]) => {
+
+hazardColors[
+normaliseKey(name)
+] =
+color;
+
+}
+
+);
+
+
+return config;
+
+}
+
+
+/* =====================================================
+MAP
+===================================================== */
+
+let map;
+let markerLayer;
+let standardLayer;
+let satelliteLayer;
+let mapillaryViewer = null;
+let allReports = [];
+let selectedHazard = "all";
+
+function showMapillaryMessage(message){
+  const box = document.getElementById("mapillaryMessage");
+  const text = document.getElementById("mapillaryMessageText");
+  if(text) text.textContent = message;
+  if(box) box.style.display = "grid";
+}
+
+function hideMapillaryMessage(){
+  const box = document.getElementById("mapillaryMessage");
+  if(box) box.style.display = "none";
+}
+
+async function nearestMapillaryImage(latitude, longitude){
+  for(const span of [0.03, 0.12, 0.5]){
+    const bbox = [
+      longitude - span,
+      latitude - span,
+      longitude + span,
+      latitude + span
+    ].join(",");
+
+    const url =
+      "https://graph.mapillary.com/images" +
+      "?access_token=" + encodeURIComponent(MAPILLARY_ACCESS_TOKEN) +
+      "&fields=id" +
+      "&bbox=" + encodeURIComponent(bbox) +
+      "&limit=1";
+
+    try{
+      const response = await fetch(url, {cache:"no-store"});
+      if(!response.ok) continue;
+      const json = await response.json();
+      if(json?.data?.[0]?.id) return json.data[0].id;
+    }catch(error){
+      console.warn("Mapillary lookup failed:", error);
+    }
+  }
+  return null;
+}
+
+async function activateMapillary(){
+  const viewerBox = document.getElementById("mapillaryViewer");
+  const mapBox = document.getElementById("map");
+
+  if(!viewerBox || !mapBox || typeof mapillary === "undefined"){
+    showMapillaryMessage("Mapillary viewer could not be loaded.");
+    return;
+  }
+
+  mapBox.style.visibility = "hidden";
+  viewerBox.style.display = "block";
+  showMapillaryMessage("Finding street-level imagery near the current map view…");
+
+  const center = map.getCenter();
+  const imageId = await nearestMapillaryImage(center.lat, center.lng);
+
+  if(!imageId){
+    showMapillaryMessage("No Mapillary imagery was found near this map view.");
+    return;
+  }
+
+  try{
+    if(!mapillaryViewer){
+      mapillaryViewer = new mapillary.Viewer({
+        accessToken: MAPILLARY_ACCESS_TOKEN,
+        container: "mapillaryViewer",
+        imageId: imageId
+      });
+    }else{
+      await mapillaryViewer.moveTo(imageId);
+    }
+    hideMapillaryMessage();
+  }catch(error){
+    console.error("Mapillary viewer error:", error);
+    showMapillaryMessage("Mapillary imagery is temporarily unavailable.");
+  }
+}
+
+function deactivateMapillary(){
+  const viewerBox = document.getElementById("mapillaryViewer");
+  const mapBox = document.getElementById("map");
+  hideMapillaryMessage();
+  if(viewerBox) viewerBox.style.display = "none";
+  if(mapBox) mapBox.style.visibility = "visible";
+  setTimeout(() => map?.invalidateSize(), 0);
+}
+
+function setMapLayer(layerName){
+  document.querySelectorAll("[data-layer]").forEach(button => {
+    button.classList.toggle("active", button.dataset.layer === layerName);
+  });
+
+  if(layerName === "mapillary"){
+    activateMapillary();
+    return;
+  }
+
+  deactivateMapillary();
+
+  if(map.hasLayer(standardLayer)) map.removeLayer(standardLayer);
+  if(map.hasLayer(satelliteLayer)) map.removeLayer(satelliteLayer);
+
+  if(layerName === "satellite") satelliteLayer.addTo(map);
+  else standardLayer.addTo(map);
+}
+
+function initialiseMap(){
+  map = L.map("map", {zoomControl:false}).setView([22.8,79.5],5);
+
+  L.control.zoom({position:"bottomleft"}).addTo(map);
+
+  standardLayer = L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {maxZoom:19, attribution:"© OpenStreetMap contributors"}
+  );
+
+  satelliteLayer = L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    {maxZoom:19, attribution:"Tiles © Esri"}
+  );
+
+  standardLayer.addTo(map);
+  markerLayer = L.layerGroup().addTo(map);
+
+  document.querySelectorAll("[data-layer]").forEach(button => {
+    button.onclick = () => setMapLayer(button.dataset.layer);
+  });
+}
+
+function configureMapillary(){
+  const button = document.getElementById("mapillaryButton");
+  if(button){
+    button.disabled = !(MAPILLARY_ACCESS_TOKEN && typeof mapillary !== "undefined");
+  }
+}
+
+
+/* =====================================================
+REPORT MAP
+===================================================== */
+
+function reportHazard(
+report
+){
+
+return (
+
+report.hazard_type
+
+??
+
+report.disaster_type
+
+??
+
+report.hazard
+
+??
+
+"other"
+
+);
+
+}
+
+
+
+function reportLatitude(
+report
+){
+
+return Number(
+
+report.latitude
+
+??
+
+report.lat
+
+??
+
+report.location?.latitude
+
+??
+
+report.location?.lat
+
+);
+
+}
+
+
+
+function reportLongitude(
+report
+){
+
+return Number(
+
+report.longitude
+
+??
+
+report.lon
+
+??
+
+report.lng
+
+??
+
+report.location?.longitude
+
+??
+
+report.location?.lon
+
+??
+
+report.location?.lng
+
+);
+
+}
+
+
+
+function renderMarkers(){
+
+markerLayer
+.clearLayers();
+
+
+
+const filtered =
+
+allReports.filter(
+
+report => {
+
+if(
+selectedHazard ===
+"all"
+){
+
+return true;
+
+}
+
+
+return (
+
+canonicalHazardKey(
+reportHazard(
+report
+)
+)
+
+===
+
+selectedHazard
+
+);
+
+}
+
+);
+
+
+
+filtered.forEach(
+
+report => {
+
+
+const latitude =
+
+reportLatitude(
+report
+);
+
+
+const longitude =
+
+reportLongitude(
+report
+);
+
+
+
+if(
+!Number.isFinite(
+latitude
+)
+||
+!Number.isFinite(
+longitude
+)
+){
+
+return;
+
+}
+
+
+
+const hazard =
+
+reportHazard(
+report
+);
+
+
+
+let affectedArea =
+
+report.affected_area
+
+??
+
+report.affected_areas
+
+??
+
+"";
+
+
+
+if(
+Array.isArray(
+affectedArea
+)
+){
+
+affectedArea =
+affectedArea.join(", ");
+
+}
+
+
+
+const date =
+
+report.incident_date
+
+??
+
+report.date
+
+??
+
+"";
+
+
+
+const location =
+
+report.location_name
+
+??
+
+report.locality
+
+??
+
+report.district
+
+??
+
+report.state
+
+??
+
+"";
+
+
+
+L.circleMarker(
+
+[
+latitude,
+longitude
+],
+
+{
+
+radius:9,
+
+color:"#FFFFFF",
+
+weight:2,
+
+fillColor:
+
+hazardColor(
+hazard
+),
+
+fillOpacity:1
+
+}
+
+)
+
+.bindPopup(
+
+`
+
+<strong>
+
+${escapeHTML(
+pretty(
+hazard
+)
+)}
+
+</strong>
+
+${
+
+affectedArea
+
+?
+
+`
+<br>
+
+${escapeHTML(
+pretty(
+affectedArea
+)
+)}
+`
+
+:
+
+""
+
+}
+
+${
+
+date
+
+?
+
+`
+<br>
+
+<span style="opacity:.72">
+
+${escapeHTML(
+date
+)}
+
+</span>
+`
+
+:
+
+""
+
+}
+
+${
+
+location
+
+?
+
+`
+<br>
+
+<span style="opacity:.72">
+
+${escapeHTML(
+location
+)}
+
+</span>
+`
+
+:
+
+""
+
+}
+
+`
+
+)
+
+.addTo(
+markerLayer
+);
+
+
+}
+
+);
+
+}
+
+
+
+function renderHazardFilters(){
+
+const box = document.getElementById("hazardFilters");
+if(!box) return;
+
+const hazards = ["all", ...HAZWATCH_HAZARDS];
+
+box.innerHTML = hazards.map(hazard => {
+  const active = selectedHazard === hazard ? "active" : "";
+  const label = hazard === "all" ? "All" : pretty(hazard);
+  const color = hazard === "all" ? "#A10D0D" : hazardColor(hazard);
+  const icon = HAZARD_ICONS[hazard] || "warning";
+
+  return `
+    <button
+      class="hazardChip ${active}"
+      data-hazard="${escapeHTML(hazard)}"
+      style="--hazard-color:${escapeHTML(color)}"
+    >
+      <span class="material-symbols-rounded">${escapeHTML(icon)}</span>
+      ${escapeHTML(label)}
+    </button>
+  `;
+}).join("");
+
+box.querySelectorAll("[data-hazard]").forEach(button => {
+  button.onclick = function(){
+    selectedHazard = button.dataset.hazard;
+    renderHazardFilters();
+    renderMarkers();
+  };
+});
+
+}
+
+
+
+/* =====================================================
+CHARTS
+===================================================== */
+
+function chartTheme(){
+
+const styles =
+
+getComputedStyle(
+root
+);
+
+
+return {
+
+text:
+
+styles
+.getPropertyValue(
+"--muted"
+)
+.trim(),
+
+grid:
+
+root.dataset.theme ===
+"dark"
+
+?
+
+"rgba(255,255,255,.08)"
+
+:
+
+"rgba(40,50,55,.08)"
+
+};
+
+}
+
+
+
+function ensureCanvas(
+id
+){
+
+let canvas =
+
+document.getElementById(
+id
+);
+
+
+if(canvas){
+
+return canvas;
+
+}
+
+
+const box =
+
+document.getElementById(
+id + "Box"
+);
+
+
+if(!box){
+
+return null;
+
+}
+
+
+box.innerHTML =
+"";
+
+
+canvas =
+
+document.createElement(
+"canvas"
+);
+
+
+canvas.id =
+id;
+
+
+box.appendChild(
+canvas
+);
+
+
+return canvas;
+
+}
+
+
+
+function showEmpty(
+boxId,
+message
+){
+
+const box =
+
+document.getElementById(
+boxId
+);
+
+
+if(!box){
+
+return;
+
+}
+
+
+box.innerHTML =
+
+`
+
+<div class="empty">
+
+${escapeHTML(
+message
+)}
+
+</div>
+
+`;
+
+}
+
+
+
+function destroyChart(
+id
+){
+
+if(
+charts[id]
+){
+
+charts[id]
+.destroy();
+
+delete charts[id];
+
+}
+
+}
+
+
+
+function drawChart(
+id,
+type,
+labels,
+values,
+options={}
+){
+
+destroyChart(id);
+
+if(!labels.length || !values.length){
+  showEmpty(id + "Box", "No live data available.");
+  return;
+}
+
+const canvas = ensureCanvas(id);
+if(!canvas || typeof Chart === "undefined") return;
+
+const theme = chartTheme();
+const ctx = canvas.getContext("2d");
+const styles = getComputedStyle(root);
+const surface = styles.getPropertyValue("--surface").trim() || "#FFFFFF";
+const textStrong = styles.getPropertyValue("--text").trim() || "#414141";
+const red = styles.getPropertyValue("--red").trim() || "#B10B12";
+
+let background = options.colors ?? red;
+let border = options.border ?? red;
+
+if(type === "line"){
+  const gradient = ctx.createLinearGradient(0,0,0,260);
+  gradient.addColorStop(0, "rgba(177,11,18,.28)");
+  gradient.addColorStop(.62, "rgba(177,11,18,.08)");
+  gradient.addColorStop(1, "rgba(177,11,18,0)");
+  background = gradient;
+  border = red;
+}
+
+if(type === "bar" && typeof background === "string" && background.toLowerCase() === "#a10d0d"){
+  const gradient = ctx.createLinearGradient(0,0,520,0);
+  gradient.addColorStop(0, "#B10B12");
+  gradient.addColorStop(1, "#D23A3F");
+  background = gradient;
+}
+
+const centerTextPlugin = {
+  id: "hazwatchCenterText_" + id,
+  afterDraw(chart){
+    if(type !== "doughnut") return;
+    const {ctx, chartArea} = chart;
+    if(!chartArea) return;
+    const total = values.reduce((sum,v)=>sum+(Number(v)||0),0);
+    const x=(chartArea.left+chartArea.right)/2;
+    const y=(chartArea.top+chartArea.bottom)/2;
+    ctx.save();
+    ctx.textAlign="center";
+    ctx.textBaseline="middle";
+    ctx.fillStyle=textStrong;
+    ctx.font="800 26px Roboto, sans-serif";
+    ctx.fillText(total, x, y-5);
+    ctx.fillStyle=theme.text;
+    ctx.font="600 11px Roboto, sans-serif";
+    ctx.fillText("TOTAL", x, y+18);
+    ctx.restore();
+  }
+};
+
+const horizontal = !!options.horizontal;
+const isDoughnut = type === "doughnut";
+
+charts[id] = new Chart(canvas, {
+  type,
+  data:{
+    labels,
+    datasets:[{
+      data:values,
+      backgroundColor:background,
+      borderColor:isDoughnut ? surface : border,
+      borderWidth:isDoughnut ? 4 : (type === "line" ? 3 : 0),
+      borderRadius:type === "bar" ? 12 : 0,
+      borderSkipped:false,
+      maxBarThickness:type === "bar" ? 28 : undefined,
+      categoryPercentage:type === "bar" ? .72 : undefined,
+      barPercentage:type === "bar" ? .86 : undefined,
+      tension:.38,
+      cubicInterpolationMode:type === "line" ? "monotone" : undefined,
+      fill:options.fill ?? (type === "line"),
+      pointRadius:type === "line" ? 4 : 0,
+      pointHoverRadius:type === "line" ? 7 : 0,
+      pointBackgroundColor:type === "line" ? surface : undefined,
+      pointBorderColor:type === "line" ? red : undefined,
+      pointBorderWidth:type === "line" ? 3 : 0,
+      hoverOffset:isDoughnut ? 8 : 0,
+      spacing:isDoughnut ? 2 : 0
+    }]
+  },
+  plugins:[centerTextPlugin],
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    indexAxis:horizontal ? "y" : "x",
+    cutout:isDoughnut ? "70%" : undefined,
+    animation:{duration:800,easing:"easeOutQuart"},
+    interaction:{mode:"nearest",intersect:false},
+    plugins:{
+      legend:{
+        display:options.legend ?? isDoughnut,
+        position:isDoughnut ? "bottom" : "right",
+        align:"center",
+        labels:{
+          color:theme.text,
+          usePointStyle:true,
+          pointStyle:"circle",
+          boxWidth:8,
+          boxHeight:8,
+          padding:16,
+          font:{family:"Roboto",size:11,weight:"600"}
+        }
+      },
+      tooltip:{
+        enabled:true,
+        backgroundColor:"rgba(30,32,35,.96)",
+        titleColor:"#FFFFFF",
+        bodyColor:"#FFFFFF",
+        padding:12,
+        cornerRadius:12,
+        displayColors:true,
+        usePointStyle:true,
+        titleFont:{family:"Roboto",weight:"700"},
+        bodyFont:{family:"Roboto",weight:"500"},
+        callbacks:{
+          label:(context)=>` ${context.label}: ${context.formattedValue}`
+        }
+      }
+    },
+    scales:isDoughnut ? {} : (
+      horizontal ? {
+        x:{
+          beginAtZero:true,
+          border:{display:false},
+          grid:{color:theme.grid,borderDash:[4,5],drawTicks:false},
+          ticks:{color:theme.text,precision:0,padding:8,font:{family:"Roboto",size:11,weight:"500"}}
+        },
+        y:{
+          border:{display:false},
+          grid:{display:false},
+          ticks:{color:theme.text,padding:10,font:{family:"Roboto",size:11,weight:"600"}}
+        }
+      } : {
+        x:{
+          border:{display:false},
+          grid:{display:false},
+          ticks:{color:theme.text,padding:8,maxRotation:0,font:{family:"Roboto",size:11,weight:"600"}}
+        },
+        y:{
+          beginAtZero:true,
+          border:{display:false},
+          grid:{color:theme.grid,borderDash:[4,5],drawTicks:false},
+          ticks:{color:theme.text,precision:0,padding:8,font:{family:"Roboto",size:11,weight:"500"}}
+        }
+      }
+    )
+  }
+});
+
+}
+
+function updateChartsTheme(){
+
+if(
+typeof Chart ===
+"undefined"
+){
+
+return;
+
+}
+
+
+
+const theme =
+
+chartTheme();
+
+
+
+Object
+.values(
+charts
+)
+.forEach(
+
+chart => {
+
+
+if(
+chart.options
+.scales
+?.x
+?.ticks
+){
+
+chart.options
+.scales
+.x
+.ticks
+.color =
+theme.text;
+
+}
+
+
+if(
+chart.options
+.scales
+?.y
+?.ticks
+){
+
+chart.options
+.scales
+.y
+.ticks
+.color =
+theme.text;
+
+}
+
+
+if(
+chart.options
+.scales
+?.y
+?.grid
+){
+
+chart.options
+.scales
+.y
+.grid
+.color =
+theme.grid;
+
+}
+
+
+if(
+chart.options
+.plugins
+?.legend
+?.labels
+){
+
+chart.options
+.plugins
+.legend
+.labels
+.color =
+theme.text;
+
+}
+
+
+chart.update();
+
+}
+
+);
+
+}
+
+
+/* =====================================================
+ANALYTICS
+===================================================== */
+
+function analyticsRows(
+data,
+keys,
+categoryKey
+){
+
+const value =
+
+valueFrom(
+data,
+keys
+);
+
+
+return normaliseCategories(
+
+value,
+categoryKey
+
+)
+
+.filter(
+
+row =>
+
+Number.isFinite(
+row.count
+)
+
+);
+
+}
+
+
+
+function renderAnalytics(
+raw
+){
+
+const data =
+
+unwrapObject(
+
+raw,
+
+[
+"analytics"
+]
+
+);
+
+
+
+const hazards =
+
+analyticsRows(
+
+data,
+
+[
+"reports_by_hazard",
+"reports_by_hazard_type",
+"hazard_counts"
+],
+
+"hazard_type"
+
+);
+
+
+
+const states =
+
+analyticsRows(
+
+data,
+
+[
+"reports_by_state",
+"state_counts"
+],
+
+"state"
+
+);
+
+
+
+const areas =
+
+analyticsRows(
+
+data,
+
+[
+"reports_by_affected_area",
+"affected_area_counts"
+],
+
+"affected_area"
+
+);
+
+
+
+const gender =
+
+analyticsRows(
+
+data,
+
+[
+"demographics_gender",
+"gender_demographics",
+"gender_counts"
+],
+
+"category"
+
+);
+
+
+
+const education =
+
+analyticsRows(
+
+data,
+
+[
+"demographics_education",
+"education_demographics",
+"education_counts"
+],
+
+"category"
+
+);
+
+
+
+const age =
+
+analyticsRows(
+
+data,
+
+[
+"demographics_age_groups",
+"age_groups",
+"age_group_counts"
+],
+
+"age_group"
+
+);
+
+
+
+const timelineValue =
+
+valueFrom(
+
+data,
+
+[
+"reports_over_time",
+"monthly_reports",
+"report_timeline"
+]
+
+);
+
+
+
+let timeline =
+[];
+
+
+
+if(
+Array.isArray(
+timelineValue
+)
+){
+
+timeline =
+
+timelineValue.map(
+
+item => ({
+
+category:
+
+item.month
+
+??
+
+item.label
+
+??
+
+item.period
+
+??
+
+item.date
+
+??
+
+"Unknown",
+
+
+count:
+
+Number(
+
+item.count
+
+??
+
+item.value
+
+??
+
+item.total
+
+??
+
+0
+
+)
+
+})
+
+);
+
+}
+
+else{
+
+timeline =
+
+normaliseCategories(
+
+timelineValue,
+
+"month"
+
+);
+
+}
+
+
+
+/* hazard chart */
+
+drawChart(
+
+"hazardChart",
+
+"bar",
+
+hazards.map(
+item =>
+pretty(
+item.category
+)
+),
+
+hazards.map(
+item =>
+item.count
+),
+
+{
+
+horizontal:true,
+
+colors:
+
+hazards.map(
+item =>
+hazardColor(
+item.category
+)
+)
+
+}
+
+);
+
+
+
+/* timeline */
+
+drawChart(
+
+"timeChart",
+
+"line",
+
+timeline.map(
+item =>
+item.category
+),
+
+timeline.map(
+item =>
+item.count
+),
+
+{
+
+fill:true,
+
+colors:
+"rgba(161,13,13,.12)",
+
+border:
+"#A10D0D"
+
+}
+
+);
+
+
+
+/* state */
+
+drawChart(
+
+"stateChart",
+
+"bar",
+
+states
+.slice(0,15)
+.map(
+item =>
+item.category
+),
+
+states
+.slice(0,15)
+.map(
+item =>
+item.count
+),
+
+{
+
+horizontal:true,
+
+colors:
+"#3F83C8"
+
+}
+
+);
+
+
+
+/* affected area */
+
+drawChart(
+
+"areaChart",
+
+"bar",
+
+areas.map(
+item =>
+pretty(
+item.category
+)
+),
+
+areas.map(
+item =>
+item.count
+),
+
+{
+
+horizontal:true,
+
+colors:
+"#49B0A7"
+
+}
+
+);
+
+
+
+/* gender */
+
+drawChart(
+
+"genderChart",
+
+"doughnut",
+
+gender.map(
+item =>
+pretty(
+item.category
+)
+),
+
+gender.map(
+item =>
+item.count
+),
+
+{
+
+legend:true,
+
+colors:[
+
+"#B10B12",
+
+"#236BC0",
+
+"#49AFA7",
+
+"#7650C4",
+
+"#C69B45"
+
+]
+
+}
+
+);
+
+
+
+/* education */
+
+drawChart(
+
+"educationChart",
+
+"doughnut",
+
+education.map(
+item =>
+pretty(
+item.category
+)
+),
+
+education.map(
+item =>
+item.count
+),
+
+{
+
+legend:true,
+
+colors:[
+
+"#B10B12",
+
+"#236BC0",
+
+"#14A9B9",
+
+"#673BB8",
+
+"#D94212",
+
+"#C69B45",
+
+"#49AFA7"
+
+]
+
+}
+
+);
+
+
+
+/* age */
+
+drawChart(
+
+"ageChart",
+
+"bar",
+
+age.map(
+item =>
+pretty(
+item.category
+)
+),
+
+age.map(
+item =>
+item.count
+),
+
+{
+
+horizontal:true,
+
+colors:
+"#7650C4"
+
+}
+
+);
+
+
+
+renderHeatmap(
+
+"monthHeat",
+
+valueFrom(
+
+data,
+
+[
+"hazard_by_month",
+"hazard_type_by_month"
+]
+
+)
+
+);
+
+
+
+renderHeatmap(
+
+"stateHeat",
+
+valueFrom(
+
+data,
+
+[
+"hazard_by_state",
+"hazard_type_by_state"
+]
+
+)
+
+);
+
+
+}
+
+
+/* =====================================================
+HEATMAP
+===================================================== */
+
+function renderHeatmap(
+targetId,
+matrix
+){
+
+const target =
+
+document.getElementById(
+targetId
+);
+
+
+
+if(
+!matrix
+||
+typeof matrix !==
+"object"
+){
+
+target.innerHTML =
+
+`
+
+<div class="empty">
+
+No live matrix data available.
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+
+const columns =
+
+matrix.months
+
+??
+
+matrix.states
+
+??
+
+matrix.columns
+
+??
+
+[];
+
+
+
+const rows =
+
+Array.isArray(
+matrix.rows
+)
+
+?
+
+matrix.rows
+
+:
+
+[];
+
+
+
+if(
+!columns.length
+||
+!rows.length
+){
+
+target.innerHTML =
+
+`
+
+<div class="empty">
+
+No live matrix data available.
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+
+const allValues =
+
+rows.flatMap(
+
+row =>
+
+Array.isArray(
+row.values
+)
+
+?
+
+row.values.map(
+Number
+)
+
+:
+
+[]
+
+);
+
+
+
+const maximum =
+
+Math.max(
+
+1,
+
+...allValues
+.filter(
+Number.isFinite
+)
+
+);
+
+
+
+const grid =
+
+document.createElement(
+"div"
+);
+
+
+grid.className =
+"heatGrid";
+
+
+grid.style
+.gridTemplateColumns =
+
+`160px repeat(
+${columns.length},
+minmax(92px,1fr)
+)`;
+
+
+
+grid.innerHTML =
+
+"<div></div>"
+
++
+
+columns.map(
+
+column =>
+
+`
+
+<div
+class="heatLabel"
+style="
+justify-content:center;
+">
+
+${escapeHTML(
+column
+)}
+
+</div>
+
+`
+
+)
+.join("");
+
+
+
+rows.forEach(
+
+row => {
+
+
+const label =
+
+row.hazard_type
+
+??
+
+row.label
+
+??
+
+row.category
+
+??
+
+"Unknown";
+
+
+grid.innerHTML +=
+
+`
+
+<div class="heatLabel">
+
+${escapeHTML(
+pretty(
+label
+)
+)}
+
+</div>
+
+`;
+
+
+const rowValues =
+
+Array.isArray(
+row.values
+)
+
+?
+
+row.values
+
+:
+
+[];
+
+
+
+rowValues
+.forEach(
+
+rawValue => {
+
+
+const value =
+
+Number(
+rawValue
+)
+
+||
+
+0;
+
+
+
+const intensity =
+
+value
+
+?
+
+.18
++
+.72
+*
+(
+value / maximum
+)
+
+:
+
+0;
+
+
+
+const background =
+
+value
+
+?
+
+`rgba(
+161,
+13,
+13,
+${intensity}
+)`
+
+:
+
+"var(--surface2)";
+
+
+
+const foreground =
+
+value / maximum >
+.58
+
+?
+
+"#FFFFFF"
+
+:
+
+"var(--text)";
+
+
+
+grid.innerHTML +=
+
+`
+
+<div
+class="heatCell"
+
+style="
+background:
+${background};
+
+color:
+${foreground};
+">
+
+${
+
+value
+
+?
+
+value
+
+:
+
+""
+
+}
+
+</div>
+
+`;
+
+
+}
+
+);
+
+
+}
+
+);
+
+
+
+target.innerHTML =
+"";
+
+
+target.appendChild(
+grid
+);
+
+
+}
+
+
+/* =====================================================
+OVERVIEW
+===================================================== */
+
+function renderOverview(
+raw
+){
+
+const data =
+
+unwrapObject(
+
+raw,
+
+[
+"overview"
+]
+
+);
+
+
+
+const reports =
+
+data.total_reports
+
+??
+
+data.reports
+
+??
+
+data.report_count;
+
+
+
+const contributors =
+
+data.unique_contributors
+
+??
+
+data.active_citizens
+
+??
+
+data.total_contributors
+
+??
+
+data.contributors
+
+??
+
+data.total_users;
+
+
+
+const states =
+
+data.states_covered
+
+??
+
+data.total_states
+
+??
+
+data.state_count;
+
+
+
+document.getElementById(
+"kpiReports"
+).textContent =
+
+reports
+
+??
+
+"—";
+
+
+
+document.getElementById(
+"kpiContributors"
+).textContent =
+
+contributors
+
+??
+
+"—";
+
+
+
+document.getElementById(
+"kpiStates"
+).textContent =
+
+states
+
+??
+
+"—";
+
+
+}
+
+
+/* =====================================================
+LEADERBOARD
+===================================================== */
+
+function renderLeaderboard(
+raw
+){
+
+const rows =
+
+unwrapArray(
+
+raw,
+
+[
+"leaderboard",
+"contributors",
+"items"
+]
+
+);
+
+
+
+const box =
+
+document.getElementById(
+"leaderboard"
+);
+
+
+
+if(
+!rows.length
+){
+
+box.innerHTML =
+
+`
+
+<div class="empty">
+
+No live leaderboard data available.
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+
+box.innerHTML =
+
+rows
+.slice(0,10)
+.map(
+
+(
+item,
+index
+) =>
+
+`
+
+<div class="leader">
+
+
+<div class="rank">
+
+#${
+escapeHTML(
+item.rank
+??
+index + 1
+)
+}
+
+</div>
+
+
+<div>
+
+<div class="leaderName">
+
+${escapeHTML(
+
+item.display_name
+
+??
+
+item.name
+
+??
+
+"Contributor"
+
+)}
+
+</div>
+
+
+<small>
+HazWatch contributor
+</small>
+
+</div>
+
+
+<div class="reportCount">
+
+${escapeHTML(
+
+item.report_count
+
+??
+
+item.reports
+
+??
+
+item.count
+
+??
+
+0
+
+)}
+
+reports
+
+</div>
+
+
+</div>
+
+`
+
+)
+
+.join("");
+
+
+}
+
+
+/* =====================================================
+LOAD REAL HAZWATCH DATA
+===================================================== */
+
+let loadingHazWatch =
+false;
+
+
+async function loadHazWatchData(){
+
+if(
+loadingHazWatch
+){
+
+return;
+
+}
+
+
+loadingHazWatch =
+true;
+
+
+
+const badge =
+
+document.getElementById(
+"apiBadge"
+);
+
+
+const status =
+
+document.getElementById(
+"apiStatus"
+);
+
+
+
+badge.textContent =
+"Loading live data";
+
+
+badge.classList
+.remove(
+"error"
+);
+
+
+
+try{
+
+
+/* 1. CONFIG */
+
+try{
+
+await loadConfig();
+
+configureMapillary();
+
+}
+
+catch(error){
+
+console.warn(
+"Config endpoint unavailable:",
+error
+);
+
+hazardColors =
+{};
+
+}
+
+
+
+/* 2. ALL REAL ENDPOINTS */
+
+const results =
+
+await Promise.allSettled(
+
+[
+
+API(
+"/public/overview"
+),
+
+API(
+"/public/analytics"
+),
+
+API(
+"/public/reports?limit=2000"
+),
+
+API(
+"/public/leaderboard?limit=10"
+)
+
+]
+
+);
+
+
+
+const overviewResult =
+results[0];
+
+
+const analyticsResult =
+results[1];
+
+
+const reportsResult =
+results[2];
+
+
+const leaderboardResult =
+results[3];
+
+
+
+/* OVERVIEW */
+
+if(
+overviewResult.status ===
+"fulfilled"
+){
+
+renderOverview(
+overviewResult.value
+);
+
+}
+
+else{
+
+document.getElementById(
+"kpiReports"
+).textContent =
+"—";
+
+
+document.getElementById(
+"kpiContributors"
+).textContent =
+"—";
+
+
+document.getElementById(
+"kpiStates"
+).textContent =
+"—";
+
+}
+
+
+
+/* ANALYTICS */
+
+if(
+analyticsResult.status ===
+"fulfilled"
+){
+
+renderAnalytics(
+analyticsResult.value
+);
+
+}
+
+else{
+
+[
+
+"hazardChartBox",
+
+"timeChartBox",
+
+"stateChartBox",
+
+"areaChartBox",
+
+"genderChartBox",
+
+"educationChartBox",
+
+"ageChartBox"
+
+]
+
+.forEach(
+
+boxId =>
+
+showEmpty(
+
+boxId,
+
+"Live analytics temporarily unavailable."
+
+)
+
+);
+
+
+document.getElementById(
+"monthHeat"
+).innerHTML =
+
+`
+
+<div class="empty">
+
+Live analytics temporarily unavailable.
+
+</div>
+
+`;
+
+
+document.getElementById(
+"stateHeat"
+).innerHTML =
+
+`
+
+<div class="empty">
+
+Live analytics temporarily unavailable.
+
+</div>
+
+`;
+
+}
+
+
+
+/* REPORTS / MAP */
+
+if(
+reportsResult.status ===
+"fulfilled"
+){
+
+allReports =
+
+unwrapArray(
+
+reportsResult.value,
+
+[
+"reports",
+"items",
+"results"
+]
+
+);
+
+
+renderHazardFilters();
+
+renderMarkers();
+
+}
+
+else{
+
+allReports =
+[];
+
+
+renderHazardFilters();
+
+renderMarkers();
+
+}
+
+
+
+/* LEADERBOARD */
+
+if(
+leaderboardResult.status ===
+"fulfilled"
+){
+
+renderLeaderboard(
+leaderboardResult.value
+);
+
+}
+
+else{
+
+document.getElementById(
+"leaderboard"
+).innerHTML =
+
+`
+
+<div class="empty">
+
+Live leaderboard temporarily unavailable.
+
+</div>
+
+`;
+
+}
+
+
+
+/* API STATUS */
+
+const successful =
+
+results.filter(
+
+result =>
+result.status ===
+"fulfilled"
+
+).length;
+
+
+
+if(
+successful === 0
+){
+
+throw new Error(
+"HazWatch API unavailable"
+);
+
+}
+
+
+
+badge.textContent =
+"Live HazWatch data";
+
+
+status.textContent =
+
+"Updated "
++
+new Date()
+.toLocaleTimeString(
+
+[],
+
+{
+
+hour:"2-digit",
+
+minute:"2-digit"
+
+}
+
+);
+
+
+
+}
+
+catch(error){
+
+
+console.error(
+error
+);
+
+
+badge.textContent =
+"Live data unavailable";
+
+
+badge.classList
+.add(
+"error"
+);
+
+
+status.textContent =
+"No demo values shown";
+
+
+}
+
+finally{
+
+loadingHazWatch =
+false;
+
+}
+
+
+}
+
+
+/* =====================================================
+WEATHER + AQI
+===================================================== */
+
+function AQILabel(
+value
+){
+
+const aqi =
+
+Number(
+value
+);
+
+
+if(
+!Number.isFinite(
+aqi
+)
+){
+
+return "Air quality";
+
+}
+
+
+if(
+aqi <= 50
+){
+
+return "Good";
+
+}
+
+
+if(
+aqi <= 100
+){
+
+return "Moderate";
+
+}
+
+
+if(
+aqi <= 150
+){
+
+return "Unhealthy for sensitive groups";
+
+}
+
+
+if(
+aqi <= 200
+){
+
+return "Unhealthy";
+
+}
+
+
+if(
+aqi <= 300
+){
+
+return "Very unhealthy";
+
+}
+
+
+return "Hazardous";
+
+}
+
+
+
+async function loadWeather(
+latitude,
+longitude,
+label
+){
+
+document.getElementById(
+"weatherLocation"
+).textContent =
+
+label
+
+||
+
+`${latitude.toFixed(3)}, ${longitude.toFixed(3)}`;
+
+
+
+try{
+
+
+const weatherURL =
+
+"https://api.open-meteo.com/v1/forecast"
+
++
+
+"?latitude="
++
+encodeURIComponent(
+latitude
+)
+
++
+
+"&longitude="
++
+encodeURIComponent(
+longitude
+)
+
++
+
+"&current="
+
++
+
+"temperature_2m,"
+
++
+
+"precipitation,"
+
++
+
+"wind_speed_10m,"
+
++
+
+"surface_pressure"
+
++
+
+"&timezone=auto";
+
+
+
+const airURL =
+
+"https://air-quality-api.open-meteo.com/v1/air-quality"
+
++
+
+"?latitude="
++
+encodeURIComponent(
+latitude
+)
+
++
+
+"&longitude="
++
+encodeURIComponent(
+longitude
+)
+
++
+
+"&current="
+
++
+
+"us_aqi,"
+
++
+
+"pm2_5,"
+
++
+
+"pm10,"
+
++
+
+"nitrogen_dioxide,"
+
++
+
+"ozone"
+
++
+
+"&timezone=auto";
+
+
+
+const responses =
+
+await Promise.all(
+
+[
+
+fetch(
+weatherURL
+),
+
+fetch(
+airURL
+)
+
+]
+
+);
+
+
+
+if(
+!responses[0].ok
+||
+!responses[1].ok
+){
+
+throw new Error(
+"Environmental API error"
+);
+
+}
+
+
+
+const weather =
+
+await responses[0]
+.json();
+
+
+
+const air =
+
+await responses[1]
+.json();
+
+
+
+const currentWeather =
+
+weather.current
+
+??
+
+{};
+
+
+
+const currentAir =
+
+air.current
+
+??
+
+{};
+
+
+
+document.getElementById(
+"weatherTemp"
+).textContent =
+
+currentWeather.temperature_2m
+
+??
+
+"—";
+
+
+
+document.getElementById(
+"weatherRain"
+).textContent =
+
+currentWeather.precipitation
+
+??
+
+"—";
+
+
+
+document.getElementById(
+"weatherWind"
+).textContent =
+
+currentWeather.wind_speed_10m
+
+??
+
+"—";
+
+
+
+document.getElementById(
+"weatherPressure"
+).textContent =
+
+Number.isFinite(
+
+Number(
+currentWeather.surface_pressure
+)
+
+)
+
+?
+
+Math.round(
+
+Number(
+currentWeather.surface_pressure
+)
+
+)
+
+:
+
+"—";
+
+
+
+document.getElementById(
+"weatherAQI"
+).textContent =
+
+currentAir.us_aqi
+
+??
+
+"—";
+
+
+
+document.getElementById(
+"weatherAQILabel"
+).textContent =
+
+AQILabel(
+currentAir.us_aqi
+);
+
+
+
+document.getElementById(
+"pm25"
+).textContent =
+
+currentAir.pm2_5
+
+??
+
+"—";
+
+
+
+document.getElementById(
+"pm10"
+).textContent =
+
+currentAir.pm10
+
+??
+
+"—";
+
+
+
+document.getElementById(
+"no2"
+).textContent =
+
+currentAir.nitrogen_dioxide
+
+??
+
+"—";
+
+
+
+document.getElementById(
+"o3"
+).textContent =
+
+currentAir.ozone
+
+??
+
+"—";
+
+
+}
+
+catch(error){
+
+
+console.error(
+error
+);
+
+
+document.getElementById(
+"weatherLocation"
+).textContent =
+
+(
+label
+||
+"Selected location"
+)
+
++
+
+" — environmental data unavailable";
+
+
+}
+
+
+}
+
+
+/* current location */
+
+document.getElementById(
+"locationButton"
+).onclick =
+function(){
+
+
+if(
+!navigator.geolocation
+){
+
+document.getElementById(
+"weatherLocation"
+).textContent =
+
+"Location is not supported by this browser.";
+
+return;
+
+}
+
+
+
+document.getElementById(
+"weatherLocation"
+).textContent =
+
+"Getting current location…";
+
+
+
+navigator
+.geolocation
+.getCurrentPosition(
+
+
+position => {
+
+
+loadWeather(
+
+position.coords.latitude,
+
+position.coords.longitude,
+
+"Current location"
+
+);
+
+
+},
+
+
+() => {
+
+
+document.getElementById(
+"weatherLocation"
+).textContent =
+
+"Location permission was not available.";
+
+
+},
+
+
+{
+
+enableHighAccuracy:true,
+
+timeout:10000,
+
+maximumAge:300000
+
+}
+
+
+);
+
+
+};
+
+
+/* city search */
+
+async function searchCity(){
+
+const city =
+
+document.getElementById(
+"cityInput"
+)
+
+.value
+
+.trim();
+
+
+
+if(!city){
+
+return;
+
+}
+
+
+
+document.getElementById(
+"weatherLocation"
+).textContent =
+
+"Searching…";
+
+
+
+try{
+
+
+const response =
+
+await fetch(
+
+"https://geocoding-api.open-meteo.com/v1/search"
+
++
+
+"?name="
+
++
+
+encodeURIComponent(
+city
+)
+
++
+
+"&count=1"
+
++
+
+"&language=en"
+
++
+
+"&format=json"
+
+);
+
+
+
+if(!response.ok){
+
+throw new Error(
+"Geocoding error"
+);
+
+}
+
+
+
+const data =
+
+await response.json();
+
+
+
+const result =
+
+data.results?.[0];
+
+
+
+if(!result){
+
+throw new Error(
+"City not found"
+);
+
+}
+
+
+
+const place =
+
+[
+
+result.name,
+
+result.admin1,
+
+result.country
+
+]
+
+.filter(Boolean)
+
+.join(", ");
+
+
+
+loadWeather(
+
+result.latitude,
+
+result.longitude,
+
+place
+
+);
+
+
+}
+
+catch(error){
+
+
+document.getElementById(
+"weatherLocation"
+).textContent =
+
+"City not found.";
+
+
+}
+
+
+}
+
+
+
+document.getElementById(
+"cityButton"
+).onclick =
+searchCity;
+
+
+
+document.getElementById(
+"cityInput"
+)
+.addEventListener(
+
+"keydown",
+
+event => {
+
+if(
+event.key ===
+"Enter"
+){
+
+searchCity();
+
+}
+
+}
+
+);
+
+
+/* =====================================================
+START
+===================================================== */
+
+initialiseMap();
+
+/* =====================================================
+TOP INFORMATION MENU + SECONDARY WEATHER
+===================================================== */
+
+(function setupInfoMenu(){
+  const items = Array.from(document.querySelectorAll(".infoMenuItem"));
+  const hoverCapable = window.matchMedia("(hover:hover) and (pointer:fine)");
+
+  function closeAll(except=null){
+    items.forEach(item => {
+      if(item !== except) item.classList.remove("open");
+    });
+  }
+
+  items.forEach(item => {
+    const button = item.querySelector(".infoMenuButton");
+
+    item.addEventListener("mouseenter", () => {
+      if(hoverCapable.matches){
+        closeAll(item);
+        item.classList.add("open");
+      }
+    });
+
+    item.addEventListener("mouseleave", () => {
+      if(hoverCapable.matches){
+        item.classList.remove("open");
+      }
+    });
+
+    button.addEventListener("click", event => {
+      if(!hoverCapable.matches){
+        event.stopPropagation();
+        const willOpen = !item.classList.contains("open");
+        closeAll();
+        item.classList.toggle("open", willOpen);
+      }
+    });
+  });
+
+  document.addEventListener("click", event => {
+    if(!event.target.closest(".infoMenuItem")) closeAll();
+  });
+
+  window.addEventListener("resize", () => closeAll());
+})();
+
+(function setupWeatherExtra(){
+  const card = document.getElementById("weatherExtraCard");
+  const toggle = document.getElementById("weatherToggle");
+  if(!card || !toggle) return;
+
+  toggle.addEventListener("click", () => {
+    const open = card.classList.toggle("open");
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.setAttribute("aria-label", open ? "Close weather tools" : "Open weather tools");
+  });
+})();
+
+/* Premium map cartography controls */
+if(map){
+  L.control.scale({
+    position:"bottomleft",
+    metric:true,
+    imperial:false,
+    maxWidth:140
+  }).addTo(map);
+
+  const NorthControl = L.Control.extend({
+    options:{position:"topleft"},
+    onAdd:function(){
+      const div = L.DomUtil.create("div","northControl");
+      div.innerHTML = '<div><span class="northArrow">▲</span><span class="northN">N</span></div>';
+      div.setAttribute("aria-label","North arrow");
+      L.DomEvent.disableClickPropagation(div);
+      return div;
+    }
+  });
+  new NorthControl().addTo(map);
+}
+
+
+
+loadHazWatchData();
+
+
+setInterval(
+
+loadHazWatchData,
+
+REFRESH_INTERVAL
+
+);
+
+</script>
+
+</body>
+</html>

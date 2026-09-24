@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <link
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+  href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;800;900&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0&display=swap"
   rel="stylesheet"
 >
 
@@ -77,7 +77,7 @@ body{
   margin:0;
 
   font-family:
-    Inter,
+    'Roboto',
     system-ui,
     -apple-system,
     BlinkMacSystemFont,
@@ -1395,7 +1395,7 @@ LEAFLET
 
 .leaflet-container{
   font-family:
-    Inter,
+    'Roboto',
     Arial,
     sans-serif;
 }
@@ -1550,6 +1550,204 @@ RESPONSIVE
     grid-template-columns:1fr;
   }
 
+}
+
+
+/* =====================================================
+   HAZWATCH APP-MATCHED PREMIUM VISUAL SYSTEM
+   ===================================================== */
+.material-symbols-rounded{
+  font-family:'Material Symbols Rounded';
+  font-weight:normal;
+  font-style:normal;
+  font-size:1.25em;
+  line-height:1;
+  letter-spacing:normal;
+  text-transform:none;
+  display:inline-block;
+  white-space:nowrap;
+  word-wrap:normal;
+  direction:ltr;
+  -webkit-font-feature-settings:'liga';
+  -webkit-font-smoothing:antialiased;
+  font-feature-settings:'liga';
+}
+
+:root{
+  --red:#B10B12;
+  --red2:#C51A21;
+  --redSoft:#F9E8E9;
+  --bg:#EEF2F5;
+  --surface:#FFFFFF;
+  --surface2:#F7F8FA;
+  --text:#414141;
+  --muted:#7B7B7B;
+  --line:#D9DDE1;
+  --blue:#2F5D8A;
+  --green:#2D7C64;
+  --shadow:0 9px 28px rgba(48,55,61,.075);
+  --radius:26px;
+  --nav:rgba(255,255,255,.96);
+}
+
+html[data-theme="dark"]{
+  --bg:#0F1417;
+  --surface:#171D21;
+  --surface2:#1D2429;
+  --text:#F2F2F2;
+  --muted:#A8ADB1;
+  --line:#2C353B;
+  --redSoft:#331719;
+  --shadow:0 12px 34px rgba(0,0,0,.28);
+  --nav:rgba(15,20,23,.96);
+}
+
+body{
+  font-family:'Roboto',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  font-weight:400;
+  letter-spacing:.002em;
+}
+
+.navInner{height:78px}
+.brand{font-weight:800;letter-spacing:-.025em;font-size:1.34rem}
+.themeButton{width:46px;height:46px;border-color:var(--line);box-shadow:0 3px 12px rgba(40,45,48,.04)}
+
+.card{
+  border-color:var(--line);
+  border-radius:26px;
+  box-shadow:var(--shadow);
+}
+
+.kicker{
+  color:var(--red);
+  font-size:.78rem;
+  font-weight:800;
+  letter-spacing:.13em;
+}
+.sectionHead h2{font-weight:800;letter-spacing:-.035em;color:var(--text)}
+.sectionSubtitle{color:var(--muted);font-weight:400}
+
+.hero{background:linear-gradient(180deg,rgba(177,11,18,.045),transparent 42%)}
+.hero h1{font-weight:900;letter-spacing:-.055em}
+.heroDescription{font-size:1.05rem;line-height:1.72}
+.eyebrow{font-weight:800;border-radius:999px;background:var(--surface);box-shadow:0 4px 18px rgba(40,45,48,.045)}
+
+.aboutCard,.teamCard{box-shadow:0 5px 18px rgba(43,49,54,.055)}
+.aboutIcon{
+  background:var(--redSoft);
+  color:var(--red);
+  width:50px;height:50px;
+  border-radius:16px;
+}
+.aboutIcon .material-symbols-rounded{font-size:27px}
+.aboutCard h3,.teamCard h3{font-weight:800;color:var(--text)}
+.teamRole{
+  display:flex;align-items:center;gap:8px;
+  color:#666;
+  font-size:.78rem;
+  font-weight:800;
+  letter-spacing:.13em;
+}
+.teamRole .roleIcon{color:var(--red);font-size:22px}
+.teamAvatar{background:var(--red);border-radius:18px}
+
+.layerSwitch{border-radius:18px;padding:5px;background:var(--surface2)}
+.layerSwitch button{border-radius:13px;padding:10px 15px;font-weight:700}
+.layerSwitch button.active{background:var(--red);box-shadow:0 6px 16px rgba(177,11,18,.22)}
+#map{border-radius:24px}
+.hazardChip{border-radius:999px;font-weight:700;padding:9px 14px}
+
+.apiCard{
+  border-left:4px solid var(--red);
+  background:linear-gradient(135deg,var(--surface),var(--surface2));
+}
+.apiBadge{font-weight:800;letter-spacing:.08em}
+
+.kpi{
+  position:relative;
+  overflow:hidden;
+  padding:20px;
+  min-height:140px;
+}
+.kpi::after{
+  content:"";
+  position:absolute;
+  right:-34px;bottom:-38px;
+  width:96px;height:96px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(177,11,18,.10),rgba(177,11,18,0) 70%);
+}
+.kpiIcon{
+  width:42px;height:42px;
+  border-radius:14px;
+  background:var(--redSoft);color:var(--red);
+  margin-bottom:17px;
+}
+.kpiIcon .material-symbols-rounded{font-size:23px}
+.kpi span{font-size:.72rem;font-weight:800;letter-spacing:.08em;color:#6F6F6F}
+.kpi strong{font-size:2.3rem;font-weight:900;color:var(--text)}
+
+.chartCard,.heatCard,.leaderboardCard{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(180deg,var(--surface) 0%,var(--surface) 72%,var(--surface2) 140%);
+  border:1px solid var(--line);
+}
+.chartCard::before,.heatCard::before,.leaderboardCard::before{
+  content:"";
+  position:absolute;left:0;top:0;width:100%;height:3px;
+  background:linear-gradient(90deg,var(--red),#D4474C,transparent 78%);
+}
+.chartTitle{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:0 0 18px;
+  color:#5F6265;
+  font-size:.82rem;
+  font-weight:800;
+  letter-spacing:.085em;
+  text-transform:uppercase;
+}
+.chartTitle .material-symbols-rounded{
+  color:var(--red);
+  font-size:21px;
+  background:var(--redSoft);
+  border-radius:10px;
+  padding:7px;
+}
+.chartBox{height:255px;padding:2px 2px 0}
+.analyticsGrid .chartCard{min-height:390px;padding:24px}
+.analyticsGrid .chartBox{height:310px}
+
+.leader{padding:13px 2px}
+.rank{font-weight:800;background:var(--surface2)}
+.leader:first-child .rank{background:var(--red);box-shadow:0 4px 12px rgba(177,11,18,.20)}
+.leaderName{font-weight:700}
+.reportCount{font-weight:800}
+
+.heatGrid{gap:7px}
+.heatCell{height:46px;border-radius:11px;font-weight:700;border:1px solid rgba(120,120,120,.05)}
+.heatLabel{font-weight:700;font-size:.76rem}
+
+.weatherCard{position:relative;overflow:hidden}
+.weatherCard small{display:flex;align-items:center;gap:7px;font-weight:700;color:#6C6F72}
+.weatherIcon{color:var(--red);font-size:19px}
+.weatherCard strong{font-weight:900;color:var(--text)}
+
+.guide{position:relative;overflow:hidden}
+.guideNumber{background:var(--red);color:white;box-shadow:0 6px 14px rgba(177,11,18,.20)}
+.guide h3{font-weight:800}
+
+.btn{font-weight:700;border-radius:16px}
+.btnRed{background:var(--red);box-shadow:0 8px 22px rgba(177,11,18,.20)}
+.btnLight{background:var(--surface)}
+
+@media(max-width:760px){
+  .analyticsGrid .chartCard{min-height:370px;padding:20px}
+  .analyticsGrid .chartBox{height:290px}
+  .chartTitle{font-size:.76rem}
+  .chartTitle .material-symbols-rounded{font-size:19px;padding:6px}
 }
 
 </style>
@@ -1795,9 +1993,7 @@ Help us make India a safer place.
 
 <article class="card aboutCard">
 
-<div class="aboutIcon">
-⌖
-</div>
+<div class="aboutIcon"><span class="material-symbols-rounded">flag</span></div>
 
 <h3>
 Our Mission
@@ -1821,9 +2017,7 @@ and informed decision-making.
 
 <article class="card aboutCard">
 
-<div class="aboutIcon">
-◉
-</div>
+<div class="aboutIcon"><span class="material-symbols-rounded">visibility</span></div>
 
 <h3>
 Our Vision
@@ -1865,9 +2059,7 @@ ZK
 
 <div>
 
-<div class="teamRole">
-Founder and Design Architect
-</div>
+<div class="teamRole"><span class="material-symbols-rounded roleIcon">person</span> Founder and Design Architect</div>
 
 <h3>
 Zainab Khan, PhD
@@ -1892,9 +2084,7 @@ DV
 
 <div>
 
-<div class="teamRole">
-Strategic Advisor
-</div>
+<div class="teamRole"><span class="material-symbols-rounded roleIcon">handshake</span> Strategic Advisor</div>
 
 <h3>
 Deepika Vashishtha, PhD
@@ -2051,9 +2241,7 @@ HazWatch API
 
 <div class="card kpi">
 
-<div class="kpiIcon">
-!
-</div>
+<div class="kpiIcon"><span class="material-symbols-rounded">crisis_alert</span></div>
 
 <span>
 Reports Filed
@@ -2069,9 +2257,7 @@ Reports Filed
 
 <div class="card kpi">
 
-<div class="kpiIcon">
-◎
-</div>
+<div class="kpiIcon"><span class="material-symbols-rounded">groups</span></div>
 
 <span>
 Contributors
@@ -2087,9 +2273,7 @@ Contributors
 
 <div class="card kpi">
 
-<div class="kpiIcon">
-⌖
-</div>
+<div class="kpiIcon"><span class="material-symbols-rounded">map</span></div>
 
 <span>
 States Covered
@@ -2108,9 +2292,7 @@ States Covered
 
 <div class="card chartCard">
 
-<div class="chartTitle">
-Reports by Hazard Type
-</div>
+<div class="chartTitle"><span class="material-symbols-rounded">warning</span><span>Reports by Hazard Type</span></div>
 
 <div
   class="chartBox"
@@ -2125,9 +2307,7 @@ Reports by Hazard Type
 
 <div class="card leaderboardCard">
 
-<div class="chartTitle">
-Top Contributors
-</div>
+<div class="chartTitle"><span class="material-symbols-rounded">leaderboard</span><span>Top Contributors</span></div>
 
 <div id="leaderboard">
 
@@ -2152,9 +2332,7 @@ Loading live leaderboard…
 
 <div class="card chartCard">
 
-<div class="chartTitle">
-Reports Over Time
-</div>
+<div class="chartTitle"><span class="material-symbols-rounded">show_chart</span><span>Reports Over Time</span></div>
 
 <div
   class="chartBox"
@@ -2169,9 +2347,7 @@ Reports Over Time
 
 <div class="card chartCard">
 
-<div class="chartTitle">
-Reports by State
-</div>
+<div class="chartTitle"><span class="material-symbols-rounded">map</span><span>Reports by State</span></div>
 
 <div
   class="chartBox"
@@ -2186,9 +2362,7 @@ Reports by State
 
 <div class="card chartCard">
 
-<div class="chartTitle">
-Reports by Affected Area
-</div>
+<div class="chartTitle"><span class="material-symbols-rounded">domain</span><span>Reports by Affected Area</span></div>
 
 <div
   class="chartBox"
@@ -2203,9 +2377,7 @@ Reports by Affected Area
 
 <div class="card chartCard">
 
-<div class="chartTitle">
-Demographics — Gender
-</div>
+<div class="chartTitle"><span class="material-symbols-rounded">wc</span><span>Demographics — Gender</span></div>
 
 <div
   class="chartBox"
@@ -2220,9 +2392,7 @@ Demographics — Gender
 
 <div class="card chartCard">
 
-<div class="chartTitle">
-Demographics — Education
-</div>
+<div class="chartTitle"><span class="material-symbols-rounded">school</span><span>Demographics — Education</span></div>
 
 <div
   class="chartBox"
@@ -2237,9 +2407,7 @@ Demographics — Education
 
 <div class="card chartCard">
 
-<div class="chartTitle">
-Demographics — Age Groups
-</div>
+<div class="chartTitle"><span class="material-symbols-rounded">groups</span><span>Demographics — Age Groups</span></div>
 
 <div
   class="chartBox"
@@ -2254,9 +2422,7 @@ Demographics — Age Groups
 
 <div class="card heatCard">
 
-<div class="chartTitle">
-Hazard Type × Month
-</div>
+<div class="chartTitle"><span class="material-symbols-rounded">calendar_month</span><span>Hazard Type × Month</span></div>
 
 <div
   id="monthHeat"
@@ -2275,9 +2441,7 @@ Loading live analytics…
 
 <div class="card heatCard">
 
-<div class="chartTitle">
-Hazard Type × State
-</div>
+<div class="chartTitle"><span class="material-symbols-rounded">grid_view</span><span>Hazard Type × State</span></div>
 
 <div
   id="stateHeat"
@@ -2386,9 +2550,7 @@ No location selected
 
 <div class="card weatherCard">
 
-<small>
-Temperature
-</small>
+<small><span class="material-symbols-rounded weatherIcon">thermostat</span>Temperature</small>
 
 <strong id="weatherTemp">
 —
@@ -2404,9 +2566,7 @@ Temperature
 
 <div class="card weatherCard">
 
-<small>
-Precipitation
-</small>
+<small><span class="material-symbols-rounded weatherIcon">rainy</span>Precipitation</small>
 
 <strong id="weatherRain">
 —
@@ -2422,9 +2582,7 @@ mm
 
 <div class="card weatherCard">
 
-<small>
-Wind Speed
-</small>
+<small><span class="material-symbols-rounded weatherIcon">air</span>Wind Speed</small>
 
 <strong id="weatherWind">
 —
@@ -2440,9 +2598,7 @@ km/h
 
 <div class="card weatherCard">
 
-<small>
-Surface Pressure
-</small>
+<small><span class="material-symbols-rounded weatherIcon">speed</span>Surface Pressure</small>
 
 <strong id="weatherPressure">
 —
@@ -2458,9 +2614,7 @@ hPa
 
 <div class="card weatherCard">
 
-<small>
-US AQI
-</small>
+<small><span class="material-symbols-rounded weatherIcon">eco</span>US AQI</small>
 
 <strong id="weatherAQI">
 —
@@ -2922,7 +3076,7 @@ FINAL HAZWATCH API
 ===================================================== */
 
 const API_BASE =
-"https://disaster-watch-beta.preview.emergentagent.com/api";
+"https://disaster-watch-beta.emergent.host/api";
 
 
 const REFRESH_INTERVAL =
@@ -4634,266 +4788,163 @@ values,
 options={}
 ){
 
-destroyChart(
-id
-);
+destroyChart(id);
 
-
-
-if(
-!labels.length
-||
-!values.length
-){
-
-showEmpty(
-
-id + "Box",
-
-"No live data available."
-
-);
-
-return;
-
+if(!labels.length || !values.length){
+  showEmpty(id + "Box", "No live data available.");
+  return;
 }
 
+const canvas = ensureCanvas(id);
+if(!canvas || typeof Chart === "undefined") return;
 
+const theme = chartTheme();
+const ctx = canvas.getContext("2d");
+const styles = getComputedStyle(root);
+const surface = styles.getPropertyValue("--surface").trim() || "#FFFFFF";
+const textStrong = styles.getPropertyValue("--text").trim() || "#414141";
+const red = styles.getPropertyValue("--red").trim() || "#B10B12";
 
-const canvas =
+let background = options.colors ?? red;
+let border = options.border ?? red;
 
-ensureCanvas(
-id
-);
-
-
-if(!canvas){
-
-return;
-
+if(type === "line"){
+  const gradient = ctx.createLinearGradient(0,0,0,260);
+  gradient.addColorStop(0, "rgba(177,11,18,.28)");
+  gradient.addColorStop(.62, "rgba(177,11,18,.08)");
+  gradient.addColorStop(1, "rgba(177,11,18,0)");
+  background = gradient;
+  border = red;
 }
 
-
-
-const theme =
-
-chartTheme();
-
-
-
-charts[id] =
-
-new Chart(
-
-canvas,
-
-{
-
-type:type,
-
-
-data:{
-
-labels:labels,
-
-
-datasets:[
-
-{
-
-data:values,
-
-backgroundColor:
-
-options.colors
-
-??
-
-"#A10D0D",
-
-borderColor:
-
-options.border
-
-??
-
-"#A10D0D",
-
-borderWidth:
-
-type === "line"
-
-?
-
-3
-
-:
-
-0,
-
-borderRadius:
-
-type === "bar"
-
-?
-
-8
-
-:
-
-0,
-
-tension:.35,
-
-fill:
-
-options.fill
-
-??
-
-false,
-
-pointRadius:
-
-type === "line"
-
-?
-
-4
-
-:
-
-0
-
+if(type === "bar" && typeof background === "string" && background.toLowerCase() === "#a10d0d"){
+  const gradient = ctx.createLinearGradient(0,0,520,0);
+  gradient.addColorStop(0, "#B10B12");
+  gradient.addColorStop(1, "#D23A3F");
+  background = gradient;
 }
 
-]
+const centerTextPlugin = {
+  id: "hazwatchCenterText_" + id,
+  afterDraw(chart){
+    if(type !== "doughnut") return;
+    const {ctx, chartArea} = chart;
+    if(!chartArea) return;
+    const total = values.reduce((sum,v)=>sum+(Number(v)||0),0);
+    const x=(chartArea.left+chartArea.right)/2;
+    const y=(chartArea.top+chartArea.bottom)/2;
+    ctx.save();
+    ctx.textAlign="center";
+    ctx.textBaseline="middle";
+    ctx.fillStyle=textStrong;
+    ctx.font="800 26px Roboto, sans-serif";
+    ctx.fillText(total, x, y-5);
+    ctx.fillStyle=theme.text;
+    ctx.font="600 11px Roboto, sans-serif";
+    ctx.fillText("TOTAL", x, y+18);
+    ctx.restore();
+  }
+};
 
-},
+const horizontal = !!options.horizontal;
+const isDoughnut = type === "doughnut";
 
-
-options:{
-
-responsive:true,
-
-maintainAspectRatio:false,
-
-indexAxis:
-
-options.horizontal
-
-?
-
-"y"
-
-:
-
-"x",
-
-
-plugins:{
-
-legend:{
-
-display:
-
-options.legend
-
-??
-
-(
-type ===
-"doughnut"
-),
-
-position:"right",
-
-labels:{
-
-color:
-theme.text,
-
-usePointStyle:true,
-
-boxWidth:12
-
-}
-
-},
-
-tooltip:{
-
-enabled:true
-
-}
-
-},
-
-
-scales:
-
-type ===
-"doughnut"
-
-?
-
-{}
-
-:
-
-{
-
-x:{
-
-grid:{
-
-display:false
-
-},
-
-ticks:{
-
-color:
-theme.text
-
-}
-
-},
-
-y:{
-
-beginAtZero:true,
-
-grid:{
-
-color:
-theme.grid
-
-},
-
-ticks:{
-
-color:
-theme.text,
-
-precision:0
-
-}
-
-}
-
-}
-
-}
-
-}
-
-);
-
+charts[id] = new Chart(canvas, {
+  type,
+  data:{
+    labels,
+    datasets:[{
+      data:values,
+      backgroundColor:background,
+      borderColor:isDoughnut ? surface : border,
+      borderWidth:isDoughnut ? 4 : (type === "line" ? 3 : 0),
+      borderRadius:type === "bar" ? 12 : 0,
+      borderSkipped:false,
+      maxBarThickness:type === "bar" ? 28 : undefined,
+      categoryPercentage:type === "bar" ? .72 : undefined,
+      barPercentage:type === "bar" ? .86 : undefined,
+      tension:.38,
+      cubicInterpolationMode:type === "line" ? "monotone" : undefined,
+      fill:options.fill ?? (type === "line"),
+      pointRadius:type === "line" ? 4 : 0,
+      pointHoverRadius:type === "line" ? 7 : 0,
+      pointBackgroundColor:type === "line" ? surface : undefined,
+      pointBorderColor:type === "line" ? red : undefined,
+      pointBorderWidth:type === "line" ? 3 : 0,
+      hoverOffset:isDoughnut ? 8 : 0,
+      spacing:isDoughnut ? 2 : 0
+    }]
+  },
+  plugins:[centerTextPlugin],
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    indexAxis:horizontal ? "y" : "x",
+    cutout:isDoughnut ? "70%" : undefined,
+    animation:{duration:800,easing:"easeOutQuart"},
+    interaction:{mode:"nearest",intersect:false},
+    plugins:{
+      legend:{
+        display:options.legend ?? isDoughnut,
+        position:isDoughnut ? "bottom" : "right",
+        align:"center",
+        labels:{
+          color:theme.text,
+          usePointStyle:true,
+          pointStyle:"circle",
+          boxWidth:8,
+          boxHeight:8,
+          padding:16,
+          font:{family:"Roboto",size:11,weight:"600"}
+        }
+      },
+      tooltip:{
+        enabled:true,
+        backgroundColor:"rgba(30,32,35,.96)",
+        titleColor:"#FFFFFF",
+        bodyColor:"#FFFFFF",
+        padding:12,
+        cornerRadius:12,
+        displayColors:true,
+        usePointStyle:true,
+        titleFont:{family:"Roboto",weight:"700"},
+        bodyFont:{family:"Roboto",weight:"500"},
+        callbacks:{
+          label:(context)=>` ${context.label}: ${context.formattedValue}`
+        }
+      }
+    },
+    scales:isDoughnut ? {} : (
+      horizontal ? {
+        x:{
+          beginAtZero:true,
+          border:{display:false},
+          grid:{color:theme.grid,borderDash:[4,5],drawTicks:false},
+          ticks:{color:theme.text,precision:0,padding:8,font:{family:"Roboto",size:11,weight:"500"}}
+        },
+        y:{
+          border:{display:false},
+          grid:{display:false},
+          ticks:{color:theme.text,padding:10,font:{family:"Roboto",size:11,weight:"600"}}
+        }
+      } : {
+        x:{
+          border:{display:false},
+          grid:{display:false},
+          ticks:{color:theme.text,padding:8,maxRotation:0,font:{family:"Roboto",size:11,weight:"600"}}
+        },
+        y:{
+          beginAtZero:true,
+          border:{display:false},
+          grid:{color:theme.grid,borderDash:[4,5],drawTicks:false},
+          ticks:{color:theme.text,precision:0,padding:8,font:{family:"Roboto",size:11,weight:"500"}}
+        }
+      }
+    )
+  }
+});
 
 }
-
-
 
 function updateChartsTheme(){
 

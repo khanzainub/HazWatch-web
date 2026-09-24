@@ -4,7 +4,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <meta name="theme-color" content="#A10D0D">
 
 <title>HazWatch | Citizen Geospatial Hazard Intelligence</title>
@@ -13,20 +12,21 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <link
-href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
-rel="stylesheet">
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+  rel="stylesheet"
+>
 
 <link
-rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
 
 <style>
 
-:root {
-
+:root{
   --red:#A10D0D;
   --red2:#C41919;
-  --red-soft:#FFF1F1;
+  --redSoft:#FFF1F1;
 
   --bg:#ECEFF1;
   --surface:#FFFFFF;
@@ -34,107 +34,112 @@ href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
   --text:#373D41;
   --muted:#747D84;
-
   --line:#DCE1E5;
 
   --blue:#2F5D8A;
   --green:#267C61;
 
   --shadow:0 18px 55px rgba(27,34,39,.10);
-
   --radius:24px;
 
-  --nav:rgba(255,255,255,.93);
+  --nav:rgba(255,255,255,.94);
 }
 
 
-html[data-theme="dark"] {
-
+html[data-theme="dark"]{
   --bg:#0D1114;
   --surface:#151B1F;
   --surface2:#1B2227;
 
   --text:#F4F6F7;
   --muted:#A9B1B7;
-
   --line:#293239;
 
-  --red-soft:#2B1719;
+  --redSoft:#2B1719;
 
   --shadow:0 20px 60px rgba(0,0,0,.32);
 
-  --nav:rgba(13,17,20,.93);
+  --nav:rgba(13,17,20,.94);
 }
 
 
-* {
+*{
   box-sizing:border-box;
 }
 
 
-html {
+html{
   scroll-behavior:smooth;
 }
 
 
-body {
-
+body{
   margin:0;
 
   font-family:
-  Inter,
-  system-ui,
-  Arial,
-  sans-serif;
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
 
   background:var(--bg);
-
   color:var(--text);
 
   line-height:1.6;
 
   transition:
-  background .25s,
-  color .25s;
+    background .25s,
+    color .25s;
 }
 
 
-a {
+a{
   color:inherit;
   text-decoration:none;
 }
 
 
 button,
-input {
+input{
   font:inherit;
 }
 
 
-button {
+button{
   cursor:pointer;
 }
 
 
-.wrap {
-
-  width:min(
-    1380px,
-    94vw
-  );
-
+.wrap{
+  width:min(1380px,94vw);
   margin:auto;
 }
 
 
-/* ===================================
+section{
+  padding:72px 0;
+}
+
+
+.card{
+  background:var(--surface);
+
+  border:1px solid var(--line);
+
+  border-radius:var(--radius);
+
+  box-shadow:var(--shadow);
+}
+
+
+/* ================================
 NAV
-=================================== */
+================================ */
 
-.nav {
-
+.nav{
   position:sticky;
-
   top:0;
 
   z-index:2000;
@@ -143,131 +148,118 @@ NAV
 
   backdrop-filter:blur(18px);
 
-  border-bottom:
-  1px solid var(--line);
+  border-bottom:1px solid var(--line);
 }
 
 
-.nav-inner {
-
+.navInner{
   height:74px;
 
   display:flex;
-
   align-items:center;
-
-  justify-content:
-  space-between;
+  justify-content:space-between;
 
   gap:20px;
 }
 
 
-.brand {
-
+.brand{
   display:flex;
-
   align-items:center;
 
   gap:10px;
 
   font-size:1.28rem;
-
   font-weight:900;
 
   letter-spacing:-.035em;
 }
 
 
-.brand img {
-
+.logoWrap{
   width:48px;
-
   height:42px;
+
+  position:relative;
+
+  display:grid;
+  place-items:center;
+}
+
+
+.logoWrap img{
+  width:100%;
+  height:100%;
 
   object-fit:contain;
 }
 
 
-.brand-red {
+.logoFallback{
+  width:38px;
+  height:38px;
+
+  border-radius:12px;
+
+  display:none;
+  place-items:center;
+
+  background:var(--red);
+  color:white;
+
+  font-weight:900;
+}
+
+
+.brandRed{
   color:var(--red);
 }
 
 
-.nav-links {
-
+.navLinks{
   display:flex;
+  align-items:center;
 
   gap:24px;
-
-  align-items:center;
 
   color:var(--muted);
 
   font-size:.88rem;
-
   font-weight:750;
 }
 
 
-.nav-links a:hover {
+.navLinks a:hover{
   color:var(--red);
 }
 
 
-.theme-button {
-
+.themeButton{
   width:44px;
-
   height:44px;
 
   border-radius:50%;
 
-  border:
-  1px solid var(--line);
+  border:1px solid var(--line);
 
   background:var(--surface);
-
   color:var(--text);
 
   display:grid;
-
   place-items:center;
 
-  font-size:1.1rem;
+  font-size:1.08rem;
 }
 
 
-/* ===================================
-GENERAL
-=================================== */
+/* ================================
+COMMON
+================================ */
 
-section {
-  padding:72px 0;
-}
-
-
-.card {
-
-  background:var(--surface);
-
-  border:
-  1px solid var(--line);
-
-  border-radius:
-  var(--radius);
-
-  box-shadow:
-  var(--shadow);
-}
-
-
-.kicker {
-
+.kicker{
   color:var(--red);
 
   font-size:.76rem;
-
   font-weight:900;
 
   letter-spacing:.15em;
@@ -276,13 +268,9 @@ section {
 }
 
 
-.section-head {
-
+.sectionHead{
   display:flex;
-
-  justify-content:
-  space-between;
-
+  justify-content:space-between;
   align-items:end;
 
   gap:28px;
@@ -291,16 +279,10 @@ section {
 }
 
 
-.section-head h2 {
-
+.sectionHead h2{
   margin:7px 0 0;
 
-  font-size:
-  clamp(
-    2.2rem,
-    4vw,
-    4rem
-  );
+  font-size:clamp(2.2rem,4vw,4rem);
 
   line-height:.98;
 
@@ -308,83 +290,68 @@ section {
 }
 
 
-.section-subtitle {
-
+.sectionSubtitle{
   max-width:720px;
 
   color:var(--muted);
 }
 
 
-.btn {
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  gap:8px;
 
   border:0;
 
   border-radius:14px;
 
-  padding:
-  13px 18px;
+  padding:13px 18px;
 
   font-weight:850;
-
-  display:inline-flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  gap:8px;
 }
 
 
-.btn-red {
-
+.btnRed{
   background:var(--red);
-
   color:white;
 
   box-shadow:
-  0 10px 28px
-  rgba(161,13,13,.22);
+    0 10px 28px
+    rgba(161,13,13,.22);
 }
 
 
-.btn-light {
-
+.btnLight{
   background:var(--surface);
-
   color:var(--text);
 
-  border:
-  1px solid var(--line);
+  border:1px solid var(--line);
 }
 
 
-/* ===================================
-ABOUT / HERO
-=================================== */
+/* ================================
+ABOUT HERO
+================================ */
 
-.hero {
-
-  padding:
-  48px 0 30px;
+.hero{
+  padding:48px 0 32px;
 
   background:
-
-  radial-gradient(
-    circle at 82% 10%,
-    rgba(161,13,13,.12),
-    transparent 26%
-  );
+    radial-gradient(
+      circle at 82% 10%,
+      rgba(161,13,13,.12),
+      transparent 26%
+    );
 }
 
 
-.hero-grid {
-
+.heroGrid{
   display:grid;
 
-  grid-template-columns:
-  1.05fr .95fr;
+  grid-template-columns:1.05fr .95fr;
 
   gap:42px;
 
@@ -392,19 +359,15 @@ ABOUT / HERO
 }
 
 
-.eyebrow {
-
+.eyebrow{
   display:inline-flex;
-
   align-items:center;
 
   gap:9px;
 
-  padding:
-  8px 13px;
+  padding:8px 13px;
 
-  border:
-  1px solid var(--line);
+  border:1px solid var(--line);
 
   border-radius:999px;
 
@@ -413,7 +376,6 @@ ABOUT / HERO
   color:var(--red);
 
   font-size:.76rem;
-
   font-weight:900;
 
   letter-spacing:.08em;
@@ -422,12 +384,10 @@ ABOUT / HERO
 }
 
 
-.eyebrow::before {
-
+.eyebrow::before{
   content:"";
 
   width:8px;
-
   height:8px;
 
   border-radius:50%;
@@ -435,22 +395,15 @@ ABOUT / HERO
   background:var(--red);
 
   box-shadow:
-  0 0 0 6px
-  rgba(161,13,13,.09);
+    0 0 0 6px
+    rgba(161,13,13,.09);
 }
 
 
-.hero h1 {
+.hero h1{
+  margin:22px 0;
 
-  margin:
-  22px 0;
-
-  font-size:
-  clamp(
-    3.3rem,
-    6.7vw,
-    7rem
-  );
+  font-size:clamp(3.3rem,6.7vw,7rem);
 
   line-height:.9;
 
@@ -458,13 +411,12 @@ ABOUT / HERO
 }
 
 
-.hero-red {
+.heroRed{
   color:var(--red);
 }
 
 
-.hero-description {
-
+.heroDescription{
   max-width:760px;
 
   color:var(--muted);
@@ -473,10 +425,8 @@ ABOUT / HERO
 }
 
 
-.hero-buttons {
-
+.heroButtons{
   display:flex;
-
   flex-wrap:wrap;
 
   gap:12px;
@@ -485,8 +435,7 @@ ABOUT / HERO
 }
 
 
-.safety {
-
+.safety{
   margin-top:18px;
 
   color:var(--muted);
@@ -495,17 +444,15 @@ ABOUT / HERO
 }
 
 
-.safety strong {
+.safety strong{
   color:var(--red);
 }
 
 
-.hero-logo-box {
-
+.heroLogoBox{
   min-height:430px;
 
   display:grid;
-
   place-items:center;
 
   position:relative;
@@ -514,22 +461,41 @@ ABOUT / HERO
 
   background:var(--surface);
 
-  border:
-  1px solid var(--line);
+  border:1px solid var(--line);
 
   border-radius:34px;
 
-  box-shadow:
-  var(--shadow);
+  box-shadow:var(--shadow);
 }
 
 
-.hero-logo {
+.heroLogoBox::after{
+  content:"";
 
-  width:min(
-    390px,
-    76%
-  );
+  position:absolute;
+
+  width:520px;
+  height:280px;
+
+  bottom:-180px;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(161,13,13,.20),
+      transparent 68%
+    );
+}
+
+
+.heroLogoWrap{
+  width:min(390px,76%);
+  aspect-ratio:1/1;
+
+  display:grid;
+  place-items:center;
 
   position:relative;
 
@@ -537,44 +503,61 @@ ABOUT / HERO
 }
 
 
-/* ===================================
+.heroLogoWrap img{
+  width:100%;
+  height:100%;
+
+  object-fit:contain;
+}
+
+
+.heroFallback{
+  width:160px;
+  height:160px;
+
+  display:none;
+  place-items:center;
+
+  border-radius:45px;
+
+  background:var(--red);
+  color:white;
+
+  font-size:4rem;
+  font-weight:900;
+}
+
+
+/* ================================
 MISSION VISION TEAM
-=================================== */
+================================ */
 
-.about-grid {
-
+.aboutGrid{
   display:grid;
 
-  grid-template-columns:
-  1fr 1fr;
+  grid-template-columns:1fr 1fr;
 
   gap:18px;
 }
 
 
-.about-card {
-
+.aboutCard{
   padding:30px;
 
   min-height:270px;
 }
 
 
-.about-icon {
-
+.aboutIcon{
   width:48px;
-
   height:48px;
 
   display:grid;
-
   place-items:center;
 
   border-radius:15px;
 
-  background:
-  var(--red-soft);
-
+  background:var(--redSoft);
   color:var(--red);
 
   font-size:1.45rem;
@@ -583,17 +566,14 @@ MISSION VISION TEAM
 }
 
 
-.about-card h3 {
-
-  margin:
-  0 0 13px;
+.aboutCard h3{
+  margin:0 0 13px;
 
   font-size:1.6rem;
 }
 
 
-.about-card p {
-
+.aboutCard p{
   margin:0;
 
   color:var(--muted);
@@ -602,15 +582,12 @@ MISSION VISION TEAM
 }
 
 
-.team-heading {
-
-  margin:
-  28px 0 14px;
+.teamHeading{
+  margin:28px 0 14px;
 
   color:var(--muted);
 
   font-size:.9rem;
-
   font-weight:900;
 
   letter-spacing:.14em;
@@ -619,25 +596,21 @@ MISSION VISION TEAM
 }
 
 
-.team-grid {
-
+.teamGrid{
   display:grid;
 
-  grid-template-columns:
-  1fr 1fr;
+  grid-template-columns:1fr 1fr;
 
   gap:18px;
 }
 
 
-.team-card {
-
+.teamCard{
   padding:25px;
 
   display:grid;
 
-  grid-template-columns:
-  auto 1fr;
+  grid-template-columns:auto 1fr;
 
   gap:18px;
 
@@ -645,34 +618,27 @@ MISSION VISION TEAM
 }
 
 
-.team-avatar {
-
+.teamAvatar{
   width:66px;
-
   height:66px;
 
   border-radius:19px;
 
   display:grid;
-
   place-items:center;
 
   background:var(--red);
-
   color:white;
 
   font-size:1.2rem;
-
   font-weight:900;
 }
 
 
-.team-role {
-
+.teamRole{
   color:var(--red);
 
   font-size:.76rem;
-
   font-weight:900;
 
   letter-spacing:.12em;
@@ -681,78 +647,66 @@ MISSION VISION TEAM
 }
 
 
-.team-card h3 {
-
-  margin:
-  4px 0 3px;
+.teamCard h3{
+  margin:4px 0 3px;
 
   font-size:1.35rem;
 }
 
 
-.team-card p {
-
+.teamCard p{
   margin:0;
 
   color:var(--muted);
 }
 
 
-/* ===================================
-MAP AND ANALYTICS
-=================================== */
+/* ================================
+MAP + ANALYTICS
+================================ */
 
-.live-grid {
-
+.liveGrid{
   display:grid;
 
   grid-template-columns:
-  minmax(0,1.7fr)
-  minmax(370px,.75fr);
+    minmax(0,1.7fr)
+    minmax(370px,.75fr);
 
   gap:20px;
 }
 
 
-.map-card {
-
+.mapCard{
   padding:14px;
 
   overflow:hidden;
 }
 
 
-.map-header {
-
+.mapHeader{
   display:flex;
-
   align-items:center;
-
-  justify-content:
-  space-between;
+  justify-content:space-between;
 
   gap:16px;
 
-  padding:
-  7px 6px 15px;
+  padding:7px 6px 15px;
 }
 
 
-.map-header h3 {
-
+.mapHeader h3{
   margin:0;
 
   font-size:1.48rem;
 }
 
 
-.map-header small {
+.mapHeader small{
   color:var(--muted);
 }
 
 
-.layer-switch {
-
+.layerSwitch{
   display:flex;
 
   gap:4px;
@@ -763,21 +717,18 @@ MAP AND ANALYTICS
 
   background:var(--surface2);
 
-  border:
-  1px solid var(--line);
+  border:1px solid var(--line);
 }
 
 
-.layer-switch button {
-
+.layerSwitch button{
   border:0;
 
   background:transparent;
 
   color:var(--muted);
 
-  padding:
-  8px 11px;
+  padding:8px 11px;
 
   border-radius:9px;
 
@@ -785,16 +736,19 @@ MAP AND ANALYTICS
 }
 
 
-.layer-switch button.active {
-
+.layerSwitch button.active{
   background:var(--red);
-
   color:white;
 }
 
 
-#map {
+.layerSwitch button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
 
+
+#map{
   height:650px;
 
   border-radius:19px;
@@ -805,71 +759,59 @@ MAP AND ANALYTICS
 }
 
 
-.hazard-filters {
-
+.hazardFilters{
   display:flex;
 
   gap:9px;
 
   overflow-x:auto;
 
-  padding:
-  14px 2px 2px;
+  padding:14px 2px 2px;
 
   scrollbar-width:none;
 }
 
 
-.hazard-chip {
-
+.hazardChip{
   white-space:nowrap;
 
   display:flex;
-
   align-items:center;
 
   gap:7px;
 
-  padding:
-  8px 12px;
+  padding:8px 12px;
 
   border-radius:999px;
 
-  border:
-  1px solid var(--line);
+  border:1px solid var(--line);
 
   background:var(--surface2);
-
   color:var(--text);
 
   font-size:.8rem;
-
   font-weight:800;
 }
 
 
-.hazard-chip.active {
-
+.hazardChip.active{
   border-color:var(--red);
 
   box-shadow:
-  0 0 0 2px
-  rgba(161,13,13,.10);
+    0 0 0 2px
+    rgba(161,13,13,.10);
 }
 
 
-.hazard-dot {
-
+.hazardDot{
   width:9px;
-
   height:9px;
 
   border-radius:50%;
 }
 
 
-.side-panel {
-
+.sidePanel{
   display:flex;
 
   flex-direction:column;
@@ -878,26 +820,19 @@ MAP AND ANALYTICS
 }
 
 
-.api-card {
-
-  padding:
-  15px 18px;
+.apiCard{
+  padding:15px 18px;
 
   display:flex;
-
   align-items:center;
-
-  justify-content:
-  space-between;
+  justify-content:space-between;
 
   gap:15px;
 }
 
 
-.api-badge {
-
+.apiBadge{
   display:flex;
-
   align-items:center;
 
   gap:8px;
@@ -905,7 +840,6 @@ MAP AND ANALYTICS
   color:var(--green);
 
   font-size:.74rem;
-
   font-weight:900;
 
   letter-spacing:.1em;
@@ -914,12 +848,10 @@ MAP AND ANALYTICS
 }
 
 
-.api-badge::before {
-
+.apiBadge::before{
   content:"";
 
   width:8px;
-
   height:8px;
 
   border-radius:50%;
@@ -928,13 +860,12 @@ MAP AND ANALYTICS
 }
 
 
-.api-badge.error {
+.apiBadge.error{
   color:#B3261E;
 }
 
 
-.api-status {
-
+.apiStatus{
   color:var(--muted);
 
   font-size:.75rem;
@@ -943,54 +874,44 @@ MAP AND ANALYTICS
 }
 
 
-.kpi-grid {
-
+.kpiGrid{
   display:grid;
 
-  grid-template-columns:
-  repeat(3,1fr);
+  grid-template-columns:repeat(3,1fr);
 
   gap:10px;
 }
 
 
-.kpi {
-
+.kpi{
   padding:18px;
 
   min-height:128px;
 }
 
 
-.kpi-icon {
-
+.kpiIcon{
   width:35px;
-
   height:35px;
 
   display:grid;
-
   place-items:center;
 
   border-radius:11px;
 
   margin-bottom:14px;
 
-  background:
-  var(--red-soft);
-
+  background:var(--redSoft);
   color:var(--red);
 
   font-weight:900;
 }
 
 
-.kpi span {
-
+.kpi span{
   color:var(--muted);
 
   font-size:.7rem;
-
   font-weight:850;
 
   text-transform:uppercase;
@@ -999,8 +920,7 @@ MAP AND ANALYTICS
 }
 
 
-.kpi strong {
-
+.kpi strong{
   display:block;
 
   margin-top:5px;
@@ -1013,25 +933,19 @@ MAP AND ANALYTICS
 }
 
 
-.chart-card {
-
+.chartCard{
   padding:20px;
 
   min-height:290px;
 }
 
 
-.chart-card h4,
-.leaderboard-card h4,
-.heat-card h4 {
-
-  margin:
-  0 0 13px;
+.chartTitle{
+  margin:0 0 13px;
 
   color:var(--muted);
 
   font-size:.88rem;
-
   font-weight:900;
 
   letter-spacing:.1em;
@@ -1040,132 +954,114 @@ MAP AND ANALYTICS
 }
 
 
-.chart-box {
+.chartBox{
   height:230px;
 }
 
 
-.leaderboard-card {
+.leaderboardCard{
   padding:20px;
 }
 
 
-.leader {
-
+.leader{
   display:grid;
 
-  grid-template-columns:
-  38px 1fr auto;
+  grid-template-columns:38px 1fr auto;
 
   gap:10px;
 
   align-items:center;
 
-  padding:
-  11px 0;
+  padding:11px 0;
 
-  border-bottom:
-  1px solid var(--line);
+  border-bottom:1px solid var(--line);
 }
 
 
-.leader:last-child {
+.leader:last-child{
   border-bottom:0;
 }
 
 
-.rank {
-
+.rank{
   width:34px;
-
   height:34px;
 
   border-radius:50%;
 
   display:grid;
-
   place-items:center;
 
   background:var(--surface2);
 
   font-size:.77rem;
-
   font-weight:900;
 }
 
 
-.leader:first-child .rank {
-
+.leader:first-child .rank{
   background:var(--red);
-
   color:white;
 }
 
 
-.leader-name {
+.leaderName{
   font-weight:800;
 }
 
 
-.leader small {
-
+.leader small{
   display:block;
 
   color:var(--muted);
 }
 
 
-.report-count {
-
+.reportCount{
   color:var(--red);
 
   font-size:.8rem;
-
   font-weight:850;
 }
 
 
-/* ===================================
+/* ================================
 ANALYTICS GRID
-=================================== */
+================================ */
 
-.analytics-grid {
-
+.analyticsGrid{
   margin-top:20px;
 
   display:grid;
 
-  grid-template-columns:
-  1fr 1fr;
+  grid-template-columns:1fr 1fr;
 
   gap:18px;
 }
 
 
-.analytics-grid .chart-card {
-
+.analyticsGrid .chartCard{
   min-height:360px;
 }
 
 
-.analytics-grid .chart-box {
-
+.analyticsGrid .chartBox{
   height:290px;
 }
 
 
-.heat-card {
+.heatCard{
   padding:20px;
 }
 
 
-.heat-scroll {
+.heatScroll{
   overflow:auto;
 }
 
 
-.heat-grid {
-
+.heatGrid{
   display:grid;
 
   gap:5px;
@@ -1174,10 +1070,8 @@ ANALYTICS GRID
 }
 
 
-.heat-label {
-
+.heatLabel{
   display:flex;
-
   align-items:center;
 
   padding-right:10px;
@@ -1185,17 +1079,14 @@ ANALYTICS GRID
   color:var(--muted);
 
   font-size:.78rem;
-
   font-weight:800;
 }
 
 
-.heat-cell {
-
+.heatCell{
   height:43px;
 
   display:grid;
-
   place-items:center;
 
   border-radius:8px;
@@ -1203,27 +1094,23 @@ ANALYTICS GRID
   background:var(--surface2);
 
   font-size:.8rem;
-
   font-weight:850;
 }
 
 
-.empty {
+.empty{
+  min-height:150px;
+
+  height:100%;
 
   display:grid;
-
   place-items:center;
 
   text-align:center;
 
-  height:100%;
-
-  min-height:150px;
-
   color:var(--muted);
 
-  border:
-  1px dashed var(--line);
+  border:1px dashed var(--line);
 
   border-radius:14px;
 
@@ -1231,27 +1118,23 @@ ANALYTICS GRID
 }
 
 
-/* ===================================
+/* ================================
 WEATHER
-=================================== */
+================================ */
 
-.conditions {
-
+.conditions{
   background:
-
-  linear-gradient(
-    180deg,
-    transparent,
-    rgba(47,93,138,.06),
-    transparent
-  );
+    linear-gradient(
+      180deg,
+      transparent,
+      rgba(47,93,138,.06),
+      transparent
+    );
 }
 
 
-.weather-control {
-
+.weatherControl{
   display:flex;
-
   align-items:center;
 
   gap:10px;
@@ -1262,8 +1145,7 @@ WEATHER
 }
 
 
-.city-search {
-
+.citySearch{
   flex:1;
 
   min-width:250px;
@@ -1274,63 +1156,64 @@ WEATHER
 }
 
 
-.city-search input {
-
+.citySearch input{
   flex:1;
 
   min-width:0;
 
-  padding:
-  12px 14px;
+  padding:12px 14px;
 
   border-radius:13px;
 
-  border:
-  1px solid var(--line);
+  border:1px solid var(--line);
 
   background:var(--surface);
-
   color:var(--text);
 
   outline:none;
 }
 
 
-.weather-location {
-
+.weatherLocation{
   color:var(--muted);
 
   font-size:.78rem;
 }
 
 
-.weather-grid {
-
+.weatherGrid{
   display:grid;
 
-  grid-template-columns:
-  repeat(5,1fr);
+  grid-template-columns:repeat(5,1fr);
 
   gap:12px;
 }
 
 
-.weather-card {
+.aqGrid{
+  display:grid;
 
+  grid-template-columns:repeat(4,1fr);
+
+  gap:12px;
+
+  margin-top:12px;
+}
+
+
+.weatherCard{
   padding:19px;
 }
 
 
-.weather-card small {
-
+.weatherCard small{
   color:var(--muted);
 
   font-weight:800;
 }
 
 
-.weather-card strong {
-
+.weatherCard strong{
   display:block;
 
   margin-top:13px;
@@ -1341,65 +1224,43 @@ WEATHER
 }
 
 
-.weather-card span {
-
+.weatherCard span{
   color:var(--muted);
 
   font-size:.75rem;
 }
 
 
-.aq-grid {
-
-  display:grid;
-
-  grid-template-columns:
-  repeat(4,1fr);
-
-  gap:12px;
-
-  margin-top:12px;
-}
-
-
-/* ===================================
+/* ================================
 GUIDELINES
-=================================== */
+================================ */
 
-.guideline-grid {
-
+.guidelineGrid{
   display:grid;
 
-  grid-template-columns:
-  repeat(5,1fr);
+  grid-template-columns:repeat(5,1fr);
 
   gap:14px;
 }
 
 
-.guide {
-
+.guide{
   min-height:235px;
 
   padding:22px;
 }
 
 
-.guide-number {
-
+.guideNumber{
   width:43px;
-
   height:43px;
 
   border-radius:50%;
 
   display:grid;
-
   place-items:center;
 
-  background:
-  var(--red-soft);
-
+  background:var(--redSoft);
   color:var(--red);
 
   font-weight:900;
@@ -1408,59 +1269,46 @@ GUIDELINES
 }
 
 
-.guide h3 {
-
-  margin:
-  0 0 8px;
+.guide h3{
+  margin:0 0 8px;
 }
 
 
-.guide p {
-
+.guide p{
   margin:0;
 
   color:var(--muted);
 }
 
 
-/* ===================================
-APP SECTION
-=================================== */
+/* ================================
+APP CTA
+================================ */
 
-.download-card {
-
+.downloadCard{
   padding:32px;
 
   display:grid;
 
-  grid-template-columns:
-  1.2fr .8fr;
+  grid-template-columns:1.2fr .8fr;
 
   gap:22px;
 
   align-items:center;
 
   background:
-
-  linear-gradient(
-    135deg,
-    var(--surface),
-    var(--surface2)
-  );
+    linear-gradient(
+      135deg,
+      var(--surface),
+      var(--surface2)
+    );
 }
 
 
-.download-card h2 {
+.downloadCard h2{
+  margin:8px 0 16px;
 
-  margin:
-  8px 0 16px;
-
-  font-size:
-  clamp(
-    2.2rem,
-    4vw,
-    4rem
-  );
+  font-size:clamp(2.2rem,4vw,4rem);
 
   line-height:1;
 
@@ -1468,20 +1316,17 @@ APP SECTION
 }
 
 
-.qr-box {
-
+.qrBox{
   height:250px;
 
   display:grid;
-
   place-items:center;
 
   padding:24px;
 
   text-align:center;
 
-  border:
-  2px dashed var(--line);
+  border:2px dashed var(--line);
 
   border-radius:22px;
 
@@ -1491,40 +1336,32 @@ APP SECTION
 }
 
 
-/* ===================================
+/* ================================
 COPYRIGHT
-=================================== */
+================================ */
 
-footer {
-
-  padding:
-  25px 0 45px;
+footer{
+  padding:25px 0 45px;
 }
 
 
-.copyright {
-
-  border-top:
-  1px solid var(--line);
+.copyright{
+  border-top:1px solid var(--line);
 }
 
 
-details {
+details{
   padding-top:22px;
 }
 
 
-summary {
-
+summary{
   cursor:pointer;
 
   list-style:none;
 
   display:flex;
-
-  justify-content:
-  space-between;
-
+  justify-content:space-between;
   align-items:center;
 
   gap:20px;
@@ -1533,13 +1370,12 @@ summary {
 }
 
 
-summary::-webkit-details-marker {
+summary::-webkit-details-marker{
   display:none;
 }
 
 
-.copyright-body {
-
+.copyrightBody{
   max-width:950px;
 
   padding-top:22px;
@@ -1548,194 +1384,169 @@ summary::-webkit-details-marker {
 }
 
 
-.copyright-body p {
-
-  margin:
-  0 0 18px;
+.copyrightBody p{
+  margin:0 0 18px;
 }
 
 
-/* ===================================
+/* ================================
 LEAFLET
-=================================== */
+================================ */
 
-.leaflet-container {
-
+.leaflet-container{
   font-family:
-  Inter,
-  Arial,
-  sans-serif;
+    Inter,
+    Arial,
+    sans-serif;
 }
 
 
-.leaflet-control-attribution {
-
-  font-size:
-  10px !important;
+.leaflet-control-attribution{
+  font-size:10px !important;
 }
 
 
 .leaflet-popup-content-wrapper,
-.leaflet-popup-tip {
-
-  background:
-  var(--surface);
-
-  color:
-  var(--text);
+.leaflet-popup-tip{
+  background:var(--surface);
+  color:var(--text);
 }
 
 
-/* ===================================
+/* ================================
 RESPONSIVE
-=================================== */
+================================ */
 
-@media(max-width:1100px) {
+@media(max-width:1100px){
 
-  .nav-links {
+  .navLinks{
     display:none;
   }
 
-  .hero-grid,
-  .live-grid {
+  .heroGrid,
+  .liveGrid{
     grid-template-columns:1fr;
   }
 
-  .hero-logo-box {
+  .heroLogoBox{
     min-height:340px;
   }
 
-  .side-panel {
-
+  .sidePanel{
     display:grid;
 
-    grid-template-columns:
-    1fr 1fr;
+    grid-template-columns:1fr 1fr;
   }
 
-  .api-card,
-  .leaderboard-card {
+  .apiCard,
+  .leaderboardCard{
     grid-column:1/-1;
   }
 
-  #map {
+  #map{
     height:560px;
   }
 
-  .weather-grid {
-    grid-template-columns:
-    repeat(3,1fr);
+  .weatherGrid{
+    grid-template-columns:repeat(3,1fr);
   }
 
-  .aq-grid {
-    grid-template-columns:
-    repeat(2,1fr);
+  .aqGrid{
+    grid-template-columns:repeat(2,1fr);
   }
 
-  .guideline-grid {
-    grid-template-columns:
-    1fr 1fr;
+  .guidelineGrid{
+    grid-template-columns:1fr 1fr;
   }
 
 }
 
 
-@media(max-width:760px) {
+@media(max-width:760px){
 
-  .hero-grid {
-
+  .heroGrid{
     display:flex;
 
-    flex-direction:
-    column-reverse;
+    flex-direction:column-reverse;
   }
 
-  .hero-logo-box {
-
+  .heroLogoBox{
     width:100%;
 
     min-height:280px;
   }
 
-  .hero-logo {
+  .heroLogoWrap{
     width:67%;
   }
 
-  .hero h1 {
+  .hero h1{
     font-size:3.55rem;
   }
 
-  .section-head {
+  .sectionHead{
     display:block;
   }
 
-  .section-subtitle {
+  .sectionSubtitle{
     margin-top:14px;
   }
 
-  .about-grid,
-  .team-grid,
-  .download-card,
-  .analytics-grid {
-
+  .aboutGrid,
+  .teamGrid,
+  .downloadCard,
+  .analyticsGrid{
     grid-template-columns:1fr;
   }
 
-  .map-header {
-
+  .mapHeader{
     flex-direction:column;
 
     align-items:flex-start;
   }
 
-  #map {
+  #map{
     height:520px;
   }
 
-  .side-panel {
+  .sidePanel{
     display:flex;
   }
 
-  .weather-grid {
-    grid-template-columns:
-    1fr 1fr;
+  .weatherGrid{
+    grid-template-columns:1fr 1fr;
   }
 
-  .guideline-grid {
+  .guidelineGrid{
     grid-template-columns:1fr;
   }
 
 }
 
 
-@media(max-width:450px) {
+@media(max-width:450px){
 
-  .hero h1 {
+  .hero h1{
     font-size:3rem;
   }
 
-  .hero-buttons .btn {
-
+  .heroButtons .btn{
     width:100%;
-
-    justify-content:center;
   }
 
-  .kpi-grid {
-
-    grid-template-columns:
-    1fr 1fr;
+  .kpiGrid{
+    grid-template-columns:1fr 1fr;
   }
 
-  .kpi:last-child {
+  .kpi:last-child{
     grid-column:1/-1;
   }
 
-  #map {
+  #map{
     height:470px;
   }
 
-  .team-card {
+  .teamCard{
     grid-template-columns:1fr;
   }
 
@@ -1749,26 +1560,39 @@ RESPONSIVE
 <body>
 
 
-<!-- ===================================
-NAVBAR
-=================================== -->
+<!-- NAV -->
 
 <nav class="nav">
 
-<div class="wrap nav-inner">
+<div class="wrap navInner">
 
 <a
-href="#top"
-class="brand">
+  href="#top"
+  class="brand"
+>
+
+<div class="logoWrap">
 
 <img
-id="navLogo"
-src="hazwatch-logo-light.jpg"
-alt="HazWatch">
+  id="navLogo"
+  src="hazwatch-logo-light.jpg"
+  alt="HazWatch"
+  onerror="
+    this.style.display='none';
+    this.nextElementSibling.style.display='grid';
+  "
+>
+
+<span class="logoFallback">
+H
+</span>
+
+</div>
+
 
 <div>
 
-<span class="brand-red">
+<span class="brandRed">
 Haz
 </span>Watch
 
@@ -1777,7 +1601,7 @@ Haz
 </a>
 
 
-<div class="nav-links">
+<div class="navLinks">
 
 <a href="#about">
 About
@@ -1803,11 +1627,11 @@ Get HazWatch
 
 
 <button
-id="themeButton"
-class="theme-button">
-
+  id="themeButton"
+  class="themeButton"
+  aria-label="Toggle theme"
+>
 ☾
-
 </button>
 
 </div>
@@ -1816,15 +1640,14 @@ class="theme-button">
 
 
 
-<!-- ===================================
-ABOUT HERO
-=================================== -->
+<!-- ABOUT HERO -->
 
 <header
-id="top"
-class="hero">
+  id="top"
+  class="hero"
+>
 
-<div class="wrap hero-grid">
+<div class="wrap heroGrid">
 
 
 <div>
@@ -1841,16 +1664,14 @@ Geospatial Intelligence
 
 About<br>
 
-<span class="hero-red">
-
+<span class="heroRed">
 HazWatch.
-
 </span>
 
 </h1>
 
 
-<p class="hero-description">
+<p class="heroDescription">
 
 HazWatch is a citizen science-based
 geospatial mobile application for
@@ -1864,11 +1685,12 @@ and research-oriented data access.
 </p>
 
 
-<div class="hero-buttons">
+<div class="heroButtons">
 
 <a
-href="#intelligence"
-class="btn btn-red">
+  href="#intelligence"
+  class="btn btnRed"
+>
 
 Explore HazWatch data
 
@@ -1876,10 +1698,11 @@ Explore HazWatch data
 
 
 <a
-href="https://play.google.com/store/apps/details?id=in.hazwatch.myapp"
-target="_blank"
-rel="noopener"
-class="btn btn-light">
+  href="https://play.google.com/store/apps/details?id=in.hazwatch.myapp"
+  target="_blank"
+  rel="noopener"
+  class="btn btnLight"
+>
 
 Get it on Google Play ↗
 
@@ -1902,13 +1725,26 @@ to report a hazard.
 </div>
 
 
-<div class="hero-logo-box">
+
+<div class="heroLogoBox">
+
+<div class="heroLogoWrap">
 
 <img
-id="heroLogo"
-src="hazwatch-logo-light.jpg"
-class="hero-logo"
-alt="HazWatch">
+  id="heroLogo"
+  src="hazwatch-logo-light.jpg"
+  alt="HazWatch logo"
+  onerror="
+    this.style.display='none';
+    this.nextElementSibling.style.display='grid';
+  "
+>
+
+<span class="heroFallback">
+H
+</span>
+
+</div>
 
 </div>
 
@@ -1922,16 +1758,14 @@ alt="HazWatch">
 <main>
 
 
-<!-- ===================================
-MISSION VISION TEAM
-=================================== -->
+<!-- ABOUT -->
 
 <section id="about">
 
 <div class="wrap">
 
 
-<div class="section-head">
+<div class="sectionHead">
 
 <div>
 
@@ -1940,19 +1774,15 @@ About HazWatch
 </div>
 
 <h2>
-
-Mission,
-vision & team
-
+Mission, vision & team
 </h2>
 
 </div>
 
 
-<p class="section-subtitle">
+<p class="sectionSubtitle">
 
-Help us make India
-a safer place.
+Help us make India a safer place.
 
 </p>
 
@@ -1960,12 +1790,12 @@ a safer place.
 
 
 
-<div class="about-grid">
+<div class="aboutGrid">
 
 
-<article class="card about-card">
+<article class="card aboutCard">
 
-<div class="about-icon">
+<div class="aboutIcon">
 ⌖
 </div>
 
@@ -1989,9 +1819,9 @@ and informed decision-making.
 
 
 
-<article class="card about-card">
+<article class="card aboutCard">
 
-<div class="about-icon">
+<div class="aboutIcon">
 ◉
 </div>
 
@@ -2018,42 +1848,34 @@ and informed decision-making.
 
 
 
-<div class="team-heading">
-
+<div class="teamHeading">
 Team
-
 </div>
 
 
 
-<div class="team-grid">
+<div class="teamGrid">
 
 
-<article class="card team-card">
+<article class="card teamCard">
 
-<div class="team-avatar">
+<div class="teamAvatar">
 ZK
 </div>
 
 <div>
 
-<div class="team-role">
-
+<div class="teamRole">
 Founder and Design Architect
-
 </div>
 
 <h3>
-
 Zainab Khan, PhD
-
 </h3>
 
 <p>
-
 Former Post-Doctoral Fellow,
 IIT Roorkee
-
 </p>
 
 </div>
@@ -2062,24 +1884,20 @@ IIT Roorkee
 
 
 
-<article class="card team-card">
+<article class="card teamCard">
 
-<div class="team-avatar">
+<div class="teamAvatar">
 DV
 </div>
 
 <div>
 
-<div class="team-role">
-
+<div class="teamRole">
 Strategic Advisor
-
 </div>
 
 <h3>
-
 Deepika Vashishtha, PhD
-
 </h3>
 
 <p>
@@ -2098,46 +1916,43 @@ Sagar, MP
 
 </div>
 
+
 </div>
 
 </section>
 
 
 
-<!-- ===================================
-MAP + ANALYTICS
-=================================== -->
+<!-- MAP + ANALYTICS -->
 
 <section id="intelligence">
 
 <div class="wrap">
 
 
-<div class="section-head">
+<div class="sectionHead">
 
 <div>
 
 <div class="kicker">
-
 HazWatch Live Intelligence
-
 </div>
 
 <h2>
-
-Incident map
-& analytics
-
+Incident map & analytics
 </h2>
 
 </div>
 
 
-<p class="section-subtitle">
+<p class="sectionSubtitle">
 
-Live public-safe incident reports,
-analytics and contributor information
-from the HazWatch backend.
+Live public-safe HazWatch
+incident reports,
+analytics,
+and contributor information.
+
+No sample analytics are used.
 
 </p>
 
@@ -2145,63 +1960,62 @@ from the HazWatch backend.
 
 
 
-<div class="live-grid">
+<div class="liveGrid">
 
 
-<!-- MAP -->
-
-<div class="card map-card">
+<div class="card mapCard">
 
 
-<div class="map-header">
+<div class="mapHeader">
 
 <div>
 
 <h3>
-
 Incident map
-
 </h3>
 
 <small>
-
 Reports plotted across India
-
 </small>
 
 </div>
 
 
-<div class="layer-switch">
+<div class="layerSwitch">
 
 <button
-data-layer="standard"
-class="active">
-
+  data-layer="standard"
+  class="active"
+>
 Standard
-
 </button>
 
 <button
-data-layer="satellite">
-
+  data-layer="satellite"
+>
 Satellite
+</button>
 
+<button
+  id="mapillaryButton"
+  data-layer="mapillary"
+  disabled
+>
+Mapillary
 </button>
 
 </div>
 
 </div>
-
 
 
 <div id="map"></div>
 
 
 <div
-id="hazardFilters"
-class="hazard-filters">
-
+  id="hazardFilters"
+  class="hazardFilters"
+>
 </div>
 
 
@@ -2209,53 +2023,44 @@ class="hazard-filters">
 
 
 
-<!-- SIDE ANALYTICS -->
-
-<aside class="side-panel">
+<aside class="sidePanel">
 
 
-<div class="card api-card">
+<div class="card apiCard">
 
 <div
-id="apiBadge"
-class="api-badge">
-
+  id="apiBadge"
+  class="apiBadge"
+>
 Connecting
-
 </div>
-
 
 <div
-id="apiStatus"
-class="api-status">
-
+  id="apiStatus"
+  class="apiStatus"
+>
 HazWatch API
-
 </div>
 
 </div>
 
 
 
-<div class="kpi-grid">
+<div class="kpiGrid">
 
 
 <div class="card kpi">
 
-<div class="kpi-icon">
+<div class="kpiIcon">
 !
 </div>
 
 <span>
-
 Reports Filed
-
 </span>
 
 <strong id="kpiReports">
-
 —
-
 </strong>
 
 </div>
@@ -2264,20 +2069,16 @@ Reports Filed
 
 <div class="card kpi">
 
-<div class="kpi-icon">
+<div class="kpiIcon">
 ◎
 </div>
 
 <span>
-
 Contributors
-
 </span>
 
 <strong id="kpiContributors">
-
 —
-
 </strong>
 
 </div>
@@ -2286,20 +2087,16 @@ Contributors
 
 <div class="card kpi">
 
-<div class="kpi-icon">
+<div class="kpiIcon">
 ⌖
 </div>
 
 <span>
-
 States Covered
-
 </span>
 
 <strong id="kpiStates">
-
 —
-
 </strong>
 
 </div>
@@ -2309,40 +2106,33 @@ States Covered
 
 
 
-<div class="card chart-card">
+<div class="card chartCard">
 
-<h4>
-
+<div class="chartTitle">
 Reports by Hazard Type
-
-</h4>
+</div>
 
 <div
-class="chart-box"
-id="hazardChartBox">
-
+  class="chartBox"
+  id="hazardChartBox"
+>
 <canvas id="hazardChart"></canvas>
-
 </div>
 
 </div>
 
 
 
-<div class="card leaderboard-card">
+<div class="card leaderboardCard">
 
-<h4>
-
+<div class="chartTitle">
 Top Contributors
-
-</h4>
+</div>
 
 <div id="leaderboard">
 
 <div class="empty">
-
 Loading live leaderboard…
-
 </div>
 
 </div>
@@ -2357,147 +2147,124 @@ Loading live leaderboard…
 
 
 
-<!-- MORE ANALYTICS -->
-
-<div class="analytics-grid">
+<div class="analyticsGrid">
 
 
-<div class="card chart-card">
+<div class="card chartCard">
 
-<h4>
-
+<div class="chartTitle">
 Reports Over Time
-
-</h4>
+</div>
 
 <div
-class="chart-box"
-id="timeChartBox">
-
+  class="chartBox"
+  id="timeChartBox"
+>
 <canvas id="timeChart"></canvas>
-
 </div>
 
 </div>
 
 
 
-<div class="card chart-card">
+<div class="card chartCard">
 
-<h4>
-
+<div class="chartTitle">
 Reports by State
-
-</h4>
+</div>
 
 <div
-class="chart-box"
-id="stateChartBox">
-
+  class="chartBox"
+  id="stateChartBox"
+>
 <canvas id="stateChart"></canvas>
-
 </div>
 
 </div>
 
 
 
-<div class="card chart-card">
+<div class="card chartCard">
 
-<h4>
-
+<div class="chartTitle">
 Reports by Affected Area
-
-</h4>
+</div>
 
 <div
-class="chart-box"
-id="areaChartBox">
-
+  class="chartBox"
+  id="areaChartBox"
+>
 <canvas id="areaChart"></canvas>
-
 </div>
 
 </div>
 
 
 
-<div class="card chart-card">
+<div class="card chartCard">
 
-<h4>
-
+<div class="chartTitle">
 Demographics — Gender
-
-</h4>
+</div>
 
 <div
-class="chart-box"
-id="genderChartBox">
-
+  class="chartBox"
+  id="genderChartBox"
+>
 <canvas id="genderChart"></canvas>
-
 </div>
 
 </div>
 
 
 
-<div class="card chart-card">
+<div class="card chartCard">
 
-<h4>
-
+<div class="chartTitle">
 Demographics — Education
-
-</h4>
+</div>
 
 <div
-class="chart-box"
-id="educationChartBox">
-
+  class="chartBox"
+  id="educationChartBox"
+>
 <canvas id="educationChart"></canvas>
-
 </div>
 
 </div>
 
 
 
-<div class="card chart-card">
+<div class="card chartCard">
 
-<h4>
-
+<div class="chartTitle">
 Demographics — Age Groups
-
-</h4>
+</div>
 
 <div
-class="chart-box"
-id="ageChartBox">
-
+  class="chartBox"
+  id="ageChartBox"
+>
 <canvas id="ageChart"></canvas>
-
 </div>
 
 </div>
 
 
 
-<div class="card heat-card">
+<div class="card heatCard">
 
-<h4>
-
+<div class="chartTitle">
 Hazard Type × Month
-
-</h4>
+</div>
 
 <div
-id="monthHeat"
-class="heat-scroll">
+  id="monthHeat"
+  class="heatScroll"
+>
 
 <div class="empty">
-
-Loading live data…
-
+Loading live analytics…
 </div>
 
 </div>
@@ -2506,22 +2273,19 @@ Loading live data…
 
 
 
-<div class="card heat-card">
+<div class="card heatCard">
 
-<h4>
-
+<div class="chartTitle">
 Hazard Type × State
-
-</h4>
+</div>
 
 <div
-id="stateHeat"
-class="heat-scroll">
+  id="stateHeat"
+  class="heatScroll"
+>
 
 <div class="empty">
-
-Loading live data…
-
+Loading live analytics…
 </div>
 
 </div>
@@ -2538,44 +2302,37 @@ Loading live data…
 
 
 
-<!-- ===================================
-WEATHER AQI
-=================================== -->
+<!-- WEATHER / AQI -->
 
 <section
-id="conditions"
-class="conditions">
+  id="conditions"
+  class="conditions"
+>
 
 <div class="wrap">
 
 
-<div class="section-head">
+<div class="sectionHead">
 
 <div>
 
 <div class="kicker">
-
 Local Environmental Context
-
 </div>
 
 <h2>
-
-Weather
-& air quality
-
+Weather & air quality
 </h2>
 
 </div>
 
 
-<p class="section-subtitle">
+<p class="sectionSubtitle">
 
-Weather and AQI come independently
-from Open-Meteo for the visitor's
-selected location.
+Weather and AQI are fetched
+separately from Open-Meteo.
 
-They are not fetched from
+They do not come from
 the HazWatch backend.
 
 </p>
@@ -2584,41 +2341,39 @@ the HazWatch backend.
 
 
 
-<div class="weather-control">
+<div class="weatherControl">
 
 
 <button
-id="locationButton"
-class="btn btn-red">
-
+  id="locationButton"
+  class="btn btnRed"
+>
 Use my current location
-
 </button>
 
 
-<div class="city-search">
+<div class="citySearch">
 
 <input
-id="cityInput"
-placeholder="Search city — e.g. Dehradun">
+  id="cityInput"
+  placeholder="Search city — e.g. Dehradun"
+>
 
 <button
-id="cityButton"
-class="btn btn-light">
-
+  id="cityButton"
+  class="btn btnLight"
+>
 Search
-
 </button>
 
 </div>
 
 
 <div
-id="weatherLocation"
-class="weather-location">
-
+  id="weatherLocation"
+  class="weatherLocation"
+>
 No location selected
-
 </div>
 
 
@@ -2626,10 +2381,10 @@ No location selected
 
 
 
-<div class="weather-grid">
+<div class="weatherGrid">
 
 
-<div class="card weather-card">
+<div class="card weatherCard">
 
 <small>
 Temperature
@@ -2647,7 +2402,7 @@ Temperature
 
 
 
-<div class="card weather-card">
+<div class="card weatherCard">
 
 <small>
 Precipitation
@@ -2665,7 +2420,7 @@ mm
 
 
 
-<div class="card weather-card">
+<div class="card weatherCard">
 
 <small>
 Wind Speed
@@ -2683,7 +2438,7 @@ km/h
 
 
 
-<div class="card weather-card">
+<div class="card weatherCard">
 
 <small>
 Surface Pressure
@@ -2701,7 +2456,7 @@ hPa
 
 
 
-<div class="card weather-card">
+<div class="card weatherCard">
 
 <small>
 US AQI
@@ -2712,9 +2467,7 @@ US AQI
 </strong>
 
 <span id="weatherAQILabel">
-
 Air quality
-
 </span>
 
 </div>
@@ -2724,10 +2477,10 @@ Air quality
 
 
 
-<div class="aq-grid">
+<div class="aqGrid">
 
 
-<div class="card weather-card">
+<div class="card weatherCard">
 
 <small>
 PM2.5
@@ -2745,7 +2498,7 @@ PM2.5
 
 
 
-<div class="card weather-card">
+<div class="card weatherCard">
 
 <small>
 PM10
@@ -2763,7 +2516,7 @@ PM10
 
 
 
-<div class="card weather-card">
+<div class="card weatherCard">
 
 <small>
 NO₂
@@ -2781,7 +2534,7 @@ NO₂
 
 
 
-<div class="card weather-card">
+<div class="card weatherCard">
 
 <small>
 O₃
@@ -2807,36 +2560,29 @@ O₃
 
 
 
-<!-- ===================================
-GUIDELINES
-=================================== -->
+<!-- GUIDELINES -->
 
 <section id="guidelines">
 
 <div class="wrap">
 
 
-<div class="section-head">
+<div class="sectionHead">
 
 <div>
 
 <div class="kicker">
-
 Reporting Guidelines
-
 </div>
 
 <h2>
-
-Report safely
-and correctly
-
+Report safely and correctly
 </h2>
 
 </div>
 
 
-<p class="section-subtitle">
+<p class="sectionSubtitle">
 
 The five-step HazWatch
 reporting workflow.
@@ -2847,19 +2593,17 @@ reporting workflow.
 
 
 
-<div class="guideline-grid">
+<div class="guidelineGrid">
 
 
 <article class="card guide">
 
-<div class="guide-number">
+<div class="guideNumber">
 1
 </div>
 
 <h3>
-
 Safety first
-
 </h3>
 
 <p>
@@ -2867,8 +2611,7 @@ Safety first
 Never go to dangerous places
 to report hazards.
 
-Report only if it is
-safe to do so.
+Report only if it is safe to do so.
 
 </p>
 
@@ -2878,14 +2621,12 @@ safe to do so.
 
 <article class="card guide">
 
-<div class="guide-number">
+<div class="guideNumber">
 2
 </div>
 
 <h3>
-
 Hazard details
-
 </h3>
 
 <p>
@@ -2903,14 +2644,12 @@ Choose the incident date.
 
 <article class="card guide">
 
-<div class="guide-number">
+<div class="guideNumber">
 3
 </div>
 
 <h3>
-
 Location
-
 </h3>
 
 <p>
@@ -2928,14 +2667,12 @@ the incident happened.
 
 <article class="card guide">
 
-<div class="guide-number">
+<div class="guideNumber">
 4
 </div>
 
 <h3>
-
 Photo
-
 </h3>
 
 <p>
@@ -2952,14 +2689,12 @@ from the gallery.
 
 <article class="card guide">
 
-<div class="guide-number">
+<div class="guideNumber">
 5
 </div>
 
 <h3>
-
 Review and submit
-
 </h3>
 
 <p>
@@ -2981,37 +2716,30 @@ and submit the report.
 
 
 
-<!-- ===================================
-GET APP
-=================================== -->
+<!-- GET APP -->
 
 <section id="getapp">
 
 <div class="wrap">
 
 
-<div class="card download-card">
+<div class="card downloadCard">
 
 
 <div>
 
 
 <div class="kicker">
-
 Reporting & Data Access
-
 </div>
 
 
 <h2>
-
-Continue in
-the HazWatch app
-
+Continue in the HazWatch app
 </h2>
 
 
-<p class="section-subtitle">
+<p class="sectionSubtitle">
 
 For incident reporting
 and HazData access requests,
@@ -3026,13 +2754,14 @@ and environmental context.
 </p>
 
 
-<div class="hero-buttons">
+<div class="heroButtons">
 
 <a
-href="https://play.google.com/store/apps/details?id=in.hazwatch.myapp"
-target="_blank"
-rel="noopener"
-class="btn btn-red">
+  href="https://play.google.com/store/apps/details?id=in.hazwatch.myapp"
+  target="_blank"
+  rel="noopener"
+  class="btn btnRed"
+>
 
 Download HazWatch ↗
 
@@ -3045,15 +2774,12 @@ Download HazWatch ↗
 
 
 
-<div class="qr-box">
-
+<div class="qrBox">
 
 <div>
 
 <strong>
-
 HazWatch QR
-
 </strong>
 
 <br><br>
@@ -3062,7 +2788,6 @@ Your Google Play QR code
 will be placed here.
 
 </div>
-
 
 </div>
 
@@ -3075,14 +2800,11 @@ will be placed here.
 </section>
 
 
-
 </main>
 
 
 
-<!-- ===================================
-COPYRIGHT
-=================================== -->
+<!-- COPYRIGHT -->
 
 <footer>
 
@@ -3095,7 +2817,6 @@ COPYRIGHT
 
 <summary>
 
-
 <span>
 
 © 2026 HazWatch.
@@ -3103,19 +2824,15 @@ All rights reserved.
 
 </span>
 
-
 <span>
-
 ⌄
-
 </span>
-
 
 </summary>
 
 
 
-<div class="copyright-body">
+<div class="copyrightBody">
 
 
 <p>
@@ -3193,21 +2910,16 @@ in legal action.
 
 
 
-<script
-src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-
-<script
-src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js">
-</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 
 
 <script>
 
-/* =========================================================
-CORRECT HAZWATCH API
-========================================================= */
+/* =====================================================
+FINAL HAZWATCH API
+===================================================== */
 
 const API_BASE =
 "https://disaster-watch-beta.preview.emergentagent.com/api";
@@ -3217,9 +2929,16 @@ const REFRESH_INTERVAL =
 45000;
 
 
-/* =========================================================
+/* IMPORTANT:
+   charts is initialized BEFORE theme functions run.
+*/
+
+let charts = {};
+
+
+/* =====================================================
 THEME
-========================================================= */
+===================================================== */
 
 const root =
 document.documentElement;
@@ -3231,7 +2950,32 @@ document.getElementById(
 );
 
 
-function applyTheme(theme) {
+function resetLogoFallbacks(){
+
+document
+.querySelectorAll(
+".logoFallback,.heroFallback"
+)
+.forEach(
+el =>
+el.style.display =
+"none"
+);
+
+document
+.querySelectorAll(
+"#navLogo,#heroLogo"
+)
+.forEach(
+img =>
+img.style.display =
+"block"
+);
+
+}
+
+
+function applyTheme(theme){
 
 root.dataset.theme =
 theme;
@@ -3245,6 +2989,9 @@ theme
 
 const dark =
 theme === "dark";
+
+
+resetLogoFallbacks();
 
 
 document.getElementById(
@@ -3290,7 +3037,7 @@ localStorage.getItem(
 );
 
 
-if(savedTheme) {
+if(savedTheme){
 
 applyTheme(
 savedTheme
@@ -3298,12 +3045,13 @@ savedTheme
 
 }
 
-else {
+else{
 
 const prefersDark =
 
-window
-.matchMedia(
+window.matchMedia
+&&
+window.matchMedia(
 "(prefers-color-scheme: dark)"
 )
 .matches;
@@ -3312,7 +3060,9 @@ window
 applyTheme(
 
 prefersDark
+
 ? "dark"
+
 : "light"
 
 );
@@ -3322,7 +3072,7 @@ prefersDark
 
 
 themeButton.onclick =
-function() {
+function(){
 
 applyTheme(
 
@@ -3338,20 +3088,19 @@ root.dataset.theme
 };
 
 
-
-/* =========================================================
+/* =====================================================
 HELPERS
-========================================================= */
+===================================================== */
 
-function normaliseKey(value) {
+function normaliseKey(value){
 
 return String(
-value || ""
+value ?? ""
 )
 
-.toLowerCase()
-
 .trim()
+
+.toLowerCase()
 
 .replace(
 /\s+/g,
@@ -3367,10 +3116,10 @@ value || ""
 
 
 
-function pretty(value) {
+function pretty(value){
 
 return String(
-value || "Unknown"
+value ?? "Unknown"
 )
 
 .replace(
@@ -3388,7 +3137,7 @@ character.toUpperCase()
 
 
 
-function escapeHTML(value) {
+function escapeHTML(value){
 
 return String(
 value ?? ""
@@ -3414,9 +3163,10 @@ character => ({
 
 
 
-async function API(path) {
+async function API(path){
 
 const response =
+
 await fetch(
 
 API_BASE + path,
@@ -3438,12 +3188,14 @@ cache:
 );
 
 
-if(!response.ok) {
+if(!response.ok){
 
 throw new Error(
 
-path +
-" returned HTTP " +
+path
++
+" returned HTTP "
++
 response.status
 
 );
@@ -3457,20 +3209,16 @@ return response.json();
 
 
 
-/* =========================================================
-ROBUST API PARSING
-========================================================= */
-
 function unwrapObject(
 raw,
-possibleKeys=[]
-) {
+keys=[]
+){
 
 if(
 !raw
 ||
 typeof raw !== "object"
-) {
+){
 
 return {};
 
@@ -3479,19 +3227,16 @@ return {};
 
 for(
 const key
-of possibleKeys
-) {
+of keys
+){
 
 if(
 raw[key]
 &&
-typeof raw[key]
-=== "object"
+typeof raw[key] === "object"
 &&
-!Array.isArray(
-raw[key]
-)
-) {
+!Array.isArray(raw[key])
+){
 
 return raw[key];
 
@@ -3503,13 +3248,10 @@ return raw[key];
 if(
 raw.data
 &&
-typeof raw.data
-=== "object"
+typeof raw.data === "object"
 &&
-!Array.isArray(
-raw.data
-)
-) {
+!Array.isArray(raw.data)
+){
 
 return raw.data;
 
@@ -3524,12 +3266,12 @@ return raw;
 
 function unwrapArray(
 raw,
-possibleKeys=[]
-) {
+keys=[]
+){
 
 if(
 Array.isArray(raw)
-) {
+){
 
 return raw;
 
@@ -3540,7 +3282,7 @@ if(
 !raw
 ||
 typeof raw !== "object"
-) {
+){
 
 return [];
 
@@ -3549,14 +3291,14 @@ return [];
 
 for(
 const key
-of possibleKeys
-) {
+of keys
+){
 
 if(
 Array.isArray(
 raw[key]
 )
-) {
+){
 
 return raw[key];
 
@@ -3569,7 +3311,7 @@ if(
 Array.isArray(
 raw.data
 )
-) {
+){
 
 return raw.data;
 
@@ -3585,19 +3327,18 @@ return [];
 function valueFrom(
 object,
 keys
-) {
+){
 
 for(
 const key
 of keys
-) {
+){
 
 if(
 object
 &&
-object[key]
-!== undefined
-) {
+object[key] !== undefined
+){
 
 return object[key];
 
@@ -3615,11 +3356,11 @@ return undefined;
 function normaliseCategories(
 value,
 preferredKey
-) {
+){
 
 if(
 Array.isArray(value)
-) {
+){
 
 return value.map(
 
@@ -3628,9 +3369,8 @@ item => {
 if(
 item
 &&
-typeof item
-=== "object"
-) {
+typeof item === "object"
+){
 
 return {
 
@@ -3639,33 +3379,42 @@ category:
 item[
 preferredKey
 ]
+
 ??
 
 item.category
+
 ??
 
 item.label
+
 ??
 
 item.name
+
 ??
 
 item.key
+
 ??
 
 "Unknown",
+
 
 count:
 
 Number(
 
 item.count
+
 ??
 
 item.value
+
 ??
 
 item.total
+
 ??
 
 0
@@ -3698,9 +3447,8 @@ count:
 if(
 value
 &&
-typeof value
-=== "object"
-) {
+typeof value === "object"
+){
 
 return Object
 .entries(value)
@@ -3711,26 +3459,26 @@ category,
 count
 ]) => ({
 
-category:
-
 category,
 
 count:
 
 Number(
 
-typeof count
-=== "object"
+typeof count === "object"
 
 ?
 
 count.count
+
 ??
 
 count.value
+
 ??
 
 count.total
+
 ??
 
 0
@@ -3753,17 +3501,19 @@ return [];
 }
 
 
-
-/* =========================================================
+/* =====================================================
 HAZARD CONFIG
-========================================================= */
+===================================================== */
 
 let hazardColors = {};
 
 
+let publicConfig = {};
+
+
 function hazardColor(
 hazard
-) {
+){
 
 return (
 
@@ -3783,15 +3533,17 @@ hazard
 
 
 
-async function loadHazardConfig() {
+async function loadConfig(){
 
 const raw =
+
 await API(
 "/public/config"
 );
 
 
 const config =
+
 unwrapObject(
 
 raw,
@@ -3801,6 +3553,10 @@ raw,
 ]
 
 );
+
+
+publicConfig =
+config;
 
 
 const colors =
@@ -3820,7 +3576,8 @@ config.colors
 {};
 
 
-hazardColors = {};
+hazardColors =
+{};
 
 
 Object
@@ -3847,14 +3604,19 @@ return config;
 }
 
 
-
-/* =========================================================
+/* =====================================================
 MAP
-========================================================= */
+===================================================== */
 
 let map;
 
 let markerLayer;
+
+let standardLayer;
+
+let satelliteLayer;
+
+let mapillaryLayer = null;
 
 let allReports = [];
 
@@ -3862,10 +3624,10 @@ let selectedHazard =
 "all";
 
 
-function initialiseMap() {
-
+function initialiseMap(){
 
 map =
+
 L.map(
 
 "map",
@@ -3902,7 +3664,7 @@ position:
 
 
 
-const standard =
+standardLayer =
 
 L.tileLayer(
 
@@ -3922,7 +3684,7 @@ attribution:
 
 
 
-const satellite =
+satelliteLayer =
 
 L.tileLayer(
 
@@ -3941,7 +3703,8 @@ attribution:
 
 
 
-standard.addTo(map);
+standardLayer
+.addTo(map);
 
 
 
@@ -3953,23 +3716,31 @@ L.layerGroup()
 
 
 
-const buttons =
-
-document.querySelectorAll(
+document
+.querySelectorAll(
 "[data-layer]"
-);
-
-
-
-buttons.forEach(
+)
+.forEach(
 
 button => {
 
 button.onclick =
-function() {
+function(){
+
+if(
+button.disabled
+){
+
+return;
+
+}
 
 
-buttons.forEach(
+document
+.querySelectorAll(
+"[data-layer]"
+)
+.forEach(
 
 item =>
 
@@ -3988,12 +3759,12 @@ button
 
 if(
 map.hasLayer(
-standard
+standardLayer
 )
-) {
+){
 
 map.removeLayer(
-standard
+standardLayer
 );
 
 }
@@ -4001,12 +3772,27 @@ standard
 
 if(
 map.hasLayer(
-satellite
+satelliteLayer
 )
-) {
+){
 
 map.removeLayer(
-satellite
+satelliteLayer
+);
+
+}
+
+
+if(
+mapillaryLayer
+&&
+map.hasLayer(
+mapillaryLayer
+)
+){
+
+map.removeLayer(
+mapillaryLayer
 );
 
 }
@@ -4016,15 +3802,34 @@ satellite
 if(
 button.dataset.layer
 === "satellite"
-) {
+){
 
-satellite.addTo(map);
+satelliteLayer
+.addTo(map);
 
 }
 
-else {
 
-standard.addTo(map);
+else if(
+button.dataset.layer
+=== "mapillary"
+&&
+mapillaryLayer
+){
+
+standardLayer
+.addTo(map);
+
+mapillaryLayer
+.addTo(map);
+
+}
+
+
+else{
+
+standardLayer
+.addTo(map);
 
 }
 
@@ -4039,13 +3844,102 @@ standard.addTo(map);
 
 
 
-/* =========================================================
-REPORT DATA
-========================================================= */
+function configureMapillary(){
 
-function getReportHazard(
+const layers =
+
+publicConfig.map_layers
+
+??
+
+publicConfig.mapLayers
+
+??
+
+publicConfig.layers
+
+??
+
+{};
+
+
+const mapillary =
+
+layers.mapillary
+
+??
+
+layers.street
+
+??
+
+null;
+
+
+const tileURL =
+
+typeof mapillary === "string"
+
+?
+
+mapillary
+
+:
+
+mapillary?.url
+
+??
+
+mapillary?.tile_url
+
+??
+
+mapillary?.tiles
+
+??
+
+null;
+
+
+if(!tileURL){
+
+return;
+
+}
+
+
+mapillaryLayer =
+
+L.tileLayer(
+
+tileURL,
+
+{
+
+maxZoom:19,
+
+opacity:.8
+
+}
+
+);
+
+
+document.getElementById(
+"mapillaryButton"
+).disabled =
+false;
+
+}
+
+
+/* =====================================================
+REPORT MAP
+===================================================== */
+
+function reportHazard(
 report
-) {
+){
 
 return (
 
@@ -4071,7 +3965,7 @@ report.hazard
 
 function reportLatitude(
 report
-) {
+){
 
 return Number(
 
@@ -4097,7 +3991,7 @@ report.location?.lat
 
 function reportLongitude(
 report
-) {
+){
 
 return Number(
 
@@ -4129,8 +4023,7 @@ report.location?.lng
 
 
 
-function renderMarkers() {
-
+function renderMarkers(){
 
 markerLayer
 .clearLayers();
@@ -4144,9 +4037,9 @@ allReports.filter(
 report => {
 
 if(
-selectedHazard
-=== "all"
-) {
+selectedHazard ===
+"all"
+){
 
 return true;
 
@@ -4156,7 +4049,7 @@ return true;
 return (
 
 normaliseKey(
-getReportHazard(
+reportHazard(
 report
 )
 )
@@ -4179,12 +4072,14 @@ report => {
 
 
 const latitude =
+
 reportLatitude(
 report
 );
 
 
 const longitude =
+
 reportLongitude(
 report
 );
@@ -4195,13 +4090,11 @@ if(
 !Number.isFinite(
 latitude
 )
-
 ||
-
 !Number.isFinite(
 longitude
 )
-) {
+){
 
 return;
 
@@ -4210,7 +4103,8 @@ return;
 
 
 const hazard =
-getReportHazard(
+
+reportHazard(
 report
 );
 
@@ -4234,7 +4128,7 @@ if(
 Array.isArray(
 affectedArea
 )
-) {
+){
 
 affectedArea =
 affectedArea.join(", ");
@@ -4243,7 +4137,7 @@ affectedArea.join(", ");
 
 
 
-const incidentDate =
+const date =
 
 report.incident_date
 
@@ -4257,7 +4151,7 @@ report.date
 
 
 
-const place =
+const location =
 
 report.location_name
 
@@ -4295,6 +4189,7 @@ color:"#FFFFFF",
 weight:2,
 
 fillColor:
+
 hazardColor(
 hazard
 ),
@@ -4312,7 +4207,9 @@ fillOpacity:1
 <strong>
 
 ${escapeHTML(
-pretty(hazard)
+pretty(
+hazard
+)
 )}
 
 </strong>
@@ -4341,18 +4238,17 @@ affectedArea
 
 ${
 
-incidentDate
+date
 
 ?
 
 `
 <br>
 
-<span
-style="opacity:.72">
+<span style="opacity:.72">
 
 ${escapeHTML(
-incidentDate
+date
 )}
 
 </span>
@@ -4366,18 +4262,17 @@ incidentDate
 
 ${
 
-place
+location
 
 ?
 
 `
 <br>
 
-<span
-style="opacity:.72">
+<span style="opacity:.72">
 
 ${escapeHTML(
-place
+location
 )}
 
 </span>
@@ -4406,14 +4301,10 @@ markerLayer
 
 
 
-/* =========================================================
-HAZARD FILTERS
-========================================================= */
-
-function renderHazardFilters() {
-
+function renderHazardFilters(){
 
 const box =
+
 document.getElementById(
 "hazardFilters"
 );
@@ -4428,7 +4319,7 @@ const hazards =
 allReports
 
 .map(
-getReportHazard
+reportHazard
 )
 
 .filter(Boolean)
@@ -4444,16 +4335,17 @@ normaliseKey
 
 
 
-let html =
+let output =
 
 `
 
 <button
-class="hazard-chip
+class="hazardChip
+
 ${
 
-selectedHazard
-=== "all"
+selectedHazard ===
+"all"
 
 ?
 
@@ -4468,7 +4360,7 @@ selectedHazard
 data-hazard="all">
 
 <span
-class="hazard-dot"
+class="hazardDot"
 style="
 background:#A10D0D;
 ">
@@ -4482,21 +4374,22 @@ All
 
 
 
-hazards.forEach(
+hazards
+.forEach(
 
 hazard => {
 
-html +=
+output +=
 
 `
 
 <button
-class="hazard-chip
+class="hazardChip
 
 ${
 
-selectedHazard
-=== hazard
+selectedHazard ===
+hazard
 
 ?
 
@@ -4515,7 +4408,7 @@ hazard
 ">
 
 <span
-class="hazard-dot"
+class="hazardDot"
 
 style="
 background:
@@ -4525,6 +4418,7 @@ hazard
 )
 )};
 ">
+
 </span>
 
 ${escapeHTML(
@@ -4544,7 +4438,7 @@ hazard
 
 
 box.innerHTML =
-html;
+output;
 
 
 
@@ -4557,7 +4451,7 @@ box
 button => {
 
 button.onclick =
-function() {
+function(){
 
 selectedHazard =
 button.dataset.hazard;
@@ -4576,17 +4470,14 @@ renderMarkers();
 }
 
 
-
-/* =========================================================
+/* =====================================================
 CHARTS
-========================================================= */
+===================================================== */
 
-let charts = {};
+function chartTheme(){
 
+const styles =
 
-function chartTheme() {
-
-const style =
 getComputedStyle(
 root
 );
@@ -4596,7 +4487,7 @@ return {
 
 text:
 
-style
+styles
 .getPropertyValue(
 "--muted"
 )
@@ -4604,8 +4495,8 @@ style
 
 grid:
 
-root.dataset.theme
-=== "dark"
+root.dataset.theme ===
+"dark"
 
 ?
 
@@ -4621,19 +4512,80 @@ root.dataset.theme
 
 
 
+function ensureCanvas(
+id
+){
+
+let canvas =
+
+document.getElementById(
+id
+);
+
+
+if(canvas){
+
+return canvas;
+
+}
+
+
+const box =
+
+document.getElementById(
+id + "Box"
+);
+
+
+if(!box){
+
+return null;
+
+}
+
+
+box.innerHTML =
+"";
+
+
+canvas =
+
+document.createElement(
+"canvas"
+);
+
+
+canvas.id =
+id;
+
+
+box.appendChild(
+canvas
+);
+
+
+return canvas;
+
+}
+
+
+
 function showEmpty(
 boxId,
 message
-) {
+){
 
 const box =
+
 document.getElementById(
 boxId
 );
 
 
-if(!box) {
+if(!box){
+
 return;
+
 }
 
 
@@ -4657,11 +4609,11 @@ message
 
 function destroyChart(
 id
-) {
+){
 
 if(
 charts[id]
-) {
+){
 
 charts[id]
 .destroy();
@@ -4680,8 +4632,7 @@ type,
 labels,
 values,
 options={}
-) {
-
+){
 
 destroyChart(
 id
@@ -4693,12 +4644,11 @@ if(
 !labels.length
 ||
 !values.length
-) {
+){
 
 showEmpty(
 
-id +
-"Box",
+id + "Box",
 
 "No live data available."
 
@@ -4711,19 +4661,22 @@ return;
 
 
 const canvas =
-document.getElementById(
+
+ensureCanvas(
 id
 );
 
 
+if(!canvas){
 
-if(!canvas) {
 return;
+
 }
 
 
 
 const theme =
+
 chartTheme();
 
 
@@ -4819,7 +4772,6 @@ type === "line"
 },
 
 
-
 options:{
 
 responsive:true,
@@ -4880,8 +4832,8 @@ enabled:true
 
 scales:
 
-type
-=== "doughnut"
+type ===
+"doughnut"
 
 ?
 
@@ -4943,13 +4895,12 @@ precision:0
 
 
 
-function updateChartsTheme() {
-
+function updateChartsTheme(){
 
 if(
-typeof Chart
-=== "undefined"
-) {
+typeof Chart ===
+"undefined"
+){
 
 return;
 
@@ -4958,6 +4909,7 @@ return;
 
 
 const theme =
+
 chartTheme();
 
 
@@ -4976,7 +4928,7 @@ chart.options
 .scales
 ?.x
 ?.ticks
-) {
+){
 
 chart.options
 .scales
@@ -4988,13 +4940,12 @@ theme.text;
 }
 
 
-
 if(
 chart.options
 .scales
 ?.y
 ?.ticks
-) {
+){
 
 chart.options
 .scales
@@ -5006,13 +4957,12 @@ theme.text;
 }
 
 
-
 if(
 chart.options
 .scales
 ?.y
 ?.grid
-) {
+){
 
 chart.options
 .scales
@@ -5024,13 +4974,12 @@ theme.grid;
 }
 
 
-
 if(
 chart.options
 .plugins
 ?.legend
 ?.labels
-) {
+){
 
 chart.options
 .plugins
@@ -5042,7 +4991,6 @@ theme.text;
 }
 
 
-
 chart.update();
 
 }
@@ -5052,19 +5000,18 @@ chart.update();
 }
 
 
-
-/* =========================================================
+/* =====================================================
 ANALYTICS
-========================================================= */
+===================================================== */
 
 function analyticsRows(
 data,
 keys,
 categoryKey
-) {
-
+){
 
 const value =
+
 valueFrom(
 data,
 keys
@@ -5074,7 +5021,6 @@ keys
 return normaliseCategories(
 
 value,
-
 categoryKey
 
 )
@@ -5082,6 +5028,7 @@ categoryKey
 .filter(
 
 row =>
+
 Number.isFinite(
 row.count
 )
@@ -5094,10 +5041,10 @@ row.count
 
 function renderAnalytics(
 raw
-) {
-
+){
 
 const data =
+
 unwrapObject(
 
 raw,
@@ -5110,7 +5057,8 @@ raw,
 
 
 
-const hazard =
+const hazards =
+
 analyticsRows(
 
 data,
@@ -5128,6 +5076,7 @@ data,
 
 
 const states =
+
 analyticsRows(
 
 data,
@@ -5144,6 +5093,7 @@ data,
 
 
 const areas =
+
 analyticsRows(
 
 data,
@@ -5160,6 +5110,7 @@ data,
 
 
 const gender =
+
 analyticsRows(
 
 data,
@@ -5177,6 +5128,7 @@ data,
 
 
 const education =
+
 analyticsRows(
 
 data,
@@ -5194,6 +5146,7 @@ data,
 
 
 const age =
+
 analyticsRows(
 
 data,
@@ -5226,7 +5179,8 @@ data,
 
 
 
-let timeline = [];
+let timeline =
+[];
 
 
 
@@ -5234,7 +5188,7 @@ if(
 Array.isArray(
 timelineValue
 )
-) {
+){
 
 timeline =
 
@@ -5262,6 +5216,7 @@ item.date
 
 "Unknown",
 
+
 count:
 
 Number(
@@ -5288,7 +5243,7 @@ item.total
 
 }
 
-else {
+else{
 
 timeline =
 
@@ -5304,7 +5259,7 @@ timelineValue,
 
 
 
-/* HAZARD */
+/* hazard chart */
 
 drawChart(
 
@@ -5312,20 +5267,16 @@ drawChart(
 
 "bar",
 
-hazard.map(
-
+hazards.map(
 item =>
 pretty(
 item.category
 )
-
 ),
 
-hazard.map(
-
+hazards.map(
 item =>
 item.count
-
 ),
 
 {
@@ -5334,13 +5285,11 @@ horizontal:true,
 
 colors:
 
-hazard.map(
-
+hazards.map(
 item =>
 hazardColor(
 item.category
 )
-
 )
 
 }
@@ -5349,7 +5298,7 @@ item.category
 
 
 
-/* TIME */
+/* timeline */
 
 drawChart(
 
@@ -5358,17 +5307,13 @@ drawChart(
 "line",
 
 timeline.map(
-
 item =>
 item.category
-
 ),
 
 timeline.map(
-
 item =>
 item.count
-
 ),
 
 {
@@ -5376,11 +5321,9 @@ item.count
 fill:true,
 
 colors:
-
 "rgba(161,13,13,.12)",
 
 border:
-
 "#A10D0D"
 
 }
@@ -5389,7 +5332,7 @@ border:
 
 
 
-/* STATES */
+/* state */
 
 drawChart(
 
@@ -5400,26 +5343,23 @@ drawChart(
 states
 .slice(0,15)
 .map(
-
 item =>
 item.category
-
 ),
 
 states
 .slice(0,15)
 .map(
-
 item =>
 item.count
-
 ),
 
 {
 
 horizontal:true,
 
-colors:"#3F83C8"
+colors:
+"#3F83C8"
 
 }
 
@@ -5427,7 +5367,7 @@ colors:"#3F83C8"
 
 
 
-/* AFFECTED AREA */
+/* affected area */
 
 drawChart(
 
@@ -5436,26 +5376,23 @@ drawChart(
 "bar",
 
 areas.map(
-
 item =>
 pretty(
 item.category
 )
-
 ),
 
 areas.map(
-
 item =>
 item.count
-
 ),
 
 {
 
 horizontal:true,
 
-colors:"#49B0A7"
+colors:
+"#49B0A7"
 
 }
 
@@ -5463,7 +5400,7 @@ colors:"#49B0A7"
 
 
 
-/* GENDER */
+/* gender */
 
 drawChart(
 
@@ -5472,19 +5409,15 @@ drawChart(
 "doughnut",
 
 gender.map(
-
 item =>
 pretty(
 item.category
 )
-
 ),
 
 gender.map(
-
 item =>
 item.count
-
 ),
 
 {
@@ -5511,7 +5444,7 @@ colors:[
 
 
 
-/* EDUCATION */
+/* education */
 
 drawChart(
 
@@ -5520,19 +5453,15 @@ drawChart(
 "doughnut",
 
 education.map(
-
 item =>
 pretty(
 item.category
 )
-
 ),
 
 education.map(
-
 item =>
 item.count
-
 ),
 
 {
@@ -5563,7 +5492,7 @@ colors:[
 
 
 
-/* AGE */
+/* age */
 
 drawChart(
 
@@ -5572,26 +5501,23 @@ drawChart(
 "bar",
 
 age.map(
-
 item =>
 pretty(
 item.category
 )
-
 ),
 
 age.map(
-
 item =>
 item.count
-
 ),
 
 {
 
 horizontal:true,
 
-colors:"#7650C4"
+colors:
+"#7650C4"
 
 }
 
@@ -5639,18 +5565,17 @@ data,
 }
 
 
-
-/* =========================================================
+/* =====================================================
 HEATMAP
-========================================================= */
+===================================================== */
 
 function renderHeatmap(
 targetId,
 matrix
-) {
-
+){
 
 const target =
+
 document.getElementById(
 targetId
 );
@@ -5660,9 +5585,9 @@ targetId
 if(
 !matrix
 ||
-typeof matrix
-!== "object"
-) {
+typeof matrix !==
+"object"
+){
 
 target.innerHTML =
 
@@ -5720,7 +5645,7 @@ if(
 !columns.length
 ||
 !rows.length
-) {
+){
 
 target.innerHTML =
 
@@ -5740,7 +5665,7 @@ return;
 
 
 
-const values =
+const allValues =
 
 rows.flatMap(
 
@@ -5752,8 +5677,9 @@ row.values
 
 ?
 
-row.values
-.map(Number)
+row.values.map(
+Number
+)
 
 :
 
@@ -5769,7 +5695,8 @@ Math.max(
 
 1,
 
-...values.filter(
+...allValues
+.filter(
 Number.isFinite
 )
 
@@ -5784,13 +5711,12 @@ document.createElement(
 );
 
 
-
 grid.className =
-"heat-grid";
+"heatGrid";
 
 
-
-grid.style.gridTemplateColumns =
+grid.style
+.gridTemplateColumns =
 
 `160px repeat(
 ${columns.length},
@@ -5805,15 +5731,14 @@ grid.innerHTML =
 
 +
 
-columns
-.map(
+columns.map(
 
 column =>
 
 `
 
 <div
-class="heat-label"
+class="heatLabel"
 style="
 justify-content:center;
 ">
@@ -5853,12 +5778,11 @@ row.category
 "Unknown";
 
 
-
 grid.innerHTML +=
 
 `
 
-<div class="heat-label">
+<div class="heatLabel">
 
 ${escapeHTML(
 pretty(
@@ -5869,7 +5793,6 @@ label
 </div>
 
 `;
-
 
 
 const rowValues =
@@ -5888,16 +5811,20 @@ row.values
 
 
 
-rowValues.forEach(
+rowValues
+.forEach(
 
 rawValue => {
 
 
 const value =
+
 Number(
 rawValue
 )
+
 ||
+
 0;
 
 
@@ -5913,9 +5840,7 @@ value
 .72
 *
 (
-value
-/
-maximum
+value / maximum
 )
 
 :
@@ -5945,10 +5870,7 @@ ${intensity}
 
 const foreground =
 
-value
-/
-maximum
->
+value / maximum >
 .58
 
 ?
@@ -5966,7 +5888,7 @@ grid.innerHTML +=
 `
 
 <div
-class="heat-cell"
+class="heatCell"
 
 style="
 background:
@@ -5995,7 +5917,6 @@ value
 `;
 
 
-
 }
 
 );
@@ -6019,17 +5940,16 @@ grid
 }
 
 
-
-/* =========================================================
+/* =====================================================
 OVERVIEW
-========================================================= */
+===================================================== */
 
 function renderOverview(
 raw
-) {
-
+){
 
 const data =
+
 unwrapObject(
 
 raw,
@@ -6070,7 +5990,11 @@ data.total_contributors
 
 ??
 
-data.contributors;
+data.contributors
+
+??
+
+data.total_users;
 
 
 
@@ -6093,6 +6017,7 @@ document.getElementById(
 ).textContent =
 
 reports
+
 ??
 
 "—";
@@ -6104,6 +6029,7 @@ document.getElementById(
 ).textContent =
 
 contributors
+
 ??
 
 "—";
@@ -6115,6 +6041,7 @@ document.getElementById(
 ).textContent =
 
 states
+
 ??
 
 "—";
@@ -6123,17 +6050,16 @@ states
 }
 
 
-
-/* =========================================================
+/* =====================================================
 LEADERBOARD
-========================================================= */
+===================================================== */
 
 function renderLeaderboard(
 raw
-) {
-
+){
 
 const rows =
+
 unwrapArray(
 
 raw,
@@ -6149,6 +6075,7 @@ raw,
 
 
 const box =
+
 document.getElementById(
 "leaderboard"
 );
@@ -6157,7 +6084,7 @@ document.getElementById(
 
 if(
 !rows.length
-) {
+){
 
 box.innerHTML =
 
@@ -6208,7 +6135,7 @@ index + 1
 
 <div>
 
-<div class="leader-name">
+<div class="leaderName">
 
 ${escapeHTML(
 
@@ -6228,15 +6155,13 @@ item.name
 
 
 <small>
-
 HazWatch contributor
-
 </small>
 
 </div>
 
 
-<div class="report-count">
+<div class="reportCount">
 
 ${escapeHTML(
 
@@ -6273,21 +6198,19 @@ reports
 }
 
 
-
-/* =========================================================
-LOAD LIVE HAZWATCH DATA
-========================================================= */
+/* =====================================================
+LOAD REAL HAZWATCH DATA
+===================================================== */
 
 let loadingHazWatch =
 false;
 
 
-async function loadHazWatchData() {
-
+async function loadHazWatchData(){
 
 if(
 loadingHazWatch
-) {
+){
 
 return;
 
@@ -6300,12 +6223,14 @@ true;
 
 
 const badge =
+
 document.getElementById(
 "apiBadge"
 );
 
 
 const status =
+
 document.getElementById(
 "apiStatus"
 );
@@ -6317,36 +6242,40 @@ badge.textContent =
 
 
 badge.classList
-.remove("error");
+.remove(
+"error"
+);
 
 
 
-try {
+try{
 
 
+/* 1. CONFIG */
 
-/* CONFIG */
+try{
 
-try {
+await loadConfig();
 
-await loadHazardConfig();
+configureMapillary();
 
 }
 
-catch(error) {
+catch(error){
 
 console.warn(
-"Config endpoint unavailable",
+"Config endpoint unavailable:",
 error
 );
 
-hazardColors = {};
+hazardColors =
+{};
 
 }
 
 
 
-/* FETCH ALL LIVE DATA */
+/* 2. ALL REAL ENDPOINTS */
 
 const results =
 
@@ -6396,9 +6325,9 @@ results[3];
 /* OVERVIEW */
 
 if(
-overviewResult.status
-=== "fulfilled"
-) {
+overviewResult.status ===
+"fulfilled"
+){
 
 renderOverview(
 overviewResult.value
@@ -6406,7 +6335,7 @@ overviewResult.value
 
 }
 
-else {
+else{
 
 document.getElementById(
 "kpiReports"
@@ -6432,9 +6361,9 @@ document.getElementById(
 /* ANALYTICS */
 
 if(
-analyticsResult.status
-=== "fulfilled"
-) {
+analyticsResult.status ===
+"fulfilled"
+){
 
 renderAnalytics(
 analyticsResult.value
@@ -6442,7 +6371,7 @@ analyticsResult.value
 
 }
 
-else {
+else{
 
 [
 
@@ -6464,17 +6393,17 @@ else {
 
 .forEach(
 
-id =>
+boxId =>
+
 showEmpty(
 
-id,
+boxId,
 
 "Live analytics temporarily unavailable."
 
 )
 
 );
-
 
 
 document.getElementById(
@@ -6490,7 +6419,6 @@ Live analytics temporarily unavailable.
 </div>
 
 `;
-
 
 
 document.getElementById(
@@ -6511,12 +6439,12 @@ Live analytics temporarily unavailable.
 
 
 
-/* REPORT MAP */
+/* REPORTS / MAP */
 
 if(
-reportsResult.status
-=== "fulfilled"
-) {
+reportsResult.status ===
+"fulfilled"
+){
 
 allReports =
 
@@ -6539,9 +6467,11 @@ renderMarkers();
 
 }
 
-else {
+else{
 
-allReports = [];
+allReports =
+[];
+
 
 renderHazardFilters();
 
@@ -6554,9 +6484,9 @@ renderMarkers();
 /* LEADERBOARD */
 
 if(
-leaderboardResult.status
-=== "fulfilled"
-) {
+leaderboardResult.status ===
+"fulfilled"
+){
 
 renderLeaderboard(
 leaderboardResult.value
@@ -6564,7 +6494,7 @@ leaderboardResult.value
 
 }
 
-else {
+else{
 
 document.getElementById(
 "leaderboard"
@@ -6584,27 +6514,26 @@ Live leaderboard temporarily unavailable.
 
 
 
-/* STATUS */
+/* API STATUS */
 
 const successful =
 
 results.filter(
 
-item =>
-item.status
-=== "fulfilled"
+result =>
+result.status ===
+"fulfilled"
 
 ).length;
 
 
 
 if(
-successful
-=== 0
-) {
+successful === 0
+){
 
 throw new Error(
-"HazWatch public API unavailable"
+"HazWatch API unavailable"
 );
 
 }
@@ -6638,7 +6567,7 @@ minute:"2-digit"
 
 }
 
-catch(error) {
+catch(error){
 
 
 console.error(
@@ -6651,7 +6580,9 @@ badge.textContent =
 
 
 badge.classList
-.add("error");
+.add(
+"error"
+);
 
 
 status.textContent =
@@ -6660,30 +6591,27 @@ status.textContent =
 
 }
 
-finally {
-
+finally{
 
 loadingHazWatch =
 false;
 
-
 }
 
 
 }
 
 
-
-/* =========================================================
-WEATHER AND AQI
-========================================================= */
+/* =====================================================
+WEATHER + AQI
+===================================================== */
 
 function AQILabel(
 value
-) {
+){
 
+const aqi =
 
-const AQI =
 Number(
 value
 );
@@ -6691,9 +6619,9 @@ value
 
 if(
 !Number.isFinite(
-AQI
+aqi
 )
-) {
+){
 
 return "Air quality";
 
@@ -6701,8 +6629,8 @@ return "Air quality";
 
 
 if(
-AQI <= 50
-) {
+aqi <= 50
+){
 
 return "Good";
 
@@ -6710,8 +6638,8 @@ return "Good";
 
 
 if(
-AQI <= 100
-) {
+aqi <= 100
+){
 
 return "Moderate";
 
@@ -6719,8 +6647,8 @@ return "Moderate";
 
 
 if(
-AQI <= 150
-) {
+aqi <= 150
+){
 
 return "Unhealthy for sensitive groups";
 
@@ -6728,8 +6656,8 @@ return "Unhealthy for sensitive groups";
 
 
 if(
-AQI <= 200
-) {
+aqi <= 200
+){
 
 return "Unhealthy";
 
@@ -6737,8 +6665,8 @@ return "Unhealthy";
 
 
 if(
-AQI <= 300
-) {
+aqi <= 300
+){
 
 return "Very unhealthy";
 
@@ -6755,8 +6683,7 @@ async function loadWeather(
 latitude,
 longitude,
 label
-) {
-
+){
 
 document.getElementById(
 "weatherLocation"
@@ -6766,13 +6693,11 @@ label
 
 ||
 
-`${latitude.toFixed(3)},
-${longitude.toFixed(3)}`;
+`${latitude.toFixed(3)}, ${longitude.toFixed(3)}`;
 
 
 
-try {
-
+try{
 
 
 const weatherURL =
@@ -6895,7 +6820,7 @@ if(
 !responses[0].ok
 ||
 !responses[1].ok
-) {
+){
 
 throw new Error(
 "Environmental API error"
@@ -7072,10 +6997,9 @@ currentAir.ozone
 "—";
 
 
-
 }
 
-catch(error) {
+catch(error){
 
 
 console.error(
@@ -7104,18 +7028,17 @@ label
 }
 
 
-
-/* CURRENT LOCATION */
+/* current location */
 
 document.getElementById(
 "locationButton"
 ).onclick =
-function() {
+function(){
 
 
 if(
 !navigator.geolocation
-) {
+){
 
 document.getElementById(
 "weatherLocation"
@@ -7155,6 +7078,7 @@ position.coords.longitude,
 
 );
 
+
 },
 
 
@@ -7166,6 +7090,7 @@ document.getElementById(
 ).textContent =
 
 "Location permission was not available.";
+
 
 },
 
@@ -7187,11 +7112,9 @@ maximumAge:300000
 };
 
 
+/* city search */
 
-/* CITY SEARCH */
-
-async function searchCity() {
-
+async function searchCity(){
 
 const city =
 
@@ -7205,8 +7128,10 @@ document.getElementById(
 
 
 
-if(!city) {
+if(!city){
+
 return;
+
 }
 
 
@@ -7219,7 +7144,7 @@ document.getElementById(
 
 
 
-try {
+try{
 
 
 const response =
@@ -7254,7 +7179,7 @@ city
 
 
 
-if(!response.ok) {
+if(!response.ok){
 
 throw new Error(
 "Geocoding error"
@@ -7276,7 +7201,7 @@ data.results?.[0];
 
 
 
-if(!result) {
+if(!result){
 
 throw new Error(
 "City not found"
@@ -7315,10 +7240,9 @@ place
 );
 
 
-
 }
 
-catch(error) {
+catch(error){
 
 
 document.getElementById(
@@ -7352,9 +7276,9 @@ document.getElementById(
 event => {
 
 if(
-event.key
-=== "Enter"
-) {
+event.key ===
+"Enter"
+){
 
 searchCity();
 
@@ -7365,10 +7289,9 @@ searchCity();
 );
 
 
-
-/* =========================================================
+/* =====================================================
 START
-========================================================= */
+===================================================== */
 
 initialiseMap();
 
@@ -7384,10 +7307,7 @@ REFRESH_INTERVAL
 
 );
 
-
 </script>
 
-
 </body>
-
 </html>

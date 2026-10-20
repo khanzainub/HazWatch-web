@@ -4162,14 +4162,24 @@ function deriveHazardReportCounts(analyticsRaw, reportsRaw){
 /* Explicit home view: full requested India geographic extent, fitted to any map size. */
 function fitIndiaHomeView(){
   if(!map) return;
-  /* Cancel an unfinished hazard flyTo/fitBounds before resetting Home. */
+  /* Cancel any unfinished hazard movement before returning to India. */
   map.stop();
   const indiaBounds = L.latLngBounds([8,68],[38,98]);
-  map.fitBounds(indiaBounds,{
-    padding:[20,20],
-    animate:true,
-    duration:0.65
-  });
+
+  /* Leaflet's default whole-number zoom can show far beyond the requested
+     bounds. Use precise zoom for this Home reset only; retain normal zoom
+     behavior everywhere else in the map. */
+  const previousZoomSnap = map.options.zoomSnap;
+  try{
+    map.options.zoomSnap = 0.05;
+    map.fitBounds(indiaBounds,{
+      padding:[6,6],
+      animate:true,
+      duration:0.65
+    });
+  }finally{
+    map.options.zoomSnap = previousZoomSnap;
+  }
 }
 
 /* Focus only the currently plotted hazard markers; never recenter on data refresh. */

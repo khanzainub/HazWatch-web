@@ -2988,7 +2988,7 @@ html[data-theme="dark"] .navInner > .infoMenu > .infoMenuItem > .infoMenuButton 
     border-radius:14px;
   }
   .mapSection #map{
-    height:450px; /* 50px less than the existing 500px mobile height */
+    height:410px; /* 90px below the original 500px mobile height */
     touch-action:pan-y;
     -webkit-user-select:none;
     user-select:none;
@@ -3035,9 +3035,9 @@ html[data-theme="dark"] .navInner > .infoMenu > .infoMenuItem > .infoMenuButton 
   }
 }
 
-/* Small phones previously used 455px; retain their 50px reduction. */
+/* Small phones: 455px original height reduced by 90px in total. */
 @media(max-width:430px){
-  .mapSection #map{height:405px}
+  .mapSection #map{height:365px}
 }
 
 /* Mobile hamburger navigation. Hidden entirely on desktop. */

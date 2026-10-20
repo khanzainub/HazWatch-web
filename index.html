@@ -2953,6 +2953,14 @@ html[data-theme="dark"] .navInner > .infoMenu > .infoMenuItem > .infoMenuButton 
   }
 }
 
+/* Match Live Impact numbers to their heading in desktop-style layouts.
+   Phone typography already uses the same 1.125rem size for both. */
+@media (min-width:621px){
+  #intelligence .liveImpactGrid .kpi strong{
+    font-size:var(--type-section);
+  }
+}
+
 /* Desktop only: prominent HazWatch-red Weather toggle with white arrow. */
 @media (min-width: 621px){
   #weatherToggle{

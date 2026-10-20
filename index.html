@@ -2881,6 +2881,38 @@ html[data-theme="dark"] .navInner .infoMenuButton .material-symbols-rounded{colo
   }
 }
 
+/* Mobile typography and single-line slogan: desktop styles are untouched. */
+@media(max-width:620px){
+  :root{--type-section:1.25rem}
+  .navInner{
+    grid-template-columns:max-content minmax(0,1fr) max-content;
+    column-gap:4px;
+  }
+  .navInner > .brand{
+    gap:4px;
+    font-size:.875rem;
+    white-space:nowrap;
+  }
+  .navInner .logoWrap{
+    width:33px;
+    height:31px;
+    flex:none;
+  }
+  .navInner > .navTagline{
+    min-width:0;
+    font-size:clamp(8.5px,2.5vw,13px);
+    font-weight:900;
+    line-height:1.2;
+    letter-spacing:-.045em;
+    white-space:nowrap;
+    text-wrap:nowrap;
+  }
+  .navInner > .themeButton{
+    width:34px;
+    height:34px;
+  }
+}
+
 </style>
 
 </head>

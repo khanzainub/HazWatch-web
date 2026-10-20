@@ -21,8 +21,6 @@
   href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 />
 
-<link rel="stylesheet" href="https://unpkg.com/mapillary-js@4.1.2/dist/mapillary.css">
-
 <style>
 
 :root{
@@ -1769,10 +1767,6 @@ body{
 .layerSwitch button .material-symbols-rounded{font-size:18px}
 .mapStage{position:relative;border-radius:19px;overflow:hidden;background:#DCE3E5}
 .mapStage #map{border-radius:0}
-#mapillaryViewer{position:absolute;inset:0;z-index:8;display:none;background:#111}
-#mapillaryMessage{position:absolute;inset:0;z-index:9;display:none;place-items:center;text-align:center;padding:24px;background:rgba(15,20,23,.90);color:#fff}
-#mapillaryMessage .material-symbols-rounded{display:block;font-size:38px;margin:0 auto 10px;color:#fff}
-#mapillaryMessage strong{display:block;margin-bottom:6px}
 .hazardFilters::-webkit-scrollbar{display:none}
 .hazardChip{display:inline-flex;align-items:center;gap:7px;background:var(--surface)}
 .hazardChip .material-symbols-rounded{font-size:18px;color:var(--hazard-color,var(--red));font-variation-settings:'FILL' 0,'wght' 600,'GRAD' 0,'opsz' 24}
@@ -2694,20 +2688,11 @@ html[data-theme="dark"] .analyticsSection{
           <div class="layerSwitch">
             <button data-layer="standard" class="active"><span class="material-symbols-rounded">map</span>Standard</button>
             <button data-layer="satellite"><span class="material-symbols-rounded">satellite_alt</span>Satellite</button>
-            <button id="mapillaryButton" data-layer="mapillary"><span class="material-symbols-rounded">streetview</span>Mapillary</button>
           </div>
         </div>
 
         <div class="mapStage">
           <div id="map"></div>
-          <div id="mapillaryViewer"></div>
-          <div id="mapillaryMessage">
-            <div>
-              <span class="material-symbols-rounded">streetview</span>
-              <strong>Mapillary street-level imagery</strong>
-              <span id="mapillaryMessageText">Finding nearby imagery…</span>
-            </div>
-          </div>
         </div>
 
         <div id="hazardFilters" class="hazardFilters"></div>
@@ -2870,8 +2855,6 @@ html[data-theme="dark"] .analyticsSection{
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<script src="https://unpkg.com/mapillary-js@4.1.2/dist/mapillary.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 
 
@@ -2887,9 +2870,6 @@ const API_BASE =
 
 const REFRESH_INTERVAL =
 45000;
-
-const MAPILLARY_ACCESS_TOKEN =
-"MLY|26460833783581937|48136f3adecdb07c6eaa2136a7512dbb";
 
 const HAZWATCH_HAZARDS = [
   "landslide",
@@ -3567,108 +3547,13 @@ let map;
 let markerLayer;
 let standardLayer;
 let satelliteLayer;
-let mapillaryViewer = null;
 let allReports = [];
 let selectedHazard = "all";
-
-function showMapillaryMessage(message){
-  const box = document.getElementById("mapillaryMessage");
-  const text = document.getElementById("mapillaryMessageText");
-  if(text) text.textContent = message;
-  if(box) box.style.display = "grid";
-}
-
-function hideMapillaryMessage(){
-  const box = document.getElementById("mapillaryMessage");
-  if(box) box.style.display = "none";
-}
-
-async function nearestMapillaryImage(latitude, longitude){
-  for(const span of [0.03, 0.12, 0.5]){
-    const bbox = [
-      longitude - span,
-      latitude - span,
-      longitude + span,
-      latitude + span
-    ].join(",");
-
-    const url =
-      "https://graph.mapillary.com/images" +
-      "?access_token=" + encodeURIComponent(MAPILLARY_ACCESS_TOKEN) +
-      "&fields=id" +
-      "&bbox=" + encodeURIComponent(bbox) +
-      "&limit=1";
-
-    try{
-      const response = await fetch(url, {cache:"no-store"});
-      if(!response.ok) continue;
-      const json = await response.json();
-      if(json?.data?.[0]?.id) return json.data[0].id;
-    }catch(error){
-      console.warn("Mapillary lookup failed:", error);
-    }
-  }
-  return null;
-}
-
-async function activateMapillary(){
-  const viewerBox = document.getElementById("mapillaryViewer");
-  const mapBox = document.getElementById("map");
-
-  if(!viewerBox || !mapBox || typeof mapillary === "undefined"){
-    showMapillaryMessage("Mapillary viewer could not be loaded.");
-    return;
-  }
-
-  mapBox.style.visibility = "hidden";
-  viewerBox.style.display = "block";
-  showMapillaryMessage("Finding street-level imagery near the current map view…");
-
-  const center = map.getCenter();
-  const imageId = await nearestMapillaryImage(center.lat, center.lng);
-
-  if(!imageId){
-    showMapillaryMessage("No Mapillary imagery was found near this map view.");
-    return;
-  }
-
-  try{
-    if(!mapillaryViewer){
-      mapillaryViewer = new mapillary.Viewer({
-        accessToken: MAPILLARY_ACCESS_TOKEN,
-        container: "mapillaryViewer",
-        imageId: imageId
-      });
-    }else{
-      await mapillaryViewer.moveTo(imageId);
-    }
-    hideMapillaryMessage();
-  }catch(error){
-    console.error("Mapillary viewer error:", error);
-    showMapillaryMessage("Mapillary imagery is temporarily unavailable.");
-  }
-}
-
-function deactivateMapillary(){
-  const viewerBox = document.getElementById("mapillaryViewer");
-  const mapBox = document.getElementById("map");
-  hideMapillaryMessage();
-  if(viewerBox) viewerBox.style.display = "none";
-  if(mapBox) mapBox.style.visibility = "visible";
-  setTimeout(() => map?.invalidateSize(), 0);
-}
 
 function setMapLayer(layerName){
   document.querySelectorAll("[data-layer]").forEach(button => {
     button.classList.toggle("active", button.dataset.layer === layerName);
   });
-
-  if(layerName === "mapillary"){
-    activateMapillary();
-    return;
-  }
-
-  deactivateMapillary();
 
   if(map.hasLayer(standardLayer)) map.removeLayer(standardLayer);
   if(map.hasLayer(satelliteLayer)) map.removeLayer(satelliteLayer);
@@ -3741,14 +3626,6 @@ function initialiseMap(){
     button.onclick = () => setMapLayer(button.dataset.layer);
   });
 }
-
-function configureMapillary(){
-  const button = document.getElementById("mapillaryButton");
-  if(button){
-    button.disabled = !(MAPILLARY_ACCESS_TOKEN && typeof mapillary !== "undefined");
-  }
-}
-
 
 /* =====================================================
 REPORT MAP
@@ -5944,8 +5821,6 @@ try{
 try{
 
 await loadConfig();
-
-configureMapillary();
 
 }
 

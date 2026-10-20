@@ -4162,21 +4162,29 @@ function deriveHazardReportCounts(analyticsRaw, reportsRaw){
 /* Explicit home view: full requested India geographic extent, fitted to any map size. */
 function fitIndiaHomeView(){
   if(!map) return;
-  /* Cancel any unfinished hazard movement before returning to India. */
+  /* Cancel unfinished hazard movement before resetting the Home viewport. */
   map.stop();
-  const indiaBounds = L.latLngBounds([8,68],[38,98]);
 
-  /* Leaflet's default whole-number zoom can show far beyond the requested
-     bounds. Use precise zoom for this Home reset only; retain normal zoom
-     behavior everywhere else in the map. */
+  /* Prioritise the requested 8–38 N extent. Fitting 68–98 E as well on a
+     narrow screen otherwise forces Leaflet to zoom far out (Aral Sea/Java).
+     Keep India's central longitude and fit the visible map HEIGHT instead. */
+  const north = map.project([38,83],0);
+  const south = map.project([8,83],0);
+  const size = map.getSize();
+  if(size.y <= 0) return;
+
+  const extentHeight = Math.abs(south.y - north.y);
+  const usableHeight = Math.max(1,size.y - 16);
+  const preciseZoom = Math.log2(usableHeight / extentHeight);
+  const center = map.unproject(
+    L.point((north.x + south.x) / 2,(north.y + south.y) / 2),0
+  );
+
+  /* Do not change the default zoom behaviour of any other map interaction. */
   const previousZoomSnap = map.options.zoomSnap;
   try{
-    map.options.zoomSnap = 0.05;
-    map.fitBounds(indiaBounds,{
-      padding:[6,6],
-      animate:true,
-      duration:0.65
-    });
+    map.options.zoomSnap = 0.01;
+    map.setView(center,preciseZoom,{animate:true,duration:0.65});
   }finally{
     map.options.zoomSnap = previousZoomSnap;
   }

@@ -2981,6 +2981,18 @@ html[data-theme="dark"] .navInner > .infoMenu > .infoMenuItem > .infoMenuButton 
   }
   .mapSection #map{
     touch-action:pan-y;
+    -webkit-user-select:none;
+    user-select:none;
+    -webkit-touch-callout:none;
+  }
+  /* OSM/Esri raster tiles are images. Their native image long-press
+     should never steal touch input from the Leaflet map surface. */
+  .mapSection #map .leaflet-tile{
+    pointer-events:none;
+    -webkit-user-drag:none;
+    -webkit-user-select:none;
+    user-select:none;
+    -webkit-touch-callout:none;
   }
   .mapSection #map.mapPanActive{
     touch-action:none;
@@ -4235,7 +4247,7 @@ function initialiseMap(){
      hold activates manual one-finger panning. Leaflet handles pinch zoom. */
   const mobileMapQuery = window.matchMedia("(max-width: 620px)");
   const mapElement = map.getContainer();
-  let holdTimer = null, panActive = false;
+  let holdTimer = null, panActive = false, touchHeld = false;
   let startX = 0, startY = 0, previousX = 0, previousY = 0;
 
   const cancelHold = () => {
@@ -4247,6 +4259,7 @@ function initialiseMap(){
   const stopMobilePan = () => {
     cancelHold();
     panActive = false;
+    touchHeld = false;
     mapElement.classList.remove("mapPanActive");
   };
   const syncMobileMapGestures = () => {
@@ -4278,17 +4291,22 @@ function initialiseMap(){
     }
     stopMobilePan();
     const finger = event.touches[0];
+    const bounds = mapElement.getBoundingClientRect();
+    /* Never arm long-press interaction from outside the visible map. */
+    if(finger.clientX < bounds.left || finger.clientX > bounds.right ||
+       finger.clientY < bounds.top || finger.clientY > bounds.bottom) return;
+    touchHeld = true;
     startX = previousX = finger.clientX;
     startY = previousY = finger.clientY;
     holdTimer = setTimeout(() => {
       holdTimer = null;
-      if(!mobileMapQuery.matches) return;
+      if(!mobileMapQuery.matches || !touchHeld) return;
       panActive = true;
       map.stop();
       mapElement.classList.add("mapPanActive");
       if(navigator.vibrate) navigator.vibrate(16);
     },450);
-  },{passive:true});
+  },{capture:true,passive:true});
 
   mapElement.addEventListener("touchmove",event => {
     if(!mobileMapQuery.matches) return;
@@ -4309,12 +4327,19 @@ function initialiseMap(){
     if(dx || dy) map.panBy([-dx,-dy],{animate:false,noMoveStart:true});
     previousX = x;
     previousY = y;
-  },{passive:false});
-  mapElement.addEventListener("touchend",stopMobilePan,{passive:true});
-  mapElement.addEventListener("touchcancel",stopMobilePan,{passive:true});
+  },{capture:true,passive:false});
+  mapElement.addEventListener("touchend",stopMobilePan,{capture:true,passive:true});
+  mapElement.addEventListener("touchcancel",stopMobilePan,{capture:true,passive:true});
   mapElement.addEventListener("contextmenu",event => {
     if(mobileMapQuery.matches) event.preventDefault();
-  });
+  },true);
+  mapElement.addEventListener("dragstart",event => {
+    if(mobileMapQuery.matches) event.preventDefault();
+  },true);
+  mapElement.addEventListener("selectstart",event => {
+    if(mobileMapQuery.matches) event.preventDefault();
+  },true);
+  window.addEventListener("blur",stopMobilePan);
 
   /* One integrated Leaflet navigation control: Zoom In, Zoom Out and India Home. */
   const MapNavigationControl = L.Control.extend({

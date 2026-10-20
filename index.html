@@ -3902,6 +3902,14 @@ function neutralChartPalette(){
     : ["#A10D0D","#363636","#646464","#939393","#BDBDBD","#D9D9D9","#7A7A7A"];
 }
 
+/* Shades for bar charts only; leaves doughnuts, lines, heatmaps and map untouched. */
+function grayBarPalette(count){
+  const shades = root.dataset.theme === "dark"
+    ? ["#D6D6D6","#C2C2C2","#AEAEAE","#9A9A9A","#868686","#727272","#5E5E5E"]
+    : ["#3A3A3A","#525252","#6A6A6A","#828282","#9A9A9A","#B2B2B2","#CACACA"];
+  return Array.from({length:count},(_,i)=>shades[i % shades.length]);
+}
+
 function chartTheme(){
 
 const styles =
@@ -4615,9 +4623,7 @@ horizontal:true,
 
 colors:
 
-hazards.map(
-() => "#A10D0D"
-)
+grayBarPalette(hazards.length)
 
 }
 
@@ -4686,7 +4692,7 @@ item.count
 horizontal:true,
 
 colors:
-"#444444"
+grayBarPalette(states.slice(0,15).length)
 
 }
 
@@ -4719,7 +4725,7 @@ item.count
 horizontal:true,
 
 colors:
-"#A10D0D"
+grayBarPalette(areas.length)
 
 }
 
@@ -4815,7 +4821,7 @@ item.count
 
 horizontal:true,
 
-colors:root.dataset.theme === "dark" ? "#D6D6D6" : "#444444"
+colors:grayBarPalette(age.length)
 
 }
 

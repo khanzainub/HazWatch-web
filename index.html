@@ -2317,6 +2317,45 @@ html[data-theme="dark"] .analyticsSection{
   color:var(--red);
 }
 
+
+/* === Get the App: final top-navigation link === */
+.infoMenu .navAppCta{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  flex:0 0 auto;
+  margin-left:5px;
+  padding:9px 12px;
+  border-radius:10px;
+  background:var(--red);
+  color:#FFFFFF;
+  font-size:var(--type-control,.875rem);
+  font-weight:800;
+  line-height:1.35;
+  white-space:nowrap;
+  box-shadow:0 3px 12px rgba(161,13,13,.16);
+}
+.infoMenu .navAppCta .material-symbols-rounded{
+  font-size:17px;
+  color:#FFFFFF;
+}
+.infoMenu .navAppCta:hover,
+.infoMenu .navAppCta:focus-visible{
+  background:#850909;
+  color:#FFFFFF;
+}
+.infoMenu .navAppCta:focus-visible{
+  outline:2px solid var(--text);
+  outline-offset:2px;
+}
+@media(max-width:760px){
+  .infoMenu .navAppCta{
+    padding:8px 10px;
+    font-size:var(--type-control,.8125rem);
+  }
+}
+
 </style>
 
 </head>
@@ -2402,6 +2441,7 @@ html[data-theme="dark"] .analyticsSection{
           </div>
         </div>
       </div>
+      <a class="navAppCta" href="https://play.google.com/store/apps/details?id=in.hazwatch.myapp" target="_blank" rel="noopener noreferrer" aria-label="Get HazWatch on Google Play"><span class="material-symbols-rounded">smartphone</span>Get the App</a>
     </div>
 
     <button id="themeButton" class="themeButton" aria-label="Toggle theme">
@@ -2420,7 +2460,6 @@ html[data-theme="dark"] .analyticsSection{
       </p>
       <div class="heroButtons">
         <a href="#intelligence" class="btn btnRed"><span class="material-symbols-rounded">map</span>Explore live data</a>
-        <a href="#getapp" class="btn btnLight"><span class="material-symbols-rounded">smartphone</span>Get the app</a>
       </div>
       <div class="safety"><strong>Your safety comes first.</strong> Never enter a dangerous place to report a hazard.</div>
     </div>

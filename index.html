@@ -2684,86 +2684,171 @@ html[data-theme="dark"] .analyticsSection{
 }
 
 
-/* Four clear navigation cards in one row on phones and tablets. */
+/* Balanced header: slogan between logo and theme; four equal-width navigation cards. */
 .navFlyout .missionVisionSubhead{margin-top:16px}
+.navInner{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,2fr) minmax(0,1fr);
+  grid-template-rows:auto auto;
+  align-items:center;
+  column-gap:12px;
+  row-gap:8px;
+  height:auto;
+  min-height:0;
+  padding:10px 0;
+}
+.navInner > .brand{
+  order:0;
+  grid-column:1;
+  grid-row:1;
+  justify-self:start;
+  min-width:0;
+}
+.navInner > .navTagline{
+  grid-column:2;
+  grid-row:1;
+  justify-self:center;
+  max-width:100%;
+  text-align:center;
+  color:var(--red);
+  font-size:clamp(.76rem,1.15vw,1rem);
+  font-weight:800;
+  line-height:1.35;
+  letter-spacing:-.01em;
+}
+html[data-theme="dark"] .navTagline{color:#E58B8B}
+.navInner > .themeButton{
+  order:0;
+  grid-column:3;
+  grid-row:1;
+  justify-self:end;
+  margin:0;
+}
+.navInner > .infoMenu{
+  order:0;
+  grid-column:1/-1;
+  grid-row:2;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+  flex:none;
+  width:100%;
+  min-width:0;
+  padding:0;
+  overflow:visible;
+  align-items:stretch;
+}
+.navInner > .infoMenu > .infoMenuItem{
+  display:flex;
+  flex:none;
+  min-width:0;
+}
+.navInner > .infoMenu > .infoMenuItem > .infoMenuButton{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  width:100%;
+  min-width:0;
+  min-height:46px;
+  padding:9px 8px;
+  white-space:normal;
+  text-align:center;
+  background:var(--surface2);
+  color:var(--text);
+  border:1px solid var(--line);
+  border-radius:11px;
+  box-shadow:0 2px 7px rgba(35,42,48,.045);
+  font-size:.85rem;
+  font-weight:800;
+  line-height:1.2;
+}
+.navInner > .infoMenu > .infoMenuItem > .infoMenuButton:hover,
+.navInner > .infoMenu > .infoMenuItem.open > .infoMenuButton{
+  color:var(--red);
+  background:var(--redSoft);
+  border-color:rgba(161,13,13,.38);
+}
+html[data-theme="dark"] .navInner .infoMenuButton .material-symbols-rounded{color:#E58B8B}
+.navInner > .infoMenu > .navAppCta{
+  display:flex;
+  flex:none;
+  flex-direction:row;
+  align-items:center;
+  justify-content:center;
+  align-self:stretch;
+  gap:7px;
+  width:100%;
+  min-width:0;
+  min-height:46px;
+  margin:0;
+  padding:9px 8px;
+  border-radius:11px;
+  background:var(--red);
+  color:#FFFFFF;
+  font-size:.85rem;
+  font-weight:800;
+  white-space:nowrap;
+}
 @media(max-width:1040px){
+  .navInner{
+    grid-template-columns:minmax(0,1fr) minmax(0,1.35fr) minmax(0,1fr);
+    row-gap:6px;
+    padding:7px 0;
+  }
   .navInner > .infoMenu{
     display:grid;
-    grid-template-columns:minmax(0,1.35fr) minmax(0,.80fr) minmax(0,.97fr) minmax(0,1.30fr);
-    gap:clamp(4px,.7vw,9px);
-    align-items:stretch;
-    padding:3px 0 5px;
-  }
-  .navInner > .infoMenu > .infoMenuItem{
-    min-width:0;
-    display:flex;
-  }
-  .navInner > .infoMenu > .infoMenuItem > .infoMenuButton{
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    gap:3px;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:6px;
     width:100%;
-    min-width:0;
-    min-height:53px;
-    padding:7px 3px;
-    background:var(--surface2);
-    color:var(--text);
-    border:1px solid var(--line);
-    border-radius:11px;
-    box-shadow:0 2px 7px rgba(35,42,48,.045);
-    white-space:normal;
-    text-align:center;
-    font-size:clamp(.68rem,1.25vw,.82rem);
-    line-height:1.13;
+    flex:none;
+    overflow:visible;
+    padding:0;
   }
-  .navInner > .infoMenu > .infoMenuItem > .infoMenuButton:hover,
-  .navInner > .infoMenu > .infoMenuItem.open > .infoMenuButton{
-    color:var(--red);
-    background:var(--redSoft);
-    border-color:rgba(161,13,13,.38);
-  }
+  .navInner > .infoMenu > .infoMenuItem > .infoMenuButton,
   .navInner > .infoMenu > .navAppCta{
     width:100%;
+    min-height:49px;
     min-width:0;
-    min-height:53px;
     margin:0;
-    padding:7px 5px;
-    justify-content:center;
-    align-self:stretch;
-    flex-direction:row;
-    border-radius:11px;
-    white-space:nowrap;
   }
-  .navInner .navFlyout{
-    top:126px;
-  }
+  .navInner .navFlyout{top:121px}
 }
 @media(max-width:620px){
+  .navInner{
+    grid-template-columns:minmax(0,1fr) minmax(0,1.02fr) auto;
+    column-gap:5px;
+    row-gap:5px;
+  }
+  .navInner > .brand{gap:5px;font-size:1.05rem}
+  .navInner > .navTagline{
+    font-size:clamp(.59rem,2.45vw,.8rem);
+    line-height:1.27;
+    font-weight:800;
+  }
+  .navInner > .themeButton{
+    width:38px;
+    height:38px;
+  }
   .navInner > .infoMenu{
     display:grid;
-    grid-template-columns:minmax(0,1.38fr) minmax(0,.75fr) minmax(0,.95fr) minmax(0,1.32fr);
+    grid-template-columns:repeat(4,minmax(0,1fr));
     gap:4px;
   }
-  .navInner > .infoMenu > .infoMenuItem > .infoMenuButton{
-    min-height:52px;
-    padding:6px 2px;
-    font-size:clamp(.61rem,2.55vw,.78rem);
-    gap:3px;
-  }
-  .navInner > .infoMenu > .infoMenuItem > .infoMenuButton .material-symbols-rounded{
-    font-size:17px;
-  }
+  .navInner > .infoMenu > .infoMenuItem > .infoMenuButton,
   .navInner > .infoMenu > .navAppCta{
-    width:100%;
-    min-height:52px;
-    padding:6px 3px;
+    flex-direction:column;
+    min-height:56px;
+    padding:6px 2px;
     gap:3px;
-    font-size:clamp(.61rem,2.55vw,.78rem);
+    font-size:clamp(.55rem,2.3vw,.76rem);
+    line-height:1.16;
+    border-radius:10px;
   }
-  .navInner > .infoMenu > .navAppCta .material-symbols-rounded{font-size:16px}
-  .navInner .navFlyout{top:123px}
+  .navInner > .infoMenu > .infoMenuItem > .infoMenuButton .material-symbols-rounded,
+  .navInner > .infoMenu > .navAppCta .material-symbols-rounded{font-size:17px}
+  .navInner .navFlyout{top:122px}
 }
 
 </style>
@@ -2782,6 +2867,7 @@ html[data-theme="dark"] .analyticsSection{
       </div>
       <div><span class="brandRed">Haz</span>Watch</div>
     </a>
+    <div class="navTagline">Help us make India a Safer Place.</div>
 
     <div class="infoMenu" id="infoMenu" aria-label="HazWatch information">
       <div class="infoMenuItem">
@@ -2842,7 +2928,7 @@ html[data-theme="dark"] .analyticsSection{
 <header id="top" class="hero">
   <div class="wrap heroGrid">
     <div>
-      <h1><span class="heroRed">Mapping Hazards. Building Resilience.</span></h1>
+      <h1><span class="heroRed">Citizen-Powered Hazard Mapping</span></h1>
       <p class="heroDescription">
         HazWatch is a citizen science-based geospatial mobile application for multi-hazard incident reporting in India.
         It connects citizen observations with mapped hazard evidence, public analytics, and research-oriented data access.
@@ -2862,7 +2948,6 @@ html[data-theme="dark"] .analyticsSection{
         <div class="kicker">Live Impact</div>
         <h2>Citizen Reporting at a Glance</h2>
       </div>
-      <p class="sectionSubtitle">Live public-safe figures from the HazWatch production API.</p>
     </div>
 
     <div class="liveImpactGrid">

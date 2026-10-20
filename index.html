@@ -2350,6 +2350,42 @@ body{background:var(--bg);color:var(--text)}
 html[data-theme="dark"] .liveImpactGrid .kpiIcon,
 html[data-theme="dark"] .weatherExtraIcon{background:var(--redSoft)}
 
+
+/* === Restrained HazWatch three-colour website palette === */
+:root{
+  --red:#A10D0D;--red2:#A10D0D;
+  --redSoft:#F8EEEE;
+  --bg:#F3F5F7;--surface:#FFFFFF;--surface2:#F8F9FA;
+  --text:#242424;--muted:#555555;--line:#DDE1E4;
+  --blue:#A10D0D;--green:#A10D0D;
+  --nav:rgba(255,255,255,.97);
+}
+html[data-theme="dark"]{
+  --red:#A10D0D;--red2:#A10D0D;--redSoft:#2C191B;
+  --bg:#141414;--surface:#202020;--surface2:#292929;
+  --text:#FFFFFF;--muted:#D0D0D0;--line:#414141;
+  --blue:#D65A5A;--green:#D65A5A;--nav:rgba(25,25,25,.97);
+}
+.hero{background:transparent}
+.card,.mapCard,.weatherExtraCard{background:var(--surface)}
+.kpiIcon,.liveImpactGrid .kpiIcon,.weatherExtraIcon,.aboutIcon{
+  background:var(--redSoft);color:var(--red);
+}
+.apiBadge,.apiBadge::before{color:var(--red)}
+.chartTitle,.teamRole,.weatherCard small,.kpi span,.liveImpactGrid .kpi span{
+  color:var(--muted);
+}
+.chartCard,.heatCard,.leaderboardCard{
+  background:var(--surface);
+}
+.chartCard::before,.heatCard::before,.leaderboardCard::before{
+  background:var(--red);
+}
+.apiCard{background:var(--surface)}
+.btnRed,.layerSwitch button.active,.guideNumber,.leader:first-child .rank{
+  background:var(--red);
+}
+
 </style>
 
 </head>

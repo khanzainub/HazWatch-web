@@ -2982,6 +2982,28 @@ html[data-theme="dark"] .navInner > .infoMenu > .infoMenuItem > .infoMenuButton 
   .mapSection #map{
     touch-action:pan-y;
   }
+  .mapSection #map.mapPanActive{
+    touch-action:none;
+    cursor:grabbing;
+    box-shadow:inset 0 0 0 3px rgba(161,13,13,.48);
+  }
+  .mapSection #map.mapPanActive::after{
+    content:"Pan active";
+    position:absolute;
+    top:10px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:1000;
+    pointer-events:none;
+    padding:5px 11px;
+    border-radius:999px;
+    background:rgba(161,13,13,.92);
+    color:#FFFFFF;
+    font-size:.72rem;
+    font-weight:800;
+    line-height:1.25;
+    white-space:nowrap;
+  }
   .mapTouchHint{
     display:block;
     margin:7px 4px 0;
@@ -3337,7 +3359,7 @@ html[data-theme="dark"] .navInner > .infoMenu > .infoMenuItem > .infoMenuButton 
         <div class="mapStage">
           <div id="map"></div>
         </div>
-        <p class="mapTouchHint">Use two fingers to pan or zoom the map.</p>
+        <p class="mapTouchHint">Long press to pan · Pinch to zoom · Swipe to scroll page</p>
 
         <div id="hazardFilters" class="hazardFilters"></div>
       </div>
@@ -4209,10 +4231,26 @@ function setMapLayer(layerName){
 function initialiseMap(){
   map = L.map("map", {zoomControl:false}).setView([22.8,79.5],5);
 
-  /* Mobile: one finger scrolls the page; Leaflet's native two-finger
-     touchZoom handles both two-finger panning and pinch zoom. */
+  /* Mobile only: one-finger swipes scroll the page. A stationary 450ms
+     hold activates manual one-finger panning. Leaflet handles pinch zoom. */
   const mobileMapQuery = window.matchMedia("(max-width: 620px)");
+  const mapElement = map.getContainer();
+  let holdTimer = null, panActive = false;
+  let startX = 0, startY = 0, previousX = 0, previousY = 0;
+
+  const cancelHold = () => {
+    if(holdTimer !== null){
+      clearTimeout(holdTimer);
+      holdTimer = null;
+    }
+  };
+  const stopMobilePan = () => {
+    cancelHold();
+    panActive = false;
+    mapElement.classList.remove("mapPanActive");
+  };
   const syncMobileMapGestures = () => {
+    stopMobilePan();
     if(mobileMapQuery.matches){
       map.dragging.disable();
       if(map.touchZoom) map.touchZoom.enable();
@@ -4226,11 +4264,57 @@ function initialiseMap(){
   }else{
     mobileMapQuery.addListener(syncMobileMapGestures);
   }
-  map.getContainer().addEventListener("touchmove",event => {
-    if(mobileMapQuery.matches && event.touches.length >= 2 && event.cancelable){
-      event.preventDefault();
+
+  mapElement.addEventListener("touchstart",event => {
+    if(!mobileMapQuery.matches) return;
+    if(event.touches.length !== 1){
+      stopMobilePan();
+      return;
     }
+    /* Tapping markers, popups and controls must keep their existing actions. */
+    if(event.target.closest(".leaflet-control, .leaflet-marker-icon, .leaflet-popup, button, a")){
+      stopMobilePan();
+      return;
+    }
+    stopMobilePan();
+    const finger = event.touches[0];
+    startX = previousX = finger.clientX;
+    startY = previousY = finger.clientY;
+    holdTimer = setTimeout(() => {
+      holdTimer = null;
+      if(!mobileMapQuery.matches) return;
+      panActive = true;
+      map.stop();
+      mapElement.classList.add("mapPanActive");
+      if(navigator.vibrate) navigator.vibrate(16);
+    },450);
+  },{passive:true});
+
+  mapElement.addEventListener("touchmove",event => {
+    if(!mobileMapQuery.matches) return;
+    if(event.touches.length !== 1){
+      stopMobilePan();
+      /* Do not manually pan while Leaflet is handling a pinch gesture. */
+      if(event.touches.length > 1 && event.cancelable) event.preventDefault();
+      return;
+    }
+    const finger = event.touches[0];
+    const x = finger.clientX, y = finger.clientY;
+    if(!panActive){
+      if(Math.hypot(x-startX,y-startY) > 8) cancelHold();
+      return;
+    }
+    if(event.cancelable) event.preventDefault();
+    const dx = x-previousX, dy = y-previousY;
+    if(dx || dy) map.panBy([-dx,-dy],{animate:false,noMoveStart:true});
+    previousX = x;
+    previousY = y;
   },{passive:false});
+  mapElement.addEventListener("touchend",stopMobilePan,{passive:true});
+  mapElement.addEventListener("touchcancel",stopMobilePan,{passive:true});
+  mapElement.addEventListener("contextmenu",event => {
+    if(mobileMapQuery.matches) event.preventDefault();
+  });
 
   /* One integrated Leaflet navigation control: Zoom In, Zoom Out and India Home. */
   const MapNavigationControl = L.Control.extend({
@@ -4708,6 +4792,28 @@ function fitIndiaHomeView(){
   if(!map) return;
   /* Cancel unfinished hazard movement before resetting the Home viewport. */
   map.stop();
+
+  /* Mobile-only: fit both the 8–38 N and 68–98 E extent, with margins.
+     Desktop continues using its existing height-based Home setting. */
+  if(window.matchMedia("(max-width: 620px)").matches){
+    const size = map.getSize();
+    if(size.x <= 0 || size.y <= 0) return;
+    const horizontalPadding = Math.max(12,Math.min(26,Math.round(size.x*.04)));
+    const verticalPadding = Math.max(12,Math.min(26,Math.round(size.y*.035)));
+    const previousZoomSnap = map.options.zoomSnap;
+    try{
+      map.options.zoomSnap = 0.01;
+      map.fitBounds([[8,68],[38,98]],{
+        paddingTopLeft:[horizontalPadding,verticalPadding],
+        paddingBottomRight:[horizontalPadding,verticalPadding],
+        animate:true,
+        duration:0.65
+      });
+    }finally{
+      map.options.zoomSnap = previousZoomSnap;
+    }
+    return;
+  }
 
   /* Prioritise the requested 8–38 N extent. Fitting 68–98 E as well on a
      narrow screen otherwise forces Leaflet to zoom far out (Aral Sea/Java).
@@ -7622,7 +7728,18 @@ if(map){
       return div;
     }
   });
-  new NorthControl().addTo(map);
+  const northControl = new NorthControl().addTo(map);
+  /* Use Leaflet's control positioning API, preserving desktop top-left. */
+  const northMobileQuery = window.matchMedia("(max-width: 620px)");
+  const syncNorthCorner = () => {
+    northControl.setPosition(northMobileQuery.matches ? "topright" : "topleft");
+  };
+  syncNorthCorner();
+  if(typeof northMobileQuery.addEventListener === "function"){
+    northMobileQuery.addEventListener("change",syncNorthCorner);
+  }else{
+    northMobileQuery.addListener(syncNorthCorner);
+  }
 }
 
 

@@ -2278,6 +2278,26 @@ body{font-size:var(--type-body);line-height:1.55}
   .liveImpactGrid .kpi span{font-size:var(--type-label)}
 }
 
+
+/* === Analytics-only restrained red / charcoal / white finish === */
+/* Scope deliberately excludes the map, markers, filters and homepage. */
+.analyticsGrid .chartCard,
+.analyticsGrid .heatCard,
+.analyticsGrid .leaderboardCard {
+  background:var(--surface);
+}
+.analyticsGrid .chartCard::before,
+.analyticsGrid .heatCard::before,
+.analyticsGrid .leaderboardCard::before {
+  background:#A10D0D;
+}
+.analyticsGrid .chartTitle {color:var(--text)}
+.analyticsGrid .chartTitle .material-symbols-rounded {
+  background:rgba(161,13,13,.09);
+  color:#A10D0D;
+}
+.analyticsGrid .chartBox canvas {background:transparent}
+
 </style>
 
 </head>
@@ -4323,6 +4343,12 @@ function renderAnalytics(
 raw
 ){
 
+/* Chart-only palette. The map's hazardColor() and marker colours are unchanged. */
+const chartPalette = root.dataset.theme === "dark"
+  ? ["#A10D0D","#FFFFFF","#C85F64","#C0C0C0","#8B1116","#E1A3A6","#858585"]
+  : ["#A10D0D","#242424","#C85F64","#737373","#8B1116","#DEA0A3","#A6A6A6"];
+const chartNeutral = root.dataset.theme === "dark" ? "#E6E6E6" : "#242424";
+
 const data =
 
 unwrapObject(
@@ -4566,10 +4592,8 @@ horizontal:true,
 colors:
 
 hazards.map(
-item =>
-hazardColor(
-item.category
-)
+(_, index) =>
+chartPalette[index % chartPalette.length]
 )
 
 }
@@ -4639,7 +4663,7 @@ item.count
 horizontal:true,
 
 colors:
-"#3F83C8"
+chartNeutral
 
 }
 
@@ -4672,7 +4696,7 @@ item.count
 horizontal:true,
 
 colors:
-"#49B0A7"
+"#A10D0D"
 
 }
 
@@ -4704,19 +4728,7 @@ item.count
 
 legend:true,
 
-colors:[
-
-"#B10B12",
-
-"#236BC0",
-
-"#49AFA7",
-
-"#7650C4",
-
-"#C69B45"
-
-]
+colors:gender.map((_, index) => chartPalette[index % chartPalette.length])
 
 }
 
@@ -4748,23 +4760,7 @@ item.count
 
 legend:true,
 
-colors:[
-
-"#B10B12",
-
-"#236BC0",
-
-"#14A9B9",
-
-"#673BB8",
-
-"#D94212",
-
-"#C69B45",
-
-"#49AFA7"
-
-]
+colors:education.map((_, index) => chartPalette[index % chartPalette.length])
 
 }
 
@@ -4797,7 +4793,7 @@ item.count
 horizontal:true,
 
 colors:
-"#7650C4"
+chartNeutral
 
 }
 

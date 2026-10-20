@@ -2683,6 +2683,89 @@ html[data-theme="dark"] .analyticsSection{
   }
 }
 
+
+/* Four clear navigation cards in one row on phones and tablets. */
+.navFlyout .missionVisionSubhead{margin-top:16px}
+@media(max-width:1040px){
+  .navInner > .infoMenu{
+    display:grid;
+    grid-template-columns:minmax(0,1.35fr) minmax(0,.80fr) minmax(0,.97fr) minmax(0,1.30fr);
+    gap:clamp(4px,.7vw,9px);
+    align-items:stretch;
+    padding:3px 0 5px;
+  }
+  .navInner > .infoMenu > .infoMenuItem{
+    min-width:0;
+    display:flex;
+  }
+  .navInner > .infoMenu > .infoMenuItem > .infoMenuButton{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:3px;
+    width:100%;
+    min-width:0;
+    min-height:53px;
+    padding:7px 3px;
+    background:var(--surface2);
+    color:var(--text);
+    border:1px solid var(--line);
+    border-radius:11px;
+    box-shadow:0 2px 7px rgba(35,42,48,.045);
+    white-space:normal;
+    text-align:center;
+    font-size:clamp(.68rem,1.25vw,.82rem);
+    line-height:1.13;
+  }
+  .navInner > .infoMenu > .infoMenuItem > .infoMenuButton:hover,
+  .navInner > .infoMenu > .infoMenuItem.open > .infoMenuButton{
+    color:var(--red);
+    background:var(--redSoft);
+    border-color:rgba(161,13,13,.38);
+  }
+  .navInner > .infoMenu > .navAppCta{
+    width:100%;
+    min-width:0;
+    min-height:53px;
+    margin:0;
+    padding:7px 5px;
+    justify-content:center;
+    align-self:stretch;
+    flex-direction:row;
+    border-radius:11px;
+    white-space:nowrap;
+  }
+  .navInner .navFlyout{
+    top:126px;
+  }
+}
+@media(max-width:620px){
+  .navInner > .infoMenu{
+    display:grid;
+    grid-template-columns:minmax(0,1.38fr) minmax(0,.75fr) minmax(0,.95fr) minmax(0,1.32fr);
+    gap:4px;
+  }
+  .navInner > .infoMenu > .infoMenuItem > .infoMenuButton{
+    min-height:52px;
+    padding:6px 2px;
+    font-size:clamp(.61rem,2.55vw,.78rem);
+    gap:3px;
+  }
+  .navInner > .infoMenu > .infoMenuItem > .infoMenuButton .material-symbols-rounded{
+    font-size:17px;
+  }
+  .navInner > .infoMenu > .navAppCta{
+    width:100%;
+    min-height:52px;
+    padding:6px 3px;
+    gap:3px;
+    font-size:clamp(.61rem,2.55vw,.78rem);
+  }
+  .navInner > .infoMenu > .navAppCta .material-symbols-rounded{font-size:16px}
+  .navInner .navFlyout{top:123px}
+}
+
 </style>
 
 </head>
@@ -2703,20 +2786,12 @@ html[data-theme="dark"] .analyticsSection{
     <div class="infoMenu" id="infoMenu" aria-label="HazWatch information">
       <div class="infoMenuItem">
         <button class="infoMenuButton" type="button">
-          <span class="material-symbols-rounded">flag</span>Mission
+          <span class="material-symbols-rounded">flag</span><span>Mission &amp; Vision</span>
         </button>
         <div class="navFlyout">
           <div class="navFlyoutTitle"><span class="material-symbols-rounded">flag</span>Our Mission</div>
           <p>To empower citizens to safely report and map hazards through an accessible geospatial platform that enables real-time disaster awareness, community participation, scientific research, and informed decision-making.</p>
-        </div>
-      </div>
-
-      <div class="infoMenuItem">
-        <button class="infoMenuButton" type="button">
-          <span class="material-symbols-rounded">visibility</span>Vision
-        </button>
-        <div class="navFlyout">
-          <div class="navFlyoutTitle"><span class="material-symbols-rounded">visibility</span>Our Vision</div>
+          <div class="navFlyoutTitle missionVisionSubhead"><span class="material-symbols-rounded">visibility</span>Our Vision</div>
           <p>To create a safer and more resilient India by transforming citizens into contributors of geospatial disaster intelligence, enabling cost-effective hazard data collection, scientific research, and informed decision-making.</p>
         </div>
       </div>
@@ -2736,22 +2811,6 @@ html[data-theme="dark"] .analyticsSection{
               <span class="material-symbols-rounded">handshake</span>
               <div><strong>Deepika Vashishtha, PhD</strong><span>Strategic Advisor · Assistant Professor, Doctor Harisingh Gour Vishwavidyalaya, Sagar, MP</span></div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="infoMenuItem">
-        <button class="infoMenuButton" type="button">
-          <span class="material-symbols-rounded">menu_book</span>Guidelines
-        </button>
-        <div class="navFlyout">
-          <div class="navFlyoutTitle"><span class="material-symbols-rounded">menu_book</span>Reporting Guidelines</div>
-          <div class="navMiniList">
-            <div class="navMiniRow"><span class="material-symbols-rounded">shield</span><div><strong>1. Safety first</strong><span>Never enter a dangerous place to report a hazard.</span></div></div>
-            <div class="navMiniRow"><span class="material-symbols-rounded">crisis_alert</span><div><strong>2. Hazard details</strong><span>Select hazard type, affected area and incident date.</span></div></div>
-            <div class="navMiniRow"><span class="material-symbols-rounded">location_on</span><div><strong>3. Location</strong><span>Use current location or select the incident location.</span></div></div>
-            <div class="navMiniRow"><span class="material-symbols-rounded">photo_camera</span><div><strong>4. Photo</strong><span>Capture or upload an image when it is safe.</span></div></div>
-            <div class="navMiniRow"><span class="material-symbols-rounded">task_alt</span><div><strong>5. Review & submit</strong><span>Check the report details before submission.</span></div></div>
           </div>
         </div>
       </div>

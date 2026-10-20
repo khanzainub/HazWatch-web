@@ -2757,7 +2757,7 @@ html[data-theme="dark"] .analyticsSection{
   padding:9px 8px;
   white-space:normal;
   text-align:center;
-  background:var(--surface2);
+  background:var(--surface);
   color:var(--text);
   border:1px solid var(--line);
   border-radius:11px;
@@ -2768,11 +2768,13 @@ html[data-theme="dark"] .analyticsSection{
 }
 .navInner > .infoMenu > .infoMenuItem > .infoMenuButton:hover,
 .navInner > .infoMenu > .infoMenuItem.open > .infoMenuButton{
-  color:var(--red);
-  background:var(--redSoft);
-  border-color:rgba(161,13,13,.38);
+  color:var(--text);
+  background:var(--surface2);
+  border-color:var(--line);
 }
-html[data-theme="dark"] .navInner .infoMenuButton .material-symbols-rounded{color:#E58B8B}
+.navInner > .infoMenu > .infoMenuItem > .infoMenuButton .material-symbols-rounded{
+  color:var(--muted);
+}
 .navInner > .infoMenu > .navAppCta{
   display:flex;
   flex:none;
@@ -2932,10 +2934,15 @@ html[data-theme="dark"] .navInner .infoMenuButton .material-symbols-rounded{colo
   }
 }
 
-/* Desktop only: HazWatch-red Local Weather dropdown arrow. */
+/* Desktop only: prominent HazWatch-red Weather toggle with white arrow. */
 @media (min-width: 621px){
+  #weatherToggle{
+    background:#A10D0D;
+    border-color:#A10D0D;
+    color:#FFFFFF;
+  }
   #weatherToggle .material-symbols-rounded{
-    color:#A10D0D;
+    color:#FFFFFF;
   }
 }
 

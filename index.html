@@ -2488,6 +2488,59 @@ html[data-theme="dark"] .analyticsSection{
   color:var(--red);
 }
 
+/* Unified map navigation: three precise controls in one Leaflet group. */
+.hazwatchMapTools.leaflet-bar{
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  border:1px solid rgba(0,0,0,.14);
+  border-radius:13px;
+  background:rgba(255,255,255,.96);
+  box-shadow:0 4px 16px rgba(0,0,0,.14);
+  margin:0 0 12px 12px;
+}
+.hazwatchMapTools .mapToolButton{
+  appearance:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:40px;
+  height:40px;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  color:#424242;
+  font-family:'Roboto',system-ui,sans-serif;
+  font-size:24px;
+  font-weight:500;
+  line-height:1;
+  cursor:pointer;
+  transition:background .15s ease,color .15s ease;
+}
+.hazwatchMapTools .mapToolButton + .mapToolButton{
+  border-top:1px solid rgba(0,0,0,.11);
+}
+.hazwatchMapTools .mapToolButton[data-map-action="home"]{
+  color:#A10D0D;
+}
+.hazwatchMapTools .mapToolButton .material-symbols-rounded{
+  font-size:21px;
+}
+.hazwatchMapTools .mapToolButton:not(:disabled):hover,
+.hazwatchMapTools .mapToolButton:not(:disabled):focus-visible{
+  background:#F8EEEE;
+  color:#A10D0D;
+}
+.hazwatchMapTools .mapToolButton:focus-visible{
+  outline:2px solid #A10D0D;
+  outline-offset:-3px;
+}
+.hazwatchMapTools .mapToolButton:disabled{
+  opacity:.38;
+  cursor:default;
+}
+
 </style>
 
 </head>
@@ -3627,7 +3680,49 @@ function setMapLayer(layerName){
 function initialiseMap(){
   map = L.map("map", {zoomControl:false}).setView([22.8,79.5],5);
 
-  L.control.zoom({position:"bottomleft"}).addTo(map);
+  /* One integrated Leaflet navigation control: Zoom In, Zoom Out and India Home. */
+  const MapNavigationControl = L.Control.extend({
+    options:{position:"bottomleft"},
+    onAdd:function(){
+      const container = L.DomUtil.create("div","hazwatchMapTools leaflet-bar");
+      container.setAttribute("role","group");
+      container.setAttribute("aria-label","Map navigation");
+      container.innerHTML =
+        '<button type="button" class="mapToolButton" data-map-action="zoom-in" aria-label="Zoom in" title="Zoom in">+</button>' +
+        '<button type="button" class="mapToolButton" data-map-action="zoom-out" aria-label="Zoom out" title="Zoom out">−</button>' +
+        '<button type="button" class="mapToolButton" data-map-action="home" aria-label="Show all India" title="Show all India"><span class="material-symbols-rounded" aria-hidden="true">home</span></button>';
+
+      L.DomEvent.disableClickPropagation(container);
+      L.DomEvent.disableScrollPropagation(container);
+
+      const zoomIn = container.querySelector('[data-map-action="zoom-in"]');
+      const zoomOut = container.querySelector('[data-map-action="zoom-out"]');
+      const syncZoomButtons = function(){
+        zoomIn.disabled = map.getZoom() >= map.getMaxZoom();
+        zoomOut.disabled = map.getZoom() <= map.getMinZoom();
+      };
+
+      container.querySelectorAll(".mapToolButton").forEach(button => {
+        L.DomEvent.on(button,"click",event => {
+          L.DomEvent.stop(event);
+          if(button.disabled) return;
+          switch(button.dataset.mapAction){
+            case "zoom-in": map.zoomIn(); break;
+            case "zoom-out": map.zoomOut(); break;
+            case "home": fitIndiaHomeView(); break;
+          }
+        });
+      });
+      map.on("zoomend",syncZoomButtons);
+      this._syncZoomButtons = syncZoomButtons;
+      syncZoomButtons();
+      return container;
+    },
+    onRemove:function(){
+      if(this._syncZoomButtons) map.off("zoomend",this._syncZoomButtons);
+    }
+  });
+  new MapNavigationControl().addTo(map);
 
   standardLayer = L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -4064,6 +4159,43 @@ function deriveHazardReportCounts(analyticsRaw, reportsRaw){
   return null;
 }
 
+/* Explicit home view: full requested India geographic extent, fitted to any map size. */
+function fitIndiaHomeView(){
+  if(!map) return;
+  const indiaBounds = L.latLngBounds([8,68],[38,98]);
+  map.fitBounds(indiaBounds,{
+    padding:[20,20],
+    animate:true,
+    duration:0.65
+  });
+}
+
+/* Focus only the currently plotted hazard markers; never recenter on data refresh. */
+function focusSelectedHazardMarkers(){
+  if(!map || !markerLayer) return;
+  const points = markerLayer.getLayers()
+    .filter(layer => typeof layer.getLatLng === "function")
+    .map(layer => layer.getLatLng())
+    .filter(point =>
+      Number.isFinite(point.lat) && Number.isFinite(point.lng) &&
+      Math.abs(point.lat) <= 90 && Math.abs(point.lng) <= 180
+    );
+
+  /* A zero-report filter leaves the viewport exactly where the user placed it. */
+  if(points.length === 0) return;
+  if(points.length === 1){
+    map.flyTo(points[0],10,{duration:0.65});
+    return;
+  }
+
+  map.fitBounds(L.latLngBounds(points),{
+    padding:[36,36],
+    maxZoom:12,
+    animate:true,
+    duration:0.65
+  });
+}
+
 function renderHazardFilters(){
 
 const box = document.getElementById("hazardFilters");
@@ -4106,6 +4238,7 @@ box.querySelectorAll("[data-hazard]").forEach(button => {
     selectedHazard = button.dataset.hazard;
     renderHazardFilters();
     renderMarkers();
+    focusSelectedHazardMarkers();
   };
 });
 
@@ -6897,7 +7030,7 @@ TOP INFORMATION MENU + SECONDARY WEATHER
 /* Premium map cartography controls */
 if(map){
   L.control.scale({
-    position:"bottomleft",
+    position:"bottomright",
     metric:true,
     imperial:false,
     maxWidth:140

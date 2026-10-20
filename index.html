@@ -2710,13 +2710,15 @@ html[data-theme="dark"] .analyticsSection{
   justify-self:center;
   max-width:100%;
   text-align:center;
-  color:var(--red);
-  font-size:clamp(.76rem,1.15vw,1rem);
-  font-weight:800;
-  line-height:1.35;
-  letter-spacing:-.01em;
+  color:var(--text);
+  font-family:inherit;
+  font-size:1.25rem;
+  font-weight:900;
+  line-height:1.2;
+  letter-spacing:-.035em;
+  text-wrap:balance;
 }
-html[data-theme="dark"] .navTagline{color:#E58B8B}
+.navInner > .navTagline .taglineIndia{color:var(--red)}
 .navInner > .themeButton{
   order:0;
   grid-column:3;
@@ -2823,9 +2825,9 @@ html[data-theme="dark"] .navInner .infoMenuButton .material-symbols-rounded{colo
   }
   .navInner > .brand{gap:5px;font-size:1.05rem}
   .navInner > .navTagline{
-    font-size:clamp(.59rem,2.45vw,.8rem);
-    line-height:1.27;
-    font-weight:800;
+    font-size:1.05rem;
+    line-height:1.2;
+    font-weight:900;
   }
   .navInner > .themeButton{
     width:38px;
@@ -2867,7 +2869,7 @@ html[data-theme="dark"] .navInner .infoMenuButton .material-symbols-rounded{colo
       </div>
       <div><span class="brandRed">Haz</span>Watch</div>
     </a>
-    <div class="navTagline">Help us make India a Safer Place.</div>
+    <div class="navTagline">Help us make <span class="taglineIndia">India</span> a Safer Place.</div>
 
     <div class="infoMenu" id="infoMenu" aria-label="HazWatch information">
       <div class="infoMenuItem">

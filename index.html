@@ -2465,6 +2465,29 @@ html[data-theme="dark"] .analyticsSection{
   line-height:1;
 }
 
+
+/* Report counts for incident-map hazard filters only. */
+.hazardFilters .hazardChipCount{
+  display:inline-flex;
+  min-width:19px;
+  height:20px;
+  padding:0 5px;
+  align-items:center;
+  justify-content:center;
+  border-radius:7px;
+  border:1px solid var(--line);
+  background:var(--surface2);
+  color:var(--text);
+  font-size:.75rem;
+  font-weight:800;
+  line-height:1;
+  font-variant-numeric:tabular-nums;
+}
+.hazardFilters .hazardChip.active .hazardChipCount{
+  background:var(--redSoft);
+  color:var(--red);
+}
+
 </style>
 
 </head>
@@ -2593,7 +2616,7 @@ html[data-theme="dark"] .analyticsSection{
       </div>
       <div class="card kpi">
         <div class="kpiIcon"><span class="material-symbols-rounded">groups</span></div>
-        <span>Active Citizens</span>
+        <span>Registered Citizens</span>
         <strong id="kpiContributors">—</strong>
       </div>
       <div class="card kpi">
@@ -4000,18 +4023,70 @@ markerLayer
 
 
 
+/* Counts come from the public analytics hazard totals (same data as the chart).
+   Public reports are a fallback. A failed API shows an en dash, never a false zero. */
+let hazardReportCounts = null;
+
+function deriveHazardReportCounts(analyticsRaw, reportsRaw){
+  const analytics = analyticsRaw == null ? {} : unwrapObject(analyticsRaw, ["analytics"]);
+  const analyticsRowsByHazard = analyticsRaw == null ? [] :
+    analyticsRows(
+      analytics,
+      ["reports_by_hazard", "reports_by_hazard_type", "hazard_counts"],
+      "hazard_type"
+    );
+  const reportRows = reportsRaw == null ? null :
+    unwrapArray(reportsRaw, ["reports", "items", "results"]);
+
+  const counts = Object.create(null);
+  let all = 0;
+
+  if(analyticsRowsByHazard.length > 0){
+    for(const row of analyticsRowsByHazard){
+      const count = Number(row.count);
+      if(!Number.isSafeInteger(count) || count < 0) continue;
+      const key = canonicalHazardKey(row.category);
+      counts[key] = (counts[key] || 0) + count;
+      all += count;
+    }
+    return {byHazard:counts, all};
+  }
+
+  if(reportRows !== null){
+    for(const report of reportRows){
+      const key = canonicalHazardKey(reportHazard(report));
+      counts[key] = (counts[key] || 0) + 1;
+      all += 1;
+    }
+    return {byHazard:counts, all};
+  }
+
+  return null;
+}
+
 function renderHazardFilters(){
 
 const box = document.getElementById("hazardFilters");
 if(!box) return;
 
-const hazards = ["all", ...HAZWATCH_HAZARDS];
+const extraHazards = hazardReportCounts
+  ? Object.keys(hazardReportCounts.byHazard).filter(
+      hazard => hazard !== "all" && !HAZWATCH_HAZARDS.includes(hazard)
+        && hazardReportCounts.byHazard[hazard] > 0
+    )
+  : [];
+const hazards = ["all", ...HAZWATCH_HAZARDS, ...extraHazards];
 
 box.innerHTML = hazards.map(hazard => {
   const active = selectedHazard === hazard ? "active" : "";
   const label = hazard === "all" ? "All" : pretty(hazard);
   const color = hazard === "all" ? "#A10D0D" : hazardColor(hazard);
   const icon = HAZARD_ICONS[hazard] || "warning";
+  const count = hazardReportCounts === null
+    ? "—"
+    : hazard === "all"
+      ? hazardReportCounts.all
+      : (hazardReportCounts.byHazard[hazard] ?? 0);
 
   return `
     <button
@@ -4020,7 +4095,8 @@ box.innerHTML = hazards.map(hazard => {
       style="--hazard-color:${escapeHTML(color)}"
     >
       <span class="material-symbols-rounded">${escapeHTML(icon)}</span>
-      ${escapeHTML(label)}
+      <span class="hazardChipLabel">${escapeHTML(label)}</span>
+      <span class="hazardChipCount">${escapeHTML(count)}</span>
     </button>
   `;
 }).join("");
@@ -5433,25 +5509,33 @@ data.report_count;
 
 
 
-const contributors =
-
-data.unique_contributors
-
+/* Count all registered accounts, not only people who submitted reports. */
+const registeredCitizens =
+data.total_users
 ??
-
-data.active_citizens
-
+data.registered_users
 ??
-
-data.total_contributors
-
+data.total_registered_users
 ??
-
-data.contributors
-
+data.registered_citizens
 ??
+data.user_count
+??
+data.users_count
+??
+data.users_total
+??
+(typeof data.users === "number" ? data.users : data.users?.total);
 
-data.total_users;
+const registeredCitizensNumber = Number(registeredCitizens);
+const registeredCitizensDisplay =
+registeredCitizens !== undefined
+&& registeredCitizens !== null
+&& registeredCitizens !== ""
+&& Number.isSafeInteger(registeredCitizensNumber)
+&& registeredCitizensNumber >= 0
+  ? registeredCitizensNumber
+  : "—";
 
 
 
@@ -5483,13 +5567,7 @@ reports
 
 document.getElementById(
 "kpiContributors"
-).textContent =
-
-contributors
-
-??
-
-"—";
+).textContent = registeredCitizensDisplay;
 
 
 
@@ -5777,6 +5855,11 @@ results[2];
 const leaderboardResult =
 results[3];
 
+/* Derive the displayed counts from the public hazard analytics when available. */
+hazardReportCounts = deriveHazardReportCounts(
+  analyticsResult.status === "fulfilled" ? analyticsResult.value : null,
+  reportsResult.status === "fulfilled" ? reportsResult.value : null
+);
 
 
 /* OVERVIEW */

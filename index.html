@@ -4826,28 +4826,43 @@ function deriveHazardReportCounts(analyticsRaw, reportsRaw){
   return null;
 }
 
+/* Remember the exact initial phone center/zoom, not merely its bounds. */
+let mobileIndiaHomeView = null;
+
 /* Explicit home view: full requested India geographic extent, fitted to any map size. */
 function fitIndiaHomeView(){
   if(!map) return;
   /* Cancel unfinished hazard movement before resetting the Home viewport. */
   map.stop();
 
-  /* Mobile-only: fit both the 8–38 N and 68–98 E extent, with margins.
-     Desktop continues using its existing height-based Home setting. */
+  /* Mobile: reuse the exact default view for Home. Only recompute after the
+     map viewport dimensions change (e.g. device orientation). */
   if(window.matchMedia("(max-width: 620px)").matches){
     const size = map.getSize();
     if(size.x <= 0 || size.y <= 0) return;
-    const horizontalPadding = Math.max(12,Math.min(26,Math.round(size.x*.04)));
-    const verticalPadding = Math.max(12,Math.min(26,Math.round(size.y*.035)));
     const previousZoomSnap = map.options.zoomSnap;
     try{
       map.options.zoomSnap = 0.01;
-      map.fitBounds([[8,68],[38,98]],{
-        paddingTopLeft:[horizontalPadding,verticalPadding],
-        paddingBottomRight:[horizontalPadding,verticalPadding],
-        animate:true,
-        duration:0.65
-      });
+      if(mobileIndiaHomeView &&
+         mobileIndiaHomeView.width === size.x &&
+         mobileIndiaHomeView.height === size.y){
+        map.setView(mobileIndiaHomeView.center,mobileIndiaHomeView.zoom,{animate:false});
+      }else{
+        const horizontalPadding = Math.max(12,Math.min(26,Math.round(size.x*.04)));
+        const verticalPadding = Math.max(12,Math.min(26,Math.round(size.y*.035)));
+        map.fitBounds([[8,68],[38,98]],{
+          paddingTopLeft:[horizontalPadding,verticalPadding],
+          paddingBottomRight:[horizontalPadding,verticalPadding],
+          animate:false
+        });
+        /* No animation: the view is fully settled before it is stored. */
+        mobileIndiaHomeView = {
+          width:size.x,
+          height:size.y,
+          center:map.getCenter(),
+          zoom:map.getZoom()
+        };
+      }
     }finally{
       map.options.zoomSnap = previousZoomSnap;
     }

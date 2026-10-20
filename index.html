@@ -2772,8 +2772,27 @@ html[data-theme="dark"] .analyticsSection{
   background:var(--surface2);
   border-color:var(--line);
 }
+/* Mirror Live Impact's circular icon backgrounds in navigation cards. */
 .navInner > .infoMenu > .infoMenuItem > .infoMenuButton .material-symbols-rounded{
+  display:inline-grid;
+  place-items:center;
+  width:28px;
+  height:28px;
+  min-width:28px;
+  border-radius:50%;
+  background:#EAF0F6;
   color:var(--muted);
+  flex:0 0 auto;
+}
+html[data-theme="dark"] .navInner > .infoMenu > .infoMenuItem > .infoMenuButton .material-symbols-rounded{
+  background:#172431;
+}
+@media(max-width:620px){
+  .navInner > .infoMenu > .infoMenuItem > .infoMenuButton .material-symbols-rounded{
+    width:24px;
+    height:24px;
+    min-width:24px;
+  }
 }
 .navInner > .infoMenu > .navAppCta{
   display:flex;

@@ -2805,15 +2805,15 @@ html[data-theme="dark"] .analyticsSection{
           <div class="navMiniList">
             <div class="navMiniRow">
               <span class="material-symbols-rounded">person</span>
-              <div><strong>Zainab Khan, PhD</strong><span>Founder and Design Architect · Former Post-Doctoral Fellow, Indian Institute of Technology Roorkee</span></div>
+              <div><strong>Zainab Khan, PhD</strong><span>Founder and Design Architect · Former Post-Doctoral Fellow, Indian Institute of Technology Roorkee · Roorkee, Uttarakhand, India</span></div>
             </div>
             <div class="navMiniRow">
               <span class="material-symbols-rounded">handshake</span>
-              <div><strong>Deepika Vashishtha, PhD</strong><span>Strategic Advisor · Assistant Professor, Doctor Harisingh Gour Vishwavidyalaya, Sagar, MP</span></div>
+              <div><strong>Deepika Vashishtha, PhD</strong><span>Strategic Advisor · Assistant Professor, Doctor Harisingh Gour Vishwavidyalaya, Sagar, Madhya Pradesh, India</span></div>
             </div>
             <div class="navMiniRow">
               <span class="material-symbols-rounded">person</span>
-              <div><strong>Amit Kumar</strong><span>Beta Tester · Doctoral Fellow, Aligarh Muslim University, India</span></div>
+              <div><strong>Amit Kumar</strong><span>Beta Tester · Doctoral Fellow, Aligarh Muslim University, Aligarh, Uttar Pradesh, India</span></div>
             </div>
           </div>
         </div>
@@ -4553,7 +4553,7 @@ const theme = chartTheme();
 const ctx = canvas.getContext("2d");
 const styles = getComputedStyle(document.querySelector(".analyticsSection") || root);
 const surface = styles.getPropertyValue("--surface").trim() || "#FFFFFF";
-const textStrong = styles.getPropertyValue("--text").trim() || "#414141";
+const textStrong = () => getComputedStyle(document.querySelector(".analyticsSection") || root).getPropertyValue("--text").trim() || "#414141";
 const red = styles.getPropertyValue("--red").trim() || "#A10D0D";
 
 let background = options.colors ?? red;
@@ -4587,10 +4587,10 @@ const centerTextPlugin = {
     ctx.save();
     ctx.textAlign="center";
     ctx.textBaseline="middle";
-    ctx.fillStyle=textStrong;
+    ctx.fillStyle=textStrong();
     ctx.font="800 26px Roboto, sans-serif";
     ctx.fillText(total, x, y-5);
-    ctx.fillStyle=theme.text;
+    ctx.fillStyle=chartTheme().text;
     ctx.font="600 11px Roboto, sans-serif";
     ctx.fillText("TOTAL", x, y+18);
     ctx.restore();
@@ -4698,112 +4698,43 @@ charts[id] = new Chart(canvas, {
 }
 
 function updateChartsTheme(){
+  if(typeof Chart === "undefined") return;
 
-if(
-typeof Chart ===
-"undefined"
-){
+  const theme = chartTheme();
+  const styles = getComputedStyle(document.querySelector(".analyticsSection") || root);
+  const surface = styles.getPropertyValue("--surface").trim() ||
+    (root.dataset.theme === "dark" ? "#202020" : "#FFFFFF");
 
-return;
+  Object.entries(charts).forEach(([id,chart]) => {
+    if(chart.options.scales?.x?.ticks) chart.options.scales.x.ticks.color = theme.text;
+    if(chart.options.scales?.y?.ticks) chart.options.scales.y.ticks.color = theme.text;
+    if(chart.options.scales?.x?.grid) chart.options.scales.x.grid.color = theme.grid;
+    if(chart.options.scales?.y?.grid) chart.options.scales.y.grid.color = theme.grid;
+    if(chart.options.plugins?.legend?.labels)
+      chart.options.plugins.legend.labels.color = theme.text;
 
-}
+    const dataset = chart.data.datasets[0];
+    if(dataset){
+      if(chart.config.type === "doughnut"){
+        dataset.backgroundColor = neutralChartPalette().slice(0,dataset.data.length);
+        /* Match doughnut separators to the new card background immediately. */
+        dataset.borderColor = surface;
+      }else if(chart.config.type === "bar"){
+        if(id === "hazardChart" || id === "areaChart")
+          dataset.backgroundColor = redBarPalette(dataset.data.length);
+        else if(id === "stateChart" || id === "ageChart")
+          dataset.backgroundColor = grayBarPalette(dataset.data.length);
+      }else if(chart.config.type === "line"){
+        dataset.pointBackgroundColor = surface;
+      }
+    }
 
-
-
-const theme =
-
-chartTheme();
-
-
-
-Object
-.values(
-charts
-)
-.forEach(
-
-chart => {
-
-
-if(
-chart.options
-.scales
-?.x
-?.ticks
-){
-
-chart.options
-.scales
-.x
-.ticks
-.color =
-theme.text;
-
-}
-
-
-if(
-chart.options
-.scales
-?.y
-?.ticks
-){
-
-chart.options
-.scales
-.y
-.ticks
-.color =
-theme.text;
-
-}
-
-
-if(
-chart.options
-.scales
-?.y
-?.grid
-){
-
-chart.options
-.scales
-.y
-.grid
-.color =
-theme.grid;
-
-}
-
-
-if(
-chart.options
-.plugins
-?.legend
-?.labels
-){
-
-chart.options
-.plugins
-.legend
-.labels
-.color =
-theme.text;
-
-}
-
-
-if(chart.config.type === "doughnut" && chart.data.datasets[0]){
-  chart.data.datasets[0].backgroundColor = neutralChartPalette().slice(
-    0, chart.data.datasets[0].data.length
-  );
-}
-chart.update();
-
-}
-
-);
-
+    /* Stop stale transitions/hover outlines and draw the new theme at once. */
+    chart.stop();
+    chart.setActiveElements([]);
+    if(chart.tooltip) chart.tooltip.setActiveElements([],{x:0,y:0});
+    chart.update("none");
+  });
 }
 
 

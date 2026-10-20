@@ -3903,6 +3903,14 @@ function neutralChartPalette(){
 }
 
 /* Shades for bar charts only; leaves doughnuts, lines, heatmaps and map untouched. */
+/* Red shades for charts whose original colour is HazWatch red. */
+function redBarPalette(count){
+  const shades = root.dataset.theme === "dark"
+    ? ["#A10D0D","#B32626","#C23E3E","#CE5858","#DA7777","#E49B9B","#ECBBBB"]
+    : ["#A10D0D","#AD2424","#BA3B3B","#C75151","#D36D6D","#DE8A8A","#E7A8A8"];
+  return Array.from({length:count},(_,i)=>shades[i % shades.length]);
+}
+
 function grayBarPalette(count){
   const shades = root.dataset.theme === "dark"
     ? ["#D6D6D6","#C2C2C2","#AEAEAE","#9A9A9A","#868686","#727272","#5E5E5E"]
@@ -4623,7 +4631,7 @@ horizontal:true,
 
 colors:
 
-grayBarPalette(hazards.length)
+redBarPalette(hazards.length)
 
 }
 
@@ -4725,7 +4733,7 @@ item.count
 horizontal:true,
 
 colors:
-grayBarPalette(areas.length)
+redBarPalette(areas.length)
 
 }
 

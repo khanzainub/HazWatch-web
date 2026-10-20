@@ -2658,6 +2658,31 @@ html[data-theme="dark"] .analyticsSection{
   }
 }
 
+/* === Mobile only: compact, regular-weight hero; retain desktop design === */
+@media(max-width:620px){
+  .hero{
+    padding:14px 0 5px;
+  }
+  .hero h1{
+    font-size:var(--type-section);
+    font-weight:400;
+    line-height:1.24;
+    letter-spacing:-.02em;
+    margin:0 0 10px;
+  }
+  .hero .heroDescription{
+    font-size:.9rem;
+    line-height:1.5;
+    margin:0;
+  }
+  .hero .safety{
+    display:none;
+  }
+  #intelligence{
+    padding-top:14px;
+  }
+}
+
 </style>
 
 </head>

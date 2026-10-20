@@ -2818,20 +2818,35 @@ html[data-theme="dark"] .navInner .infoMenuButton .material-symbols-rounded{colo
   .navInner .navFlyout{top:121px}
 }
 @media(max-width:620px){
+  /* Compress only the phone header; give the slogan all remaining room. */
   .navInner{
-    grid-template-columns:minmax(0,1fr) minmax(0,1.02fr) auto;
-    column-gap:5px;
+    grid-template-columns:max-content minmax(0,1fr) 34px;
+    column-gap:4px;
     row-gap:5px;
   }
-  .navInner > .brand{gap:5px;font-size:1.05rem}
+  .navInner > .brand{
+    gap:3px;
+    font-size:.82rem;
+    letter-spacing:-.035em;
+    white-space:nowrap;
+  }
+  .navInner > .brand .logoWrap{
+    width:31px;
+    height:31px;
+    flex:0 0 31px;
+  }
   .navInner > .navTagline{
-    font-size:1.05rem;
-    line-height:1.2;
+    min-width:0;
+    font-size:clamp(8px,2.6vw,11px);
+    line-height:1.15;
     font-weight:900;
+    letter-spacing:-.045em;
+    white-space:nowrap;
+    text-wrap:nowrap;
   }
   .navInner > .themeButton{
-    width:38px;
-    height:38px;
+    width:34px;
+    height:34px;
   }
   .navInner > .infoMenu{
     display:grid;
@@ -2851,6 +2866,19 @@ html[data-theme="dark"] .navInner .infoMenuButton .material-symbols-rounded{colo
   .navInner > .infoMenu > .infoMenuItem > .infoMenuButton .material-symbols-rounded,
   .navInner > .infoMenu > .navAppCta .material-symbols-rounded{font-size:17px}
   .navInner .navFlyout{top:122px}
+
+  /* Moderate oversized bold headings on phones, keeping their hierarchy. */
+  .hero h1{
+    font-size:1.32rem;
+    line-height:1.23;
+  }
+  .liveImpactHead h2,
+  .sectionHead h2,
+  .analyticsHeader h2,
+  .downloadCard h2{
+    font-size:1.3rem;
+    line-height:1.23;
+  }
 }
 
 </style>

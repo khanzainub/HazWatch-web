@@ -4260,6 +4260,7 @@ function initialiseMap(){
   /* Mobile only: one-finger swipes scroll the page. A stationary 450ms
      hold activates manual one-finger panning. Leaflet handles pinch zoom. */
   const mobileMapQuery = window.matchMedia("(max-width: 620px)");
+  const originalZoomSnap = map.options.zoomSnap;
   const mapElement = map.getContainer();
   let holdTimer = null, panActive = false, touchHeld = false;
   let startX = 0, startY = 0, previousX = 0, previousY = 0;
@@ -4279,9 +4280,13 @@ function initialiseMap(){
   const syncMobileMapGestures = () => {
     stopMobilePan();
     if(mobileMapQuery.matches){
+      /* A stable fractional zoom prevents Home from rounding the saved
+         mobile fit differently from the view loaded on refresh. */
+      map.options.zoomSnap = 0.01;
       map.dragging.disable();
       if(map.touchZoom) map.touchZoom.enable();
     }else{
+      map.options.zoomSnap = originalZoomSnap;
       map.dragging.enable();
     }
   };
@@ -4835,9 +4840,10 @@ function fitIndiaHomeView(){
   /* Cancel unfinished hazard movement before resetting the Home viewport. */
   map.stop();
 
-  /* Mobile: reuse the exact default view for Home. Only recompute after the
-     map viewport dimensions change (e.g. device orientation). */
+  /* Mobile: Home MUST reproduce the settled view used on refresh. Refresh
+     Leaflet's cached container dimensions before restoring its exact zoom. */
   if(window.matchMedia("(max-width: 620px)").matches){
+    map.invalidateSize({pan:false,animate:false});
     const size = map.getSize();
     if(size.x <= 0 || size.y <= 0) return;
     const previousZoomSnap = map.options.zoomSnap;
@@ -4846,7 +4852,7 @@ function fitIndiaHomeView(){
       if(mobileIndiaHomeView &&
          mobileIndiaHomeView.width === size.x &&
          mobileIndiaHomeView.height === size.y){
-        map.setView(mobileIndiaHomeView.center,mobileIndiaHomeView.zoom,{animate:false});
+        map.setView(mobileIndiaHomeView.center,mobileIndiaHomeView.zoom,{animate:false,reset:true});
       }else{
         const horizontalPadding = Math.max(12,Math.min(26,Math.round(size.x*.04)));
         const verticalPadding = Math.max(12,Math.min(26,Math.round(size.y*.035)));

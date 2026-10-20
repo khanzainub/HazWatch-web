@@ -27,19 +27,19 @@
 
 :root{
   --red:#A10D0D;
-  --red2:#C41919;
+  --red2:#A10D0D;
   --redSoft:#FFF1F1;
 
   --bg:#ECEFF1;
   --surface:#FFFFFF;
   --surface2:#F7F9FA;
 
-  --text:#373D41;
-  --muted:#747D84;
+  --text:#363636;
+  --muted:#555555;
   --line:#DCE1E5;
 
-  --blue:#2F5D8A;
-  --green:#267C61;
+  --blue:#A10D0D;
+  --green:#A10D0D;
 
   --shadow:0 18px 55px rgba(27,34,39,.10);
   --radius:24px;
@@ -757,7 +757,7 @@ MAP + ANALYTICS
 
   overflow:hidden;
 
-  background:#DCE3E5;
+  background:#F3F5F7;
 }
 
 
@@ -863,7 +863,7 @@ MAP + ANALYTICS
 
 
 .apiBadge.error{
-  color:#B3261E;
+  color:#A10D0D;
 }
 
 
@@ -1129,7 +1129,7 @@ WEATHER
     linear-gradient(
       180deg,
       transparent,
-      rgba(47,93,138,.06),
+      rgba(161,13,13,.025),
       transparent
     );
 }
@@ -1576,17 +1576,17 @@ RESPONSIVE
 }
 
 :root{
-  --red:#B10B12;
-  --red2:#C51A21;
+  --red:#A10D0D;
+  --red2:#A10D0D;
   --redSoft:#F9E8E9;
   --bg:#EEF2F5;
   --surface:#FFFFFF;
   --surface2:#F7F8FA;
-  --text:#414141;
-  --muted:#7B7B7B;
+  --text:#363636;
+  --muted:#555555;
   --line:#D9DDE1;
-  --blue:#2F5D8A;
-  --green:#2D7C64;
+  --blue:#A10D0D;
+  --green:#A10D0D;
   --shadow:0 9px 28px rgba(48,55,61,.075);
   --radius:26px;
   --nav:rgba(255,255,255,.96);
@@ -1629,7 +1629,7 @@ body{
 .sectionHead h2{font-weight:800;letter-spacing:-.035em;color:var(--text)}
 .sectionSubtitle{color:var(--muted);font-weight:400}
 
-.hero{background:linear-gradient(180deg,rgba(177,11,18,.045),transparent 42%)}
+.hero{background:linear-gradient(180deg,rgba(161,13,13,.045),transparent 42%)}
 .hero h1{font-weight:900;letter-spacing:-.055em}
 .heroDescription{font-size:1.05rem;line-height:1.72}
 .eyebrow{font-weight:800;border-radius:999px;background:var(--surface);box-shadow:0 4px 18px rgba(40,45,48,.045)}
@@ -1655,7 +1655,7 @@ body{
 
 .layerSwitch{border-radius:18px;padding:5px;background:var(--surface2)}
 .layerSwitch button{border-radius:13px;padding:10px 15px;font-weight:700}
-.layerSwitch button.active{background:var(--red);box-shadow:0 6px 16px rgba(177,11,18,.22)}
+.layerSwitch button.active{background:var(--red);box-shadow:0 6px 16px rgba(161,13,13,.22)}
 #map{border-radius:24px}
 .hazardChip{border-radius:999px;font-weight:700;padding:9px 14px}
 
@@ -1677,7 +1677,7 @@ body{
   right:-34px;bottom:-38px;
   width:96px;height:96px;
   border-radius:50%;
-  background:radial-gradient(circle,rgba(177,11,18,.10),rgba(177,11,18,0) 70%);
+  background:radial-gradient(circle,rgba(161,13,13,.10),rgba(161,13,13,0) 70%);
 }
 .kpiIcon{
   width:42px;height:42px;
@@ -1686,7 +1686,7 @@ body{
   margin-bottom:17px;
 }
 .kpiIcon .material-symbols-rounded{font-size:23px}
-.kpi span{font-size:.72rem;font-weight:800;letter-spacing:.08em;color:#6F6F6F}
+.kpi span{font-size:.72rem;font-weight:800;letter-spacing:.08em;color:#555555}
 .kpi strong{font-size:2.3rem;font-weight:900;color:var(--text)}
 
 .chartCard,.heatCard,.leaderboardCard{
@@ -1698,14 +1698,14 @@ body{
 .chartCard::before,.heatCard::before,.leaderboardCard::before{
   content:"";
   position:absolute;left:0;top:0;width:100%;height:3px;
-  background:linear-gradient(90deg,var(--red),#D4474C,transparent 78%);
+  background:linear-gradient(90deg,var(--red),#A10D0D,transparent 78%);
 }
 .chartTitle{
   display:flex;
   align-items:center;
   gap:10px;
   margin:0 0 18px;
-  color:#5F6265;
+  color:#555555;
   font-size:.82rem;
   font-weight:800;
   letter-spacing:.085em;
@@ -1724,7 +1724,7 @@ body{
 
 .leader{padding:13px 2px}
 .rank{font-weight:800;background:var(--surface2)}
-.leader:first-child .rank{background:var(--red);box-shadow:0 4px 12px rgba(177,11,18,.20)}
+.leader:first-child .rank{background:var(--red);box-shadow:0 4px 12px rgba(161,13,13,.20)}
 .leaderName{font-weight:700}
 .reportCount{font-weight:800}
 
@@ -1733,16 +1733,16 @@ body{
 .heatLabel{font-weight:700;font-size:.76rem}
 
 .weatherCard{position:relative;overflow:hidden}
-.weatherCard small{display:flex;align-items:center;gap:7px;font-weight:700;color:#6C6F72}
+.weatherCard small{display:flex;align-items:center;gap:7px;font-weight:700;color:#555555}
 .weatherIcon{color:var(--red);font-size:19px}
 .weatherCard strong{font-weight:900;color:var(--text)}
 
 .guide{position:relative;overflow:hidden}
-.guideNumber{background:var(--red);color:white;box-shadow:0 6px 14px rgba(177,11,18,.20)}
+.guideNumber{background:var(--red);color:white;box-shadow:0 6px 14px rgba(161,13,13,.20)}
 .guide h3{font-weight:800}
 
 .btn{font-weight:700;border-radius:16px}
-.btnRed{background:var(--red);box-shadow:0 8px 22px rgba(177,11,18,.20)}
+.btnRed{background:var(--red);box-shadow:0 8px 22px rgba(161,13,13,.20)}
 .btnLight{background:var(--surface)}
 
 @media(max-width:760px){
@@ -1767,7 +1767,7 @@ body{
 .themeButton .material-symbols-rounded{font-size:21px}
 .layerSwitch button{display:inline-flex;align-items:center;gap:6px}
 .layerSwitch button .material-symbols-rounded{font-size:18px}
-.mapStage{position:relative;border-radius:19px;overflow:hidden;background:#DCE3E5}
+.mapStage{position:relative;border-radius:19px;overflow:hidden;background:#F3F5F7}
 .mapStage #map{border-radius:0}
 #mapillaryViewer{position:absolute;inset:0;z-index:8;display:none;background:#111}
 #mapillaryMessage{position:absolute;inset:0;z-index:9;display:none;place-items:center;text-align:center;padding:24px;background:rgba(15,20,23,.90);color:#fff}
@@ -1942,10 +1942,10 @@ section{padding:46px 0}
 }
 .liveImpactGrid .kpiIcon{
   width:40px;height:40px;border-radius:50%;
-  background:#EAF0F6;
+  background:#F8EFF0;
   color:var(--blue);
 }
-html[data-theme="dark"] .liveImpactGrid .kpiIcon{background:#172431}
+html[data-theme="dark"] .liveImpactGrid .kpiIcon{background:#292929}
 .liveImpactGrid .kpi strong{font-size:2.35rem}
 .apiStrip{
   margin-top:12px;
@@ -2082,11 +2082,11 @@ html[data-theme="dark"] .liveImpactGrid .kpiIcon{background:#172431}
   width:42px;height:42px;
   display:grid;place-items:center;
   border-radius:50%;
-  background:#EAF0F6;
+  background:#F8EFF0;
   color:var(--blue);
   flex:0 0 auto;
 }
-html[data-theme="dark"] .weatherExtraIcon{background:#172431}
+html[data-theme="dark"] .weatherExtraIcon{background:#292929}
 .weatherExtraTitle strong{display:block;font-size:.98rem}
 .weatherExtraTitle small{display:block;color:var(--muted);font-size:.78rem}
 .weatherToggle{
@@ -2277,6 +2277,78 @@ body{font-size:var(--type-body);line-height:1.55}
   .liveImpactGrid .kpi strong{font-size:var(--type-stat)}
   .liveImpactGrid .kpi span{font-size:var(--type-label)}
 }
+
+
+
+/* === HazWatch monochrome website palette ===
+   Brand red, charcoal, white, on a subtle blue-grey page canvas.
+   Geographic maps and satellite imagery retain their natural colors. */
+:root{
+  --red:#A10D0D;
+  --red2:#A10D0D;
+  --redSoft:#F8EFF0;
+  --bg:#F3F5F7;
+  --surface:#FFFFFF;
+  --surface2:#FFFFFF;
+  --text:#363636;
+  --muted:#525252;
+  --line:#DCE1E5;
+  --blue:#A10D0D;
+  --green:#A10D0D;
+  --nav:rgba(255,255,255,.97);
+  --radius:16px;
+  --shadow:0 4px 18px rgba(25,25,25,.055);
+}
+html[data-theme="dark"]{
+  --bg:#121212;
+  --surface:#202020;
+  --surface2:#262626;
+  --text:#FFFFFF;
+  --muted:#CACACA;
+  --line:#434343;
+  --redSoft:#352425;
+  --nav:rgba(25,25,25,.98);
+  --shadow:0 4px 18px rgba(0,0,0,.22);
+}
+body{background:var(--bg);color:var(--text)}
+.nav{background:var(--nav)}
+.hero{background:transparent}
+.card{
+  background:var(--surface);
+  border-color:var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+.mapCard,.downloadCard,.weatherExtraCard{
+  background:var(--surface);
+  border-radius:var(--radius);
+}
+.downloadCard,.chartCard,.heatCard,.leaderboardCard,
+.analyticsGrid .chartCard{background:var(--surface)}
+.kpi::after{display:none}
+.kpi span,.liveImpactGrid .kpi span,.chartTitle,
+.weatherCard small,.teamRole{color:var(--muted)}
+.kpi strong,.liveImpactGrid .kpi strong,
+.weatherCard strong{color:var(--text)}
+.liveImpactGrid .kpiIcon,.weatherExtraIcon,.aboutIcon,
+.chartTitle .material-symbols-rounded{
+  background:var(--redSoft);
+  color:var(--red);
+}
+.apiBadge,.apiBadge.error,.hazardChip .material-symbols-rounded{
+  color:var(--red);
+}
+.chartCard::before,.heatCard::before,.leaderboardCard::before{
+  background:var(--red);
+  height:2px;
+}
+.btn{border-radius:10px}
+.layerSwitch button,.infoMenuButton{border-radius:9px}
+.mapStage{background:var(--bg)}
+.conditions{background:transparent}
+.weatherExtraCard,.apiStrip,.navFlyout{background:var(--surface)}
+html[data-theme="dark"] .liveImpactGrid .kpiIcon,
+html[data-theme="dark"] .weatherExtraIcon{background:var(--redSoft)}
 
 </style>
 
@@ -3214,15 +3286,8 @@ function hazardColor(
 hazard
 ){
 
-return (
-
-hazardColors[canonicalHazardKey(hazard)]
-
-||
-
-"#A10D0D"
-
-);
+// Consistent brand red; hazard categories remain identified by text and filter.
+return "#A10D0D";
 
 }
 
@@ -3857,6 +3922,12 @@ box.querySelectorAll("[data-hazard]").forEach(button => {
 CHARTS
 ===================================================== */
 
+function neutralChartPalette(){
+  return root.dataset.theme === "dark"
+    ? ["#A10D0D","#FFFFFF","#D6D6D6","#B0B0B0","#858585","#606060","#E6E6E6"]
+    : ["#A10D0D","#363636","#646464","#939393","#BDBDBD","#D9D9D9","#7A7A7A"];
+}
+
 function chartTheme(){
 
 const styles =
@@ -4032,24 +4103,24 @@ const ctx = canvas.getContext("2d");
 const styles = getComputedStyle(root);
 const surface = styles.getPropertyValue("--surface").trim() || "#FFFFFF";
 const textStrong = styles.getPropertyValue("--text").trim() || "#414141";
-const red = styles.getPropertyValue("--red").trim() || "#B10B12";
+const red = styles.getPropertyValue("--red").trim() || "#A10D0D";
 
 let background = options.colors ?? red;
 let border = options.border ?? red;
 
 if(type === "line"){
   const gradient = ctx.createLinearGradient(0,0,0,260);
-  gradient.addColorStop(0, "rgba(177,11,18,.28)");
-  gradient.addColorStop(.62, "rgba(177,11,18,.08)");
-  gradient.addColorStop(1, "rgba(177,11,18,0)");
+  gradient.addColorStop(0, "rgba(161,13,13,.28)");
+  gradient.addColorStop(.62, "rgba(161,13,13,.08)");
+  gradient.addColorStop(1, "rgba(161,13,13,0)");
   background = gradient;
   border = red;
 }
 
 if(type === "bar" && typeof background === "string" && background.toLowerCase() === "#a10d0d"){
   const gradient = ctx.createLinearGradient(0,0,520,0);
-  gradient.addColorStop(0, "#B10B12");
-  gradient.addColorStop(1, "#D23A3F");
+  gradient.addColorStop(0, "#A10D0D");
+  gradient.addColorStop(1, "#A10D0D");
   background = gradient;
 }
 
@@ -4271,6 +4342,11 @@ theme.text;
 }
 
 
+if(chart.config.type === "doughnut" && chart.data.datasets[0]){
+  chart.data.datasets[0].backgroundColor = neutralChartPalette().slice(
+    0, chart.data.datasets[0].data.length
+  );
+}
 chart.update();
 
 }
@@ -4639,7 +4715,7 @@ item.count
 horizontal:true,
 
 colors:
-"#3F83C8"
+"#444444"
 
 }
 
@@ -4672,7 +4748,7 @@ item.count
 horizontal:true,
 
 colors:
-"#49B0A7"
+"#A10D0D"
 
 }
 
@@ -4704,19 +4780,7 @@ item.count
 
 legend:true,
 
-colors:[
-
-"#B10B12",
-
-"#236BC0",
-
-"#49AFA7",
-
-"#7650C4",
-
-"#C69B45"
-
-]
+colors:neutralChartPalette().slice(0,5)
 
 }
 
@@ -4748,23 +4812,7 @@ item.count
 
 legend:true,
 
-colors:[
-
-"#B10B12",
-
-"#236BC0",
-
-"#14A9B9",
-
-"#673BB8",
-
-"#D94212",
-
-"#C69B45",
-
-"#49AFA7"
-
-]
+colors:neutralChartPalette().slice(0,7)
 
 }
 
@@ -4796,8 +4844,7 @@ item.count
 
 horizontal:true,
 
-colors:
-"#7650C4"
+colors:root.dataset.theme === "dark" ? "#D6D6D6" : "#444444"
 
 }
 

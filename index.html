@@ -2198,6 +2198,86 @@ html[data-theme="dark"] .weatherExtraIcon{background:#172431}
   #map{height:455px}
 }
 
+
+/* === Unified typography system (HazWatch) === */
+/* One hierarchy for headings, body copy, controls, captions, and statistics. */
+:root{
+  --type-display:clamp(2.15rem,3.1vw,2.75rem);
+  --type-section:clamp(1.55rem,2.15vw,1.85rem);
+  --type-subheading:1.25rem;
+  --type-body:1rem;
+  --type-control:.875rem;
+  --type-caption:.8125rem;
+  --type-label:.75rem;
+  --type-stat:2rem;
+}
+body{font-size:var(--type-body);line-height:1.55}
+.brand{font-size:1.25rem;line-height:1.2}
+.hero h1{
+  font-size:var(--type-display);
+  line-height:1.12;
+  letter-spacing:-.035em;
+  overflow-wrap:normal;
+}
+.sectionHead h2,.liveImpactHead h2,.analyticsHeader h2,.downloadCard h2{
+  font-size:var(--type-section);
+  line-height:1.2;
+  letter-spacing:-.03em;
+}
+.mapHeader h3,.aboutCard h3,.teamCard h3,.guide h3,
+.navFlyoutTitle{font-size:var(--type-subheading);line-height:1.3}
+.heroDescription,.sectionSubtitle,.aboutCard p,.teamCard p,.guide p,
+.copyrightBody,.leaderName{font-size:var(--type-body);line-height:1.6}
+.infoMenuButton,.navLinks,.btn,.layerSwitch button,.hazardChip,
+.contactLink,.navFlyout p,.navMiniRow strong,.safety,.apiStrip,
+.reportCount,.weatherLocation,.weatherCard small,.weatherCard span,
+.citySearch input,.empty,.rank,.qrCaption,.weatherExtraTitle small{
+  font-size:var(--type-control);
+  line-height:1.45;
+}
+.kicker,.eyebrow,.teamRole,.chartTitle,.apiBadge,.apiStatus,
+.heatLabel,.heatCell,.navMiniRow span,.mapHeader small,
+.leader small,.kpi span,.liveImpactGrid .kpi span{
+  font-size:var(--type-label);
+  line-height:1.4;
+}
+.chartTitle{letter-spacing:.055em}
+.eyebrow,.kicker,.apiBadge,.kpi span,.teamRole{letter-spacing:.06em}
+.kpi strong,.liveImpactGrid .kpi strong,.weatherCard strong{
+  font-size:var(--type-stat);
+  line-height:1.12;
+}
+.weatherExtraTitle strong{font-size:var(--type-subheading);line-height:1.3}
+.liveImpactGrid .kpi span{
+  display:block;
+  overflow-wrap:break-word;
+}
+@media(max-width:760px){
+  :root{
+    --type-display:1.85rem;
+    --type-section:1.5rem;
+    --type-subheading:1.15rem;
+    --type-body:.9375rem;
+    --type-control:.8125rem;
+    --type-caption:.8125rem;
+    --type-label:.75rem;
+    --type-stat:1.75rem;
+  }
+  .brand{font-size:1.125rem}
+  .infoMenuButton,.layerSwitch button{font-size:var(--type-control)}
+  .hero h1{font-size:var(--type-display);line-height:1.15}
+  .liveImpactHead h2,.analyticsHeader h2{line-height:1.2}
+  .liveImpactGrid .kpi strong{font-size:var(--type-stat)}
+  .liveImpactGrid .kpi span{font-size:var(--type-label);line-height:1.35}
+  .apiStrip,.chartTitle{font-size:var(--type-label)}
+}
+@media(max-width:430px){
+  .brand{font-size:1.125rem}
+  .infoMenuButton{font-size:var(--type-control)}
+  .liveImpactGrid .kpi strong{font-size:var(--type-stat)}
+  .liveImpactGrid .kpi span{font-size:var(--type-label)}
+}
+
 </style>
 
 </head>

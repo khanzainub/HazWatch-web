@@ -4162,6 +4162,8 @@ function deriveHazardReportCounts(analyticsRaw, reportsRaw){
 /* Explicit home view: full requested India geographic extent, fitted to any map size. */
 function fitIndiaHomeView(){
   if(!map) return;
+  /* Cancel an unfinished hazard flyTo/fitBounds before resetting Home. */
+  map.stop();
   const indiaBounds = L.latLngBounds([8,68],[38,98]);
   map.fitBounds(indiaBounds,{
     padding:[20,20],

@@ -3029,6 +3029,7 @@ html[data-theme="dark"] .navInner > .infoMenu > .infoMenuItem > .infoMenuButton 
     outline:2px solid var(--red);
     outline-offset:2px;
   }
+  /* Compact, right-aligned mobile dropdown: keep the page visible beneath it. */
   .navInner > .infoMenu{
     display:none;
     position:absolute;
@@ -3037,21 +3038,21 @@ html[data-theme="dark"] .navInner > .infoMenu > .infoMenuItem > .infoMenuButton 
     top:calc(100% + 2px);
     right:0;
     left:auto;
-    width:min(350px,94vw);
-    max-height:calc(100vh - 90px);
-    max-height:calc(100dvh - 90px);
+    width:min(286px,calc(100vw - 20px));
+    max-height:70vh;
+    max-height:min(70dvh,440px);
     overflow-x:hidden;
     overflow-y:auto;
     overscroll-behavior:contain;
     flex-direction:column;
     align-items:stretch;
-    gap:6px;
-    padding:10px;
+    gap:4px;
+    padding:7px;
     margin:0;
     border:1px solid var(--line);
-    border-radius:15px;
+    border-radius:13px;
     background:var(--surface);
-    box-shadow:0 16px 36px rgba(0,0,0,.19);
+    box-shadow:0 12px 26px rgba(0,0,0,.17);
     z-index:2500;
   }
   .navInner.mobileMenuOpen > .infoMenu{display:flex}
@@ -3064,53 +3065,70 @@ html[data-theme="dark"] .navInner > .infoMenu > .infoMenuItem > .infoMenuButton 
     flex-direction:row;
     justify-content:flex-start;
     width:100%;
-    min-height:44px;
-    padding:7px 10px;
-    gap:10px;
-    font-size:.85rem;
+    min-height:38px;
+    padding:5px 7px;
+    gap:7px;
+    font-size:.78rem;
     text-align:left;
-    border-radius:10px;
+    border-radius:9px;
   }
   .navInner > .infoMenu > .infoMenuItem > .infoMenuButton .material-symbols-rounded{
-    width:26px;
-    height:26px;
-    min-width:26px;
-    font-size:17px;
+    width:23px;
+    height:23px;
+    min-width:23px;
+    font-size:15px;
   }
   .navInner > .infoMenu > .navAppCta{
     flex-direction:row;
     justify-content:center;
-    min-height:44px;
+    min-height:39px;
     width:100%;
     margin:0;
-    padding:9px;
-    gap:9px;
-    font-size:.85rem;
+    padding:7px;
+    gap:7px;
+    font-size:.8rem;
+    border-radius:9px;
   }
-  .navInner > .infoMenu > .navAppCta .material-symbols-rounded{font-size:19px}
+  .navInner > .infoMenu > .navAppCta .material-symbols-rounded{font-size:17px}
+  /* A proper on/off switch, using the original theme-switch functionality. */
   .navInner > .infoMenu > .mobileThemeButton{
     display:flex;
     align-items:center;
-    justify-content:flex-start;
+    justify-content:space-between;
     width:100%;
-    min-height:44px;
-    gap:10px;
-    padding:8px 10px;
+    min-height:39px;
+    gap:8px;
+    padding:6px 9px;
     border:1px solid var(--line);
-    border-radius:10px;
+    border-radius:9px;
     background:var(--surface2);
     color:var(--text);
+    font-size:.78rem;
     font-weight:800;
-    font-size:.85rem;
   }
-  .navInner > .infoMenu > .mobileThemeButton .material-symbols-rounded{
-    display:grid;
-    place-items:center;
-    width:26px;
-    height:26px;
-    font-size:18px;
-    color:var(--muted);
+  .navInner > .infoMenu .mobileThemeSwitch{
+    display:flex;
+    align-items:center;
+    width:38px;
+    height:22px;
+    padding:3px;
+    flex:0 0 auto;
+    border-radius:999px;
+    background:var(--muted);
+    transition:background .18s ease;
   }
+  .navInner > .infoMenu .mobileThemeKnob{
+    display:block;
+    width:16px;
+    height:16px;
+    border-radius:50%;
+    background:#FFFFFF;
+    box-shadow:0 1px 3px rgba(0,0,0,.2);
+    transition:transform .18s ease;
+  }
+  html[data-theme="dark"] .navInner > .infoMenu .mobileThemeSwitch{background:#A10D0D}
+  html[data-theme="dark"] .navInner > .infoMenu .mobileThemeKnob{transform:translateX(16px)}
+  /* Keep details accessible without an oversized expanded menu. */
   .navInner > .infoMenu .navFlyout{
     position:static;
     display:none;
@@ -3118,9 +3136,11 @@ html[data-theme="dark"] .navInner > .infoMenu > .infoMenuItem > .infoMenuButton 
     left:auto;
     right:auto;
     width:100%;
-    margin:5px 0 0;
-    padding:12px;
-    border-radius:10px;
+    max-height:min(40dvh,250px);
+    overflow-y:auto;
+    margin:4px 0 0;
+    padding:8px;
+    border-radius:9px;
     background:var(--surface2);
     box-shadow:none;
     opacity:1;
@@ -3132,6 +3152,49 @@ html[data-theme="dark"] .navInner > .infoMenu > .infoMenuItem > .infoMenuButton 
   .navInner > .infoMenu .infoMenuItem.open > .navFlyout{
     display:block;
     transform:none;
+  }
+  .navInner > .infoMenu .navFlyoutTitle{
+    gap:5px;
+    margin-bottom:5px;
+    font-size:.81rem;
+    line-height:1.25;
+  }
+  .navInner > .infoMenu .navFlyoutTitle .material-symbols-rounded{font-size:17px}
+  .navInner > .infoMenu .missionVisionSubhead{margin-top:10px}
+  .navInner > .infoMenu .navFlyout p{
+    font-size:.75rem;
+    line-height:1.4;
+  }
+  .navInner > .infoMenu .navMiniList{gap:5px;margin-top:6px}
+  .navInner > .infoMenu .navMiniRow{
+    gap:6px;
+    padding:6px 7px;
+    border-radius:9px;
+  }
+  .navInner > .infoMenu .navMiniRow .material-symbols-rounded{
+    font-size:16px;
+    flex:0 0 auto;
+  }
+  .navInner > .infoMenu .navMiniRow strong{font-size:.76rem;line-height:1.3}
+  .navInner > .infoMenu .navMiniRow span{font-size:.72rem;line-height:1.35}
+  .navInner > .infoMenu .contactLinks{margin-top:5px}
+  .navInner > .infoMenu .contactLink{
+    gap:6px;
+    padding:7px;
+    font-size:.75rem;
+    overflow-wrap:anywhere;
+  }
+  /* Keep the founder's desktop person icon, but distinguish the beta tester on mobile. */
+  .navInner > .infoMenu .betaTesterIcon{font-size:0!important}
+  .navInner > .infoMenu .betaTesterIcon::before{
+    content:"bug_report";
+    font-family:'Material Symbols Rounded';
+    font-size:16px;
+    line-height:1;
+    font-weight:normal;
+    font-style:normal;
+    letter-spacing:normal;
+    font-feature-settings:'liga';
   }
 }
 
@@ -3185,7 +3248,7 @@ html[data-theme="dark"] .navInner > .infoMenu > .infoMenuItem > .infoMenuButton 
               <div><strong>Deepika Vashishtha, PhD</strong><span>Strategic Advisor · Assistant Professor, Doctor Harisingh Gour Vishwavidyalaya, Sagar, Madhya Pradesh, India</span></div>
             </div>
             <div class="navMiniRow">
-              <span class="material-symbols-rounded">person</span>
+              <span class="material-symbols-rounded betaTesterIcon">person</span>
               <div><strong>Amit Kumar</strong><span>Beta Tester · Doctoral Fellow, Aligarh Muslim University, Aligarh, Uttar Pradesh, India</span></div>
             </div>
           </div>
@@ -3204,7 +3267,7 @@ html[data-theme="dark"] .navInner > .infoMenu > .infoMenuItem > .infoMenuButton 
         </div>
       </div>
       <a class="navAppCta" href="https://play.google.com/store/apps/details?id=in.hazwatch.myapp" target="_blank" rel="noopener noreferrer" aria-label="Get HazWatch on Google Play"><span class="material-symbols-rounded">smartphone</span>Get the App</a>
-      <button id="mobileThemeButton" class="mobileThemeButton" type="button" aria-label="Switch colour theme"><span class="material-symbols-rounded" aria-hidden="true">dark_mode</span><span class="mobileThemeLabel">Light / Dark Theme</span></button>
+      <button id="mobileThemeButton" class="mobileThemeButton" type="button" role="switch" aria-checked="false" aria-label="Dark mode"><span class="mobileThemeLabel">Dark mode</span><span class="mobileThemeSwitch" aria-hidden="true"><span class="mobileThemeKnob"></span></span></button>
     </div>
 
     <button id="themeButton" class="themeButton" aria-label="Toggle theme">
@@ -7464,9 +7527,8 @@ TOP INFORMATION MENU + SECONDARY WEATHER
   };
   const updateThemeAction = () => {
     const dark = document.documentElement.dataset.theme === "dark";
-    mobileTheme.setAttribute("aria-label",dark ? "Switch to light theme" : "Switch to dark theme");
-    mobileTheme.querySelector(".material-symbols-rounded").textContent = dark ? "light_mode" : "dark_mode";
-    mobileTheme.querySelector(".mobileThemeLabel").textContent = dark ? "Switch to Light Theme" : "Switch to Dark Theme";
+    mobileTheme.setAttribute("aria-checked",String(dark));
+    mobileTheme.setAttribute("aria-label",dark ? "Dark mode on" : "Dark mode off");
   };
   const closeMenu = () => {
     navInner.classList.remove("mobileMenuOpen");
@@ -7511,7 +7573,6 @@ TOP INFORMATION MENU + SECONDARY WEATHER
     if(!mobileLayout.matches) return;
     desktopTheme.click();
     updateThemeAction();
-    closeMenu();
   });
 
   infoMenu.addEventListener("click",event => {

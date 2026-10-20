@@ -2356,6 +2356,115 @@ html[data-theme="dark"] .analyticsSection{
   }
 }
 
+
+/* === Balanced top navigation and precise north indicator === */
+/* Fill available nav width evenly while keeping the six original tabs. */
+.navInner{
+  justify-content:space-between;
+  column-gap:clamp(8px,1.2vw,18px);
+}
+.navInner > .brand{order:0;flex:0 0 auto}
+.navInner > .themeButton{
+  order:1;
+  flex:0 0 auto;
+  margin-left:0;
+}
+.navInner > .infoMenu{
+  order:2;
+  flex:1 1 auto;
+  width:auto;
+  min-width:0;
+  justify-content:space-between;
+  gap:clamp(2px,.4vw,8px);
+}
+.infoMenu > .infoMenuItem{
+  flex:1 1 0;
+  min-width:0;
+}
+.infoMenu > .infoMenuItem > .infoMenuButton{
+  width:100%;
+  justify-content:center;
+  padding-left:clamp(4px,.7vw,11px);
+  padding-right:clamp(4px,.7vw,11px);
+}
+.infoMenu > .navAppCta{
+  flex:1 1 auto;
+  margin-left:0;
+}
+@media(max-width:1040px){
+  .navInner{row-gap:4px}
+  .navInner > .infoMenu{
+    order:3;
+    flex:0 0 100%;
+    width:100%;
+    justify-content:space-between;
+    overflow-x:visible;
+    padding-bottom:2px;
+  }
+  .navInner > .themeButton{
+    order:2;
+    margin-left:auto;
+  }
+}
+@media(max-width:620px){
+  .navInner > .infoMenu{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:4px;
+  }
+  .infoMenu > .infoMenuItem > .infoMenuButton,
+  .infoMenu > .navAppCta{
+    width:100%;
+    min-width:0;
+    padding:8px 4px;
+    justify-content:center;
+  }
+  .infoMenu > .infoMenuItem > .infoMenuButton{
+    gap:4px;
+  }
+  .infoMenu .navAppCta .material-symbols-rounded,
+  .infoMenuButton .material-symbols-rounded{font-size:15px}
+  .navFlyout{top:155px}
+}
+/* Centre the triangle and letter optically and geometrically. */
+.northControl > div{
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+}
+.northControl .northArrow{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:16px;
+  font-size:0;
+  line-height:0;
+  margin:0;
+}
+.northControl .northArrow::before{
+  content:"";
+  display:block;
+  width:0;
+  height:0;
+  border-left:7px solid transparent;
+  border-right:7px solid transparent;
+  border-bottom:14px solid #A10D0D;
+}
+.northControl .northN{
+  width:100%;
+  display:block;
+  text-align:center;
+  margin:0;
+  letter-spacing:0;
+  font-size:12px;
+  line-height:1;
+}
+
 </style>
 
 </head>
@@ -2458,9 +2567,6 @@ html[data-theme="dark"] .analyticsSection{
         HazWatch is a citizen science-based geospatial mobile application for multi-hazard incident reporting in India.
         It connects citizen observations with mapped hazard evidence, public analytics, and research-oriented data access.
       </p>
-      <div class="heroButtons">
-        <a href="#intelligence" class="btn btnRed"><span class="material-symbols-rounded">map</span>Explore live data</a>
-      </div>
       <div class="safety"><strong>Your safety comes first.</strong> Never enter a dangerous place to report a hazard.</div>
     </div>
   </div>

@@ -2988,6 +2988,7 @@ html[data-theme="dark"] .navInner > .infoMenu > .infoMenuItem > .infoMenuButton 
     border-radius:14px;
   }
   .mapSection #map{
+    height:450px; /* 50px less than the existing 500px mobile height */
     touch-action:pan-y;
     -webkit-user-select:none;
     user-select:none;
@@ -3032,6 +3033,11 @@ html[data-theme="dark"] .navInner > .infoMenu > .infoMenuItem > .infoMenuButton 
     line-height:1.35;
     color:var(--muted);
   }
+}
+
+/* Small phones previously used 455px; retain their 50px reduction. */
+@media(max-width:430px){
+  .mapSection #map{height:405px}
 }
 
 /* Mobile hamburger navigation. Hidden entirely on desktop. */

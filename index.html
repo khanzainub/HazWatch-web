@@ -2992,6 +2992,149 @@ html[data-theme="dark"] .navInner > .infoMenu > .infoMenuItem > .infoMenuButton 
   }
 }
 
+/* Mobile hamburger navigation. Hidden entirely on desktop. */
+.mobileMenuButton,
+.mobileThemeButton{display:none}
+@media(max-width:620px){
+  .navInner{
+    position:relative;
+    grid-template-columns:max-content minmax(0,1fr) 36px;
+    grid-template-rows:auto;
+    row-gap:0;
+    align-items:center;
+    padding-top:7px;
+    padding-bottom:7px;
+  }
+  .navInner > .brand{grid-column:1;grid-row:1}
+  .navInner > .navTagline{grid-column:2;grid-row:1}
+  .navInner > #themeButton{display:none}
+  .navInner > .mobileMenuButton{
+    display:grid;
+    grid-column:3;
+    grid-row:1;
+    place-items:center;
+    justify-self:end;
+    width:36px;
+    height:36px;
+    padding:0;
+    border:1px solid var(--line);
+    border-radius:11px;
+    background:var(--surface);
+    color:var(--text);
+  }
+  .navInner > .mobileMenuButton .material-symbols-rounded{font-size:23px}
+  .navInner > .mobileMenuButton:focus-visible,
+  .navInner > .infoMenu button:focus-visible,
+  .navInner > .infoMenu a:focus-visible{
+    outline:2px solid var(--red);
+    outline-offset:2px;
+  }
+  .navInner > .infoMenu{
+    display:none;
+    position:absolute;
+    grid-column:auto;
+    grid-row:auto;
+    top:calc(100% + 2px);
+    right:0;
+    left:auto;
+    width:min(350px,94vw);
+    max-height:calc(100vh - 90px);
+    max-height:calc(100dvh - 90px);
+    overflow-x:hidden;
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    flex-direction:column;
+    align-items:stretch;
+    gap:6px;
+    padding:10px;
+    margin:0;
+    border:1px solid var(--line);
+    border-radius:15px;
+    background:var(--surface);
+    box-shadow:0 16px 36px rgba(0,0,0,.19);
+    z-index:2500;
+  }
+  .navInner.mobileMenuOpen > .infoMenu{display:flex}
+  .navInner > .infoMenu > .infoMenuItem{
+    display:block;
+    width:100%;
+    flex:none;
+  }
+  .navInner > .infoMenu > .infoMenuItem > .infoMenuButton{
+    flex-direction:row;
+    justify-content:flex-start;
+    width:100%;
+    min-height:44px;
+    padding:7px 10px;
+    gap:10px;
+    font-size:.85rem;
+    text-align:left;
+    border-radius:10px;
+  }
+  .navInner > .infoMenu > .infoMenuItem > .infoMenuButton .material-symbols-rounded{
+    width:26px;
+    height:26px;
+    min-width:26px;
+    font-size:17px;
+  }
+  .navInner > .infoMenu > .navAppCta{
+    flex-direction:row;
+    justify-content:center;
+    min-height:44px;
+    width:100%;
+    margin:0;
+    padding:9px;
+    gap:9px;
+    font-size:.85rem;
+  }
+  .navInner > .infoMenu > .navAppCta .material-symbols-rounded{font-size:19px}
+  .navInner > .infoMenu > .mobileThemeButton{
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    width:100%;
+    min-height:44px;
+    gap:10px;
+    padding:8px 10px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:var(--surface2);
+    color:var(--text);
+    font-weight:800;
+    font-size:.85rem;
+  }
+  .navInner > .infoMenu > .mobileThemeButton .material-symbols-rounded{
+    display:grid;
+    place-items:center;
+    width:26px;
+    height:26px;
+    font-size:18px;
+    color:var(--muted);
+  }
+  .navInner > .infoMenu .navFlyout{
+    position:static;
+    display:none;
+    top:auto;
+    left:auto;
+    right:auto;
+    width:100%;
+    margin:5px 0 0;
+    padding:12px;
+    border-radius:10px;
+    background:var(--surface2);
+    box-shadow:none;
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+    transform:none;
+    transition:none;
+  }
+  .navInner > .infoMenu .infoMenuItem.open > .navFlyout{
+    display:block;
+    transform:none;
+  }
+}
+
 </style>
 
 </head>
@@ -3009,6 +3152,9 @@ html[data-theme="dark"] .navInner > .infoMenu > .infoMenuItem > .infoMenuButton 
       <div><span class="brandRed">Haz</span>Watch</div>
     </a>
     <div class="navTagline">Help us make <span class="taglineIndia">India</span> a Safer Place.</div>
+    <button id="mobileMenuButton" class="mobileMenuButton" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="infoMenu">
+      <span class="material-symbols-rounded" aria-hidden="true">menu</span>
+    </button>
 
     <div class="infoMenu" id="infoMenu" aria-label="HazWatch information">
       <div class="infoMenuItem">
@@ -3058,6 +3204,7 @@ html[data-theme="dark"] .navInner > .infoMenu > .infoMenuItem > .infoMenuButton 
         </div>
       </div>
       <a class="navAppCta" href="https://play.google.com/store/apps/details?id=in.hazwatch.myapp" target="_blank" rel="noopener noreferrer" aria-label="Get HazWatch on Google Play"><span class="material-symbols-rounded">smartphone</span>Get the App</a>
+      <button id="mobileThemeButton" class="mobileThemeButton" type="button" aria-label="Switch colour theme"><span class="material-symbols-rounded" aria-hidden="true">dark_mode</span><span class="mobileThemeLabel">Light / Dark Theme</span></button>
     </div>
 
     <button id="themeButton" class="themeButton" aria-label="Toggle theme">
@@ -7260,6 +7407,7 @@ TOP INFORMATION MENU + SECONDARY WEATHER
 (function setupInfoMenu(){
   const items = Array.from(document.querySelectorAll(".infoMenuItem"));
   const hoverCapable = window.matchMedia("(hover:hover) and (pointer:fine)");
+  const mobileNavLayout = window.matchMedia("(max-width: 620px)");
 
   function closeAll(except=null){
     items.forEach(item => {
@@ -7271,20 +7419,20 @@ TOP INFORMATION MENU + SECONDARY WEATHER
     const button = item.querySelector(".infoMenuButton");
 
     item.addEventListener("mouseenter", () => {
-      if(hoverCapable.matches){
+      if(hoverCapable.matches && !mobileNavLayout.matches){
         closeAll(item);
         item.classList.add("open");
       }
     });
 
     item.addEventListener("mouseleave", () => {
-      if(hoverCapable.matches){
+      if(hoverCapable.matches && !mobileNavLayout.matches){
         item.classList.remove("open");
       }
     });
 
     button.addEventListener("click", event => {
-      if(!hoverCapable.matches){
+      if(!hoverCapable.matches || mobileNavLayout.matches){
         event.stopPropagation();
         const willOpen = !item.classList.contains("open");
         closeAll();
@@ -7298,6 +7446,88 @@ TOP INFORMATION MENU + SECONDARY WEATHER
   });
 
   window.addEventListener("resize", () => closeAll());
+})();
+
+/* Mobile-only hamburger panel; reuse original flyouts and theme switcher. */
+(function setupMobileNavigation(){
+  const navInner = document.querySelector(".navInner");
+  const toggle = document.getElementById("mobileMenuButton");
+  const infoMenu = document.getElementById("infoMenu");
+  const mobileTheme = document.getElementById("mobileThemeButton");
+  const desktopTheme = document.getElementById("themeButton");
+  const mobileLayout = window.matchMedia("(max-width: 620px)");
+  if(!navInner || !toggle || !infoMenu || !mobileTheme || !desktopTheme) return;
+
+  const closeFlyouts = () => {
+    infoMenu.querySelectorAll(".infoMenuItem.open").forEach(item => item.classList.remove("open"));
+    infoMenu.querySelectorAll(".infoMenuButton[aria-expanded]").forEach(button => button.setAttribute("aria-expanded","false"));
+  };
+  const updateThemeAction = () => {
+    const dark = document.documentElement.dataset.theme === "dark";
+    mobileTheme.setAttribute("aria-label",dark ? "Switch to light theme" : "Switch to dark theme");
+    mobileTheme.querySelector(".material-symbols-rounded").textContent = dark ? "light_mode" : "dark_mode";
+    mobileTheme.querySelector(".mobileThemeLabel").textContent = dark ? "Switch to Light Theme" : "Switch to Dark Theme";
+  };
+  const closeMenu = () => {
+    navInner.classList.remove("mobileMenuOpen");
+    toggle.setAttribute("aria-expanded","false");
+    toggle.setAttribute("aria-label","Open navigation menu");
+    toggle.querySelector(".material-symbols-rounded").textContent = "menu";
+    closeFlyouts();
+  };
+
+  infoMenu.querySelectorAll(".infoMenuItem").forEach((item,index) => {
+    const button = item.querySelector(".infoMenuButton");
+    if(!button) return;
+    const flyout = item.querySelector(".navFlyout");
+    if(flyout){
+      flyout.id = "mobileFlyout" + index;
+      button.setAttribute("aria-controls",flyout.id);
+      button.setAttribute("aria-expanded","false");
+    }
+    button.addEventListener("click", () => {
+      if(mobileLayout.matches){
+        infoMenu.querySelectorAll(".infoMenuItem").forEach(other => {
+          const otherButton = other.querySelector(".infoMenuButton");
+          if(otherButton) otherButton.setAttribute("aria-expanded",String(other.classList.contains("open")));
+        });
+      }
+    });
+  });
+
+  toggle.addEventListener("click", event => {
+    event.stopPropagation();
+    if(!mobileLayout.matches) return;
+    const opening = !navInner.classList.contains("mobileMenuOpen");
+    if(!opening){closeMenu();return}
+    navInner.classList.add("mobileMenuOpen");
+    toggle.setAttribute("aria-expanded","true");
+    toggle.setAttribute("aria-label","Close navigation menu");
+    toggle.querySelector(".material-symbols-rounded").textContent = "close";
+    updateThemeAction();
+  });
+
+  mobileTheme.addEventListener("click", () => {
+    if(!mobileLayout.matches) return;
+    desktopTheme.click();
+    updateThemeAction();
+    closeMenu();
+  });
+
+  infoMenu.addEventListener("click",event => {
+    if(mobileLayout.matches && event.target.closest("a")) closeMenu();
+  });
+  document.addEventListener("click",event => {
+    if(mobileLayout.matches && !navInner.contains(event.target)) closeMenu();
+  });
+  document.addEventListener("keydown",event => {
+    if(event.key === "Escape" && mobileLayout.matches && navInner.classList.contains("mobileMenuOpen")){
+      closeMenu();
+      toggle.focus();
+    }
+  });
+  window.addEventListener("resize",closeMenu);
+  updateThemeAction();
 })();
 
 (function setupWeatherExtra(){

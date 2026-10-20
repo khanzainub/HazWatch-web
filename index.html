@@ -2279,24 +2279,43 @@ body{font-size:var(--type-body);line-height:1.55}
 }
 
 
-/* === Analytics-only restrained red / charcoal / white finish === */
-/* Scope deliberately excludes the map, markers, filters and homepage. */
+/* === Historic pre-rollback chart styling, scoped strictly to analytics === */
+.analyticsSection{
+  --red:#A10D0D;
+  --red2:#A10D0D;
+  --redSoft:#F8EEEE;
+  --surface:#FFFFFF;
+  --surface2:#F8F9FA;
+  --text:#242424;
+  --muted:#555555;
+  --line:#DDE1E4;
+}
+html[data-theme="dark"] .analyticsSection{
+  --red:#A10D0D;
+  --red2:#A10D0D;
+  --redSoft:#2C191B;
+  --surface:#202020;
+  --surface2:#292929;
+  --text:#FFFFFF;
+  --muted:#D0D0D0;
+  --line:#414141;
+}
 .analyticsGrid .chartCard,
 .analyticsGrid .heatCard,
-.analyticsGrid .leaderboardCard {
+.analyticsGrid .leaderboardCard{
   background:var(--surface);
 }
 .analyticsGrid .chartCard::before,
 .analyticsGrid .heatCard::before,
-.analyticsGrid .leaderboardCard::before {
-  background:#A10D0D;
+.analyticsGrid .leaderboardCard::before{
+  background:var(--red);
+  height:2px;
 }
-.analyticsGrid .chartTitle {color:var(--text)}
-.analyticsGrid .chartTitle .material-symbols-rounded {
-  background:rgba(161,13,13,.09);
-  color:#A10D0D;
+.analyticsGrid .chartTitle{color:var(--muted)}
+.analyticsGrid .chartTitle .material-symbols-rounded{
+  background:var(--redSoft);
+  color:var(--red);
 }
-.analyticsGrid .chartBox canvas {background:transparent}
 
 </style>
 
@@ -3877,12 +3896,18 @@ box.querySelectorAll("[data-hazard]").forEach(button => {
 CHARTS
 ===================================================== */
 
+function neutralChartPalette(){
+  return root.dataset.theme === "dark"
+    ? ["#A10D0D","#FFFFFF","#D6D6D6","#B0B0B0","#858585","#606060","#E6E6E6"]
+    : ["#A10D0D","#363636","#646464","#939393","#BDBDBD","#D9D9D9","#7A7A7A"];
+}
+
 function chartTheme(){
 
 const styles =
 
 getComputedStyle(
-root
+document.querySelector(".analyticsSection") || root
 );
 
 
@@ -4049,27 +4074,27 @@ if(!canvas || typeof Chart === "undefined") return;
 
 const theme = chartTheme();
 const ctx = canvas.getContext("2d");
-const styles = getComputedStyle(root);
+const styles = getComputedStyle(document.querySelector(".analyticsSection") || root);
 const surface = styles.getPropertyValue("--surface").trim() || "#FFFFFF";
 const textStrong = styles.getPropertyValue("--text").trim() || "#414141";
-const red = styles.getPropertyValue("--red").trim() || "#B10B12";
+const red = styles.getPropertyValue("--red").trim() || "#A10D0D";
 
 let background = options.colors ?? red;
 let border = options.border ?? red;
 
 if(type === "line"){
   const gradient = ctx.createLinearGradient(0,0,0,260);
-  gradient.addColorStop(0, "rgba(177,11,18,.28)");
-  gradient.addColorStop(.62, "rgba(177,11,18,.08)");
-  gradient.addColorStop(1, "rgba(177,11,18,0)");
+  gradient.addColorStop(0, "rgba(161,13,13,.28)");
+  gradient.addColorStop(.62, "rgba(161,13,13,.08)");
+  gradient.addColorStop(1, "rgba(161,13,13,0)");
   background = gradient;
   border = red;
 }
 
 if(type === "bar" && typeof background === "string" && background.toLowerCase() === "#a10d0d"){
   const gradient = ctx.createLinearGradient(0,0,520,0);
-  gradient.addColorStop(0, "#B10B12");
-  gradient.addColorStop(1, "#D23A3F");
+  gradient.addColorStop(0, "#A10D0D");
+  gradient.addColorStop(1, "#A10D0D");
   background = gradient;
 }
 
@@ -4291,6 +4316,11 @@ theme.text;
 }
 
 
+if(chart.config.type === "doughnut" && chart.data.datasets[0]){
+  chart.data.datasets[0].backgroundColor = neutralChartPalette().slice(
+    0, chart.data.datasets[0].data.length
+  );
+}
 chart.update();
 
 }
@@ -4342,12 +4372,6 @@ row.count
 function renderAnalytics(
 raw
 ){
-
-/* Chart-only palette. The map's hazardColor() and marker colours are unchanged. */
-const chartPalette = root.dataset.theme === "dark"
-  ? ["#A10D0D","#FFFFFF","#C85F64","#C0C0C0","#8B1116","#E1A3A6","#858585"]
-  : ["#A10D0D","#242424","#C85F64","#737373","#8B1116","#DEA0A3","#A6A6A6"];
-const chartNeutral = root.dataset.theme === "dark" ? "#E6E6E6" : "#242424";
 
 const data =
 
@@ -4592,8 +4616,7 @@ horizontal:true,
 colors:
 
 hazards.map(
-(_, index) =>
-chartPalette[index % chartPalette.length]
+() => "#A10D0D"
 )
 
 }
@@ -4663,7 +4686,7 @@ item.count
 horizontal:true,
 
 colors:
-chartNeutral
+"#444444"
 
 }
 
@@ -4728,7 +4751,7 @@ item.count
 
 legend:true,
 
-colors:gender.map((_, index) => chartPalette[index % chartPalette.length])
+colors:neutralChartPalette().slice(0,5)
 
 }
 
@@ -4760,7 +4783,7 @@ item.count
 
 legend:true,
 
-colors:education.map((_, index) => chartPalette[index % chartPalette.length])
+colors:neutralChartPalette().slice(0,7)
 
 }
 
@@ -4792,8 +4815,7 @@ item.count
 
 horizontal:true,
 
-colors:
-chartNeutral
+colors:root.dataset.theme === "dark" ? "#D6D6D6" : "#444444"
 
 }
 
